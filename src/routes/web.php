@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+//Route::get('/', [AuthController::class,'index']);
+
+//ログイン関連のルート
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login'); // ログインフォーム表示
+Route::post('/login', [AuthController::class, 'login'])->name('login.submit'); // ログイン処理
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 });
