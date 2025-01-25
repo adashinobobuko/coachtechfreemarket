@@ -6,13 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-//use App\Http\Requests\RegisterRequest;
-//use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
 {
-    //
-        /**
+    /**
      * 登録フォームの表示
      */
     public function showRegisterForm()
@@ -20,13 +18,13 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-        /**
+    /**
      * ユーザー登録処理
      */
     public function register(RegisterRequest $request)
     {
         // バリデーションはRegisterRequestで行う
-
+        dd($request->all());
         // ユーザーを作成
         User::create([
             'name' => $request->name,
@@ -34,8 +32,8 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        // 登録後、ログイン画面にリダイレクト
-        return redirect('/login')->with('message', '登録が完了しました！');
+        // 登録後、プロフィール編集画面にリダイレクト
+        return redirect('/mypage/profile');
     }
 
     // ログインフォームを表示
@@ -45,7 +43,7 @@ class AuthController extends Controller
     }
 
     // ログイン処理
-    public function login(LoginRequest $request) // LoginRequestを適用
+    public function login(LoginRequest $request)
     {
         // バリデーション済みデータを取得
         $credentials = $request->validated();
@@ -55,7 +53,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             // 管理ページ(admin)にリダイレクト
-            return redirect()->intended('/admin');
+            return redirect()->intended('/');
         }
 
         // 認証失敗時

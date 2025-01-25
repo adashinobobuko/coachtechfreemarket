@@ -12,7 +12,7 @@
   <form class="form" action="{{ route('login') }}" method="post">
     @csrf
     <div class="form__group">
-      <label for="email" class="form__label--item">ユーザー名/メールアドレス</label>
+      <label for="email" class="form__label--item">メールアドレス</label>
       <input type="email" id="email" name="email" value="{{ old('email') }}" class="form__input--text">
       @error('email')
       <div class="form__error">{{ $message }}</div>
@@ -28,7 +28,7 @@
     </div>
 
     <div class="form__button">
-      <button type="submit" class="form__button-submit">ログイン</button>
+      <button type="submit" class="form__button-submit">ログインする</button>
     </div>
   </form>
 
