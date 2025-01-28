@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\ProfileRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
@@ -36,6 +37,11 @@ class ProfileController extends Controller
         // 他のフィールドを更新
         $user->update($request->only('postal_code', 'address', 'building_name'));
 
-        return redirect()->route('dashboard')->with('success', 'プロフィールが更新されました。');
+        return redirect()->route('profile.edit')->with('success', 'プロフィールが更新されました。');
+    }
+
+    public function index()
+    {
+        return view('mypage/mypage');
     }
 }

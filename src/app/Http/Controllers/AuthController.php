@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginRequest;
+
 
 class AuthController extends Controller
 {
@@ -24,16 +26,18 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         // バリデーションはRegisterRequestで行う
-        dd($request->all());
         // ユーザーを作成
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        // 登録後、プロフィール編集画面にリダイレクト
-        return redirect('/mypage/profile');
+        // 作成したユーザーをログイン状態にする
+        Auth::login($user);
+
+        // プロフィール編集画面にリダイレクト
+        return redirect()->route('profile.edit');
     }
 
     // ログインフォームを表示

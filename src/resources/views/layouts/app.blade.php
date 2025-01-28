@@ -10,11 +10,13 @@
 </head>
 <body>
     <div class="header">
-        <header class="header-logo">
+        <div class="header-logo">
             <img src="{{ asset('images/logo.svg') }}" alt="coachtechのロゴ">
-        </header>        
-    </div>
-    @if (Auth::check())
+        </div>
+        <div class="searchbar">
+            <input type="text" class="searchbar-item">
+        </div>
+        @if (Auth::check())
         <div class="logged-in">
              <a href=""  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                    ログアウト
@@ -23,16 +25,17 @@
                     @csrf
              </form>
          </div>
-    @else
+        @else
         <div class="tologin">
             <a href="{{ route('login') }}">ログイン</a>
         </div>
-    @endif
-    <div class="tomypage">
-        <a href="">マイページ</a>
-    </div>
-    <div class="tosellform">
-        <a href="">出品</a>
+        @endif
+        <div class="tomypage">
+            <a href="{{ route('mypage') }}">マイページ</a>
+        </div>
+        <div class="tosellform">
+            <a href="">出品</a>
+        </div>        
     </div>    
     <main>@yield('content')</main>
 </body>

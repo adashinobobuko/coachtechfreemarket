@@ -4,5 +4,8 @@
 @endsection
 
 @section('content')
-<h1>テスト</h1>
+<h1>おすすめ</h1>
+<h1>マイリスト</h1>
+<span>商品</span>
+<span>商品</span>
 @endsection

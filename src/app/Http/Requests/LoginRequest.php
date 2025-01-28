@@ -13,7 +13,7 @@ class LoginRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,26 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'email' => ['required', 'email', 'max:255'],
+            'password' => 'required|string|min:8|max:255',
         ];
+    }
+
+    public function messages()
+    {
+        return [
+            'email.required' => 'メールアドレスを入力してください',
+            'password.required' => 'パスワードを入力してください',
+        ];
+    }
+
+    protected function failedValidation($validator)
+    {
+        parent::failedValidation($validator);
+
+        // 登録されていない場合の追加メッセージを処理する
+        if (!\App\Models\User::where('email', $this->email)->exists()) {
+            session()->flash('login_error', 'ログイン情報が登録されていません');
+        }
     }
 }
