@@ -62,7 +62,7 @@ class AuthController extends Controller
 
         // 認証失敗時
         return back()->withErrors([
-            'email' => 'メールアドレスまたはパスワードが正しくありません。',
+            'email' => 'ログイン情報が登録されていません',
         ])->onlyInput('email');
     }
 

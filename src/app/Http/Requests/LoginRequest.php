@@ -25,7 +25,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'email' => ['required', 'email', 'max:255'],
-            'password' => 'required|string|min:8|max:255',
+            'password' => 'required|string|max:255',
         ];
     }
 
@@ -37,13 +37,4 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    protected function failedValidation($validator)
-    {
-        parent::failedValidation($validator);
-
-        // 登録されていない場合の追加メッセージを処理する
-        if (!\App\Models\User::where('email', $this->email)->exists()) {
-            session()->flash('login_error', 'ログイン情報が登録されていません');
-        }
-    }
 }

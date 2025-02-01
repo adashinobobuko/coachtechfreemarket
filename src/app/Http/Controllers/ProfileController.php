@@ -12,7 +12,9 @@ class ProfileController extends Controller
     // プロフィール設定画面を表示
     public function edit()
     {
+        //登録ユーザーの情報を取得
         $user = Auth::user();
+
         return view('mypage/profile', compact('user'));
     }
 
@@ -40,7 +42,7 @@ class ProfileController extends Controller
         return redirect()->route('profile.edit')->with('success', 'プロフィールが更新されました。');
     }
 
-    public function index()
+    public function showMypage()
     {
         return view('mypage/mypage');
     }

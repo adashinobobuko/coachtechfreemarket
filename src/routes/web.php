@@ -36,7 +36,7 @@ Route::middleware(['auth'])->group(function () {
 
 //マイページ関連のルート
 Route::middleware(['auth'])->group(function () {
-    Route::get('/mypage',[ProfileController::class,'index'])->name('mypage');
+    Route::get('/mypage',[ProfileController::class,'showMypage'])->name('mypage');
 });
 
 //メール認証必要なルートのちに編集予定
