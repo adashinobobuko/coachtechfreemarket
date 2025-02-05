@@ -31,7 +31,7 @@
             <div class="flex flex-wrap gap-2 mt-2">
                 @foreach(['ファッション', '家電', 'インテリア', 'レディース', 'メンズ', 'コスメ', '本', 'ゲーム', 'スポーツ', 'キッチン', 'ハンドメイド', 'アクセサリー', 'おもちゃ', 'ベビー・キッズ'] as $category)
                     <label class="inline-flex items-center">
-                        <input type="radio" name="category" value="{{ $category }}" class="mr-2"> {{ $category }}
+                        <input type="checkbox" name="category[]" value="{{ $category }}" class="mr-2"> {{ $category }}
                     </label>
                 @endforeach
             </div>

@@ -21,8 +21,10 @@
                 @if(isset($goods) && $goods->isNotEmpty())
                     @foreach($goods as $good)
                         <div class="p-3 border text-center">
-                            <img src="{{ asset('storage/' . $good->image) }}" alt="商品画像" class="img-fluid">
-                            <br>{{ $good->name }}
+                            <a href="{{ route('goods.show', $good->id) }}">
+                                <img src="{{ asset('storage/' . $good->image) }}" alt="商品画像" class="img-fluid">
+                                <br>{{ $good->name }}
+                            </a>
                         </div>
                     @endforeach
                 @else

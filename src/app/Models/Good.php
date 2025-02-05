@@ -20,6 +20,12 @@ class Good extends Model
         'user_id'
     ];
     
+    // カテゴリーを配列に変換
+    public function getCategoryArrayAttribute()
+    {
+        return explode(',', $this->category);
+    }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);

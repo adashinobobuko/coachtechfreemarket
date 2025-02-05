@@ -32,7 +32,7 @@ class ListingController extends Controller
         $goods = Good::create([
             'user_id' => Auth::id(),
             'image' => $request->file('image')->store('goods', 'public'),
-            'category' => $request->category,
+            'category' => implode(',', $request->category),
             'condition' => $request->condition,
             'name' => $request->name,
             'description' => $request->description,

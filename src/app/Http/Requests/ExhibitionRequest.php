@@ -25,7 +25,7 @@ class ExhibitionRequest extends FormRequest
     {
         return [
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'category' => 'required|string',
+            'category' => 'required|array', // 配列として受け取る
             'condition' => 'required|string',
             'name' => 'required|string',
             'description' => 'required|string|max:255',

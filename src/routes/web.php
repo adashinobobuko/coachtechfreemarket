@@ -20,6 +20,12 @@ use App\Http\Controllers\ListingController;
 //トップ（商品一覧）ページへ
 Route::get('/', [ItemController::class,'index'])->name('index');
 
+//商品詳細閲覧、購入のルート
+Route::get('/item/{id}', [ItemController::class, 'show'])->name('goods.show');//商品の詳細を表示
+//TODO:購入はログインメンバーのみ
+//コメントするためのルート
+Route::post('/comments/{good}', [ItemController::class, 'store'])->name('comments.store');
+
 //ユーザー登録のルート
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
