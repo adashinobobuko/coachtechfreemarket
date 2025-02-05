@@ -1,0 +1,29 @@
+.tab-menu {
+    display: flex;
+    border-bottom: 2px solid #ccc;
+}
+
+.tab-menu button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: black;
+}
+
+.tab-menu button.active {
+    color: red;
+    font-weight: bold;
+    border-bottom: 3px solid red;
+}
+
+.tab-content {
+    display: none;
+    padding: 20px;
+}
+
+.tab-content.active {
+    display: block;
+}

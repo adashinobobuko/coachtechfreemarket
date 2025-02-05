@@ -45,4 +45,12 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    //グッズモデルとのリレーション
+    public function goods()
+    {
+        return $this->hasMany(Good::class);
+    }
+
 }
+

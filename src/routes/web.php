@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\MarketController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ListingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,8 +17,8 @@ use App\Http\Controllers\MarketController;
 |
 */
 
-//トップページへ
-Route::get('/', [MarketController::class,'index']);
+//トップ（商品一覧）ページへ
+Route::get('/', [ItemController::class,'index'])->name('index');
 
 //ユーザー登録のルート
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
@@ -37,6 +38,12 @@ Route::middleware(['auth'])->group(function () {
 //マイページ関連のルート
 Route::middleware(['auth'])->group(function () {
     Route::get('/mypage',[ProfileController::class,'showMypage'])->name('mypage');
+});
+
+//出品関連のルート
+Route::middleware(['auth'])->group(function () {
+    Route::get('/sell',[ListingController::class,'showSellForm'])->name('sellform');
+    Route::post('/sell/store',[ListingController::class,'store'])->name('sellform.store');
 });
 
 //メール認証必要なルートのちに編集予定

@@ -34,7 +34,7 @@
             <a href="{{ route('mypage') }}">マイページ</a>
         </div>
         <div class="tosellform">
-            <a href="">出品</a>
+            <a href="{{ route('sellform') }}">出品</a>
         </div>        
     </div>    
     <main>@yield('content')</main>
