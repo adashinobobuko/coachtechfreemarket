@@ -18,7 +18,7 @@ class ListingController extends Controller
 
     public function store(ExhibitionRequest $request)
     {
-        // デバッグ用: リクエストされたデータを確認
+        //デバッグ用: リクエストされたデータを確認
         //dd($request->all());
 
         // 画像アップロード処理
@@ -35,6 +35,7 @@ class ListingController extends Controller
             'category' => implode(',', $request->category),
             'condition' => $request->condition,
             'name' => $request->name,
+            'brand' => $request->brand,
             'description' => $request->description,
             'price' => $request->price,
         ]);

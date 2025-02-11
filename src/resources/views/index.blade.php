@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/index.css') }}" />
+<link rel="stylesheet" href="{{ asset('css/index.css') }}?v={{ time() }}" />
 @endsection
 
 @section('content')
@@ -20,22 +20,45 @@
             <div class="d-flex gap-3">
                 @if(isset($goods) && $goods->isNotEmpty())
                     @foreach($goods as $good)
-                        <div class="p-3 border text-center">
-                            <a href="{{ route('goods.show', $good->id) }}">
-                                <img src="{{ asset('storage/' . $good->image) }}" alt="商品画像" class="img-fluid">
-                                <br>{{ $good->name }}
-                            </a>
-                        </div>
+                        @if(!Auth::check() || Auth::id() !== $good->user_id)
+                            <div class="p-3 border text-center position-relative">
+                                <a href="{{ route('goods.show', $good->id) }}">
+                                    <div class="position-relative">
+                                        <img src="{{ asset('storage/' . $good->image) }}" alt="商品画像" class="product-image">
+                                        @if($good->is_sold_out)
+                                            <div class="sold-out-overlay">SOLD OUT</div>
+                                        @endif
+                                    </div>
+                                    <br>{{ $good->name }}
+                                </a>
+                            </div>
+                        @endif
                     @endforeach
                 @else
-                    <p>出品した商品はありません。</p>
+                    <p>おすすめの商品はありません。</p>
                 @endif
             </div>
         </div>
         <div class="tab-content" id="tab2">
             <h3>マイリスト</h3>
             <div class="d-flex gap-3">
-                <div class="p-3 border text-center">商品画像<br>商品名</div>
+                @if(Auth::check() && isset($mylist) && $mylist->isNotEmpty())
+                    @foreach($mylist as $item)
+                        <div class="p-3 border text-center position-relative">
+                            <a href="{{ route('goods.show', $item->id) }}">
+                                <div class="position-relative">
+                                    <img src="{{ asset('storage/' . $item->image) }}" alt="商品画像" class="img-fluid">
+                                    @if($item->is_sold_out)
+                                        <div class="sold-out-overlay">SOLD OUT</div>
+                                    @endif
+                                </div>
+                                <br>{{ $item->name }}
+                            </a>
+                        </div>
+                    @endforeach
+                @else
+                    <p>マイリストには商品がありません。</p>
+                @endif
             </div>
         </div>
     </div>
@@ -61,5 +84,5 @@
         });
     </script>
 
-</body
+</body>
 @endsection

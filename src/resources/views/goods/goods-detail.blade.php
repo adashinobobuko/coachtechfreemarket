@@ -16,18 +16,24 @@
 
             <!-- お気に入り＆コメントアイコン -->
             <div class="d-flex align-items-center mb-3">
-                <span class="me-3"><i class="fas fa-star"></i> {{ $good->favorites_count ?? 0 }}</span>
-                <span><i class="fas fa-comment"></i> {{ $good->comments_count ?? 0 }}</span>
-            </div>
+                <!-- いいねボタン -->
+                <button id="favorite-btn" class="btn btn-outline-warning me-3">
+                    <img src="{{ asset('images/1fc8ae66e54e525cb4afafb0a04b1deb.png') }}" alt="お気に入り" width="20">
+                    <span id="favorite-count">0</span>
+                </button>
 
+                <!-- コメント数表示 -->
+                <span>
+                    <img src="{{ asset('images/9403a7440cf0d1765014bcdbe8540f70.png') }}" alt="コメント" width="20">
+                    <span id="comment-count">{{ isset($comments) ? $comments->count() : 0 }}</span>
+                </span>
+            </div>
             <!-- 購入ボタン -->
-            <a href="#" class="btn btn-danger w-100">購入手続きへ</a>
+            <a href="{{ route('buy.show', ['id' => $good->id]) }}" class="btn btn-danger w-100">購入手続きへ</a>
 
             <!-- 商品説明 -->
             <div class="mt-4">
                 <h4>商品説明</h4>
-                <p><strong>カラー：</strong>{{ $good->color ?? '記載なし' }}</p>
-                <p><strong>状態：</strong>{{ $good->condition ?? '不明' }}</p>
                 <p>{{ $good->description ?? '商品説明がありません。' }}</p>
             </div>
 
@@ -35,6 +41,7 @@
             <div class="mt-3">
                 <h4>商品の情報</h4>
                 <span class="badge bg-secondary">{{ $good->category ?? 'カテゴリ不明' }}</span>
+                <p><strong>状態：</strong>{{ $good->condition ?? '不明' }}</p>
             </div>
         </div>
     </div>
@@ -43,7 +50,7 @@
     <div class="mt-5">
         <h4>コメント ({{ isset($comments) ? $comments->count() : 0 }})</h4>
 
-            @if(isset($comments) && $comments->isNotEmpty())
+            @if($comments->isNotEmpty())
                 @foreach ($comments as $comment)
                     <div class="d-flex align-items-center border p-2 mb-2">
                         <img src="{{ asset('storage/' . ($comment->user->profile_image ?? 'default.png')) }}" 
@@ -75,3 +82,63 @@
     </div>
 </div>
 @endsection
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('favorite-btn').addEventListener('click', function() {
+        let goodId = this.dataset.goodId;
+        let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        fetch(`/favorites/${goodId}`, {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": token,
+                "Content-Type": "application/json"
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            let favoriteBtn = document.getElementById('favorite-btn');
+            let favoriteCount = document.getElementById('favorite-count');
+
+            favoriteCount.textContent = data.count;
+            favoriteBtn.classList.toggle('btn-outline-warning');
+            favoriteBtn.classList.toggle('btn-warning');
+        })
+        .catch(error => console.error('Error:', error));
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const favoriteBtn = document.getElementById("favorite-btn");
+    const favoriteCount = document.getElementById("favorite-count");
+    const commentBtn = document.getElementById("add-comment-btn");
+    const commentCount = document.getElementById("comment-count");
+    const commentInput = document.getElementById("comment-input");
+
+    // いいねボタンの動作
+    let liked = false;
+    favoriteBtn.addEventListener("click", function () {
+        let count = parseInt(favoriteCount.textContent);
+        if (liked) {
+            count--;
+            liked = false;
+        } else {
+            count++;
+            liked = true;
+        }
+        favoriteCount.textContent = count;
+    });
+
+    // コメント追加の動作
+    commentBtn.addEventListener("click", function () {
+        if (commentInput.value.trim() !== "") {
+            let count = parseInt(commentCount.textContent);
+            count++;
+            commentCount.textContent = count;
+            commentInput.value = ""; // 入力欄をクリア
+        }
+    });
+});
+</script>
+

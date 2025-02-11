@@ -97,28 +97,3 @@
     padding: 5px 10px;
     font-weight: bold;
 }
-
-.tologin a{
-    text-decoration: none;
-    color: white;
-}
-
-.tomypage a{
-    text-decoration: none;
-    color: white;
-}
-
-.tosellform{
-    background: #fff;
-    padding: 5px 10px;
-}
-
-.tosellform a{
-    text-decoration: none;
-    color: black;
-}
-
-.logged-out a{
-    text-decoration: none;
-    color: white;
-}

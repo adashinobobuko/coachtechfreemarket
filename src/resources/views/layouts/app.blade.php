@@ -6,18 +6,21 @@
     <title>coachtechfreemarket</title>
     <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('css')
 </head>
 <body>
     <div class="header">
         <div class="header-logo">
-            <img src="{{ asset('images/logo.svg') }}" alt="coachtechのロゴ">
+            <a href="{{ route('index') }}" class="header-logo_a">
+                <img src="{{ asset('images/logo.svg') }}" alt="coachtechのロゴ">
+            </a>
         </div>
-        <div class="searchbar">
-            <input type="text" class="searchbar-item">
-        </div>
+        <form class="search-form" action="{{ route('search') }}" method="GET">
+            <input class="search-form__item-input" type="text" name="keyword" value="{{ request('keyword') }}" placeholder="なにをお探しですか？">
+        </form>
         @if (Auth::check())
-        <div class="logged-in">
+        <div class="logged-out">
              <a href=""  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                    ログアウト
              </a>

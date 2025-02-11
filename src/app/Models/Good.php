@@ -12,6 +12,7 @@ class Good extends Model
     protected $fillable = [
         'image',
         'category',
+        'brand',
         'condition',
         'name',
         'description',
@@ -25,15 +26,38 @@ class Good extends Model
     {
         return explode(',', $this->category);
     }
-
+    //コメント関連
     public function comments()
     {
         return $this->hasMany(Comment::class);
     }
-
+    //ユーザーとの紐づけ
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    //いいね、マイリスト関連
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function getFavoritesCountAttribute()
+    {
+        return $this->favorites()->count();
+    }
+
+    public function isFavoritedBy($user)
+    {
+        return $this->favorites()->where('user_id', $user->id)->exists();
+    }
+    
+    //検索機能のローカルスコープ
+    public function scopeKeywordSearch($query, $keyword)
+    {
+    if (!empty($keyword)) {
+        $query->where('name', 'like', '%' . $keyword . '%');
+    }
     }
 
 }

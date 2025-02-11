@@ -1,3 +1,5 @@
+/* index.css */
+
 .tab-menu {
     display: flex;
     border-bottom: 2px solid #ccc;
@@ -26,4 +28,47 @@
 
 .tab-content.active {
     display: block;
+}
+
+/* 商品一覧のスタイル */
+.d-flex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1540px;
+    margin: 0 auto;
+    gap: 20px;
+}
+
+/* 商品アイテム */
+.product-item {
+    width: 290px;
+    height: 281px;
+    border: 1px solid #ccc;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+/* 商品画像 */
+.product-item img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+/* 売り切れオーバーレイ */
+.sold-out-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    font-weight: bold;
 }

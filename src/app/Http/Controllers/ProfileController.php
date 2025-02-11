@@ -32,7 +32,7 @@ class ProfileController extends Controller
         }
 
         // 他のフィールドを更新
-        $user->update($request->only('postal_code', 'address', 'building_name'));
+        $user->update($request->only('name','postal_code', 'address', 'building_name'));
 
         return redirect()->route('profile.edit')->with('success', 'プロフィールが更新されました。');
     }

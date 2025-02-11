@@ -12,7 +12,10 @@
                 <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" alt="プロフィール画像" class="mt-3" style="width: 100px; height: 100px; border-radius: 50%;">
             @endif
         </div>
-        <!--ユーザー名の入力欄も追加-->
+        <div class="mb-3">
+            <label for="name" class="form-label">ユーザー名</label>
+            <input type="text" id="name" name="name" value="{{ old('name', Auth::user()->name) }}" class="form-control">
+        </div>
         <div class="mb-3">
             <label for="postal_code" class="form-label">郵便番号</label>
             <input type="text" id="postal_code" name="postal_code" value="{{ old('postal_code', Auth::user()->postal_code) }}" class="form-control">

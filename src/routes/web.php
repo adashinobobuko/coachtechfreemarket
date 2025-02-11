@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ListingController;
+use App\Http\Controllers\BuyController;
+use App\Http\Controllers\PurchaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,9 +24,19 @@ Route::get('/', [ItemController::class,'index'])->name('index');
 
 //商品詳細閲覧、購入のルート
 Route::get('/item/{id}', [ItemController::class, 'show'])->name('goods.show');//商品の詳細を表示
+
 //TODO:購入はログインメンバーのみ
-//コメントするためのルート
-Route::post('/comments/{good}', [ItemController::class, 'store'])->name('comments.store');
+Route::middleware(['auth'])->group(function(){
+    Route::get('/purchase/{id}',[BuyController::class,'showBuyform'])->name('buy.show');
+    Route::post('/purchase/store', [PurchaseController::class, 'store'])->name('purchase.store');
+    Route::get('/purchase/complete', [PurchaseController::class, 'complete'])->name('purchase.complete');
+});
+
+//いいね、マイリスト機能関連のルート、コメントするためのルート
+Route::middleware(['auth'])->group(function () {
+    Route::post('/favorites/{good}', [ItemController::class, 'toggle'])->name('favorites.toggle');
+    Route::post('/comments/{good}', [ItemController::class, 'store'])->name('comments.store');
+});
 
 //ユーザー登録のルート
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
@@ -51,6 +63,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/sell',[ListingController::class,'showSellForm'])->name('sellform');
     Route::post('/sell/store',[ListingController::class,'store'])->name('sellform.store');
 });
+
+//商品を検索するためのルート
+Route::get('/search',[ItemController::class,'search'])->name('search');
 
 //メール認証必要なルートのちに編集予定
 Route::middleware(['auth', 'verified'])->group(function () {
