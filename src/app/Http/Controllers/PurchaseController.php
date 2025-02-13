@@ -27,7 +27,7 @@ class PurchaseController extends Controller
 
     public function complete()
     {
-        return view('goods.purchasecomplete');
+        return view('index');
     }
 }
 

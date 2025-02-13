@@ -16,16 +16,33 @@
 
             <!-- お気に入り＆コメントアイコン -->
             <div class="d-flex align-items-center mb-3">
-                <!-- いいねボタン -->
-                <button id="favorite-btn" class="btn btn-outline-warning me-3">
-                    <img src="{{ asset('images/1fc8ae66e54e525cb4afafb0a04b1deb.png') }}" alt="お気に入り" width="20">
-                    <span id="favorite-count">0</span>
-                </button>
+                <!-- いいねボタン（フォーム利用） -->
+                    @if(Auth::check() && optional(Auth::user()->favorites)->contains('good_id', $good->id))
+                        <form action="{{ route('like.destroy', ['id' => $good->id]) }}" method="POST">
+                            @csrf
+                            @method('POST')
+                            <button type="submit" class="btn btn-warning">
+                                <img src="{{ asset('images/1fc8ae66e54e525cb4afafb0a04b1deb.png') }}" alt="お気に入り解除" width="20">
+                                いいね解除
+                            </button>
+                        </form>
+                    @else
+                        <form action="{{ route('like.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="good_id" value="{{ $good->id }}">
+                            <button type="submit" class="btn btn-outline-warning">
+                                <img src="{{ asset('images/1fc8ae66e54e525cb4afafb0a04b1deb.png') }}" alt="お気に入り" width="20">
+                                いいね
+                            </button>
+                        </form>
+                    @endif
+                <!-- いいね数を表示 -->
+                <span class="ms-2">{{ $good->favorites->count() }}</span>
 
                 <!-- コメント数表示 -->
                 <span>
                     <img src="{{ asset('images/9403a7440cf0d1765014bcdbe8540f70.png') }}" alt="コメント" width="20">
-                    <span id="comment-count">{{ isset($comments) ? $comments->count() : 0 }}</span>
+                    <span>{{ isset($comments) ? $comments->count() : 0 }}</span>
                 </span>
             </div>
             <!-- 購入ボタン -->
@@ -82,63 +99,3 @@
     </div>
 </div>
 @endsection
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById('favorite-btn').addEventListener('click', function() {
-        let goodId = this.dataset.goodId;
-        let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-        fetch(`/favorites/${goodId}`, {
-            method: "POST",
-            headers: {
-                "X-CSRF-TOKEN": token,
-                "Content-Type": "application/json"
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            let favoriteBtn = document.getElementById('favorite-btn');
-            let favoriteCount = document.getElementById('favorite-count');
-
-            favoriteCount.textContent = data.count;
-            favoriteBtn.classList.toggle('btn-outline-warning');
-            favoriteBtn.classList.toggle('btn-warning');
-        })
-        .catch(error => console.error('Error:', error));
-    });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    const favoriteBtn = document.getElementById("favorite-btn");
-    const favoriteCount = document.getElementById("favorite-count");
-    const commentBtn = document.getElementById("add-comment-btn");
-    const commentCount = document.getElementById("comment-count");
-    const commentInput = document.getElementById("comment-input");
-
-    // いいねボタンの動作
-    let liked = false;
-    favoriteBtn.addEventListener("click", function () {
-        let count = parseInt(favoriteCount.textContent);
-        if (liked) {
-            count--;
-            liked = false;
-        } else {
-            count++;
-            liked = true;
-        }
-        favoriteCount.textContent = count;
-    });
-
-    // コメント追加の動作
-    commentBtn.addEventListener("click", function () {
-        if (commentInput.value.trim() !== "") {
-            let count = parseInt(commentCount.textContent);
-            count++;
-            commentCount.textContent = count;
-            commentInput.value = ""; // 入力欄をクリア
-        }
-    });
-});
-</script>
-

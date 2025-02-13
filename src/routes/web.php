@@ -25,16 +25,24 @@ Route::get('/', [ItemController::class,'index'])->name('index');
 //商品詳細閲覧、購入のルート
 Route::get('/item/{id}', [ItemController::class, 'show'])->name('goods.show');//商品の詳細を表示
 
-//TODO:購入はログインメンバーのみ
+//購入のルート
 Route::middleware(['auth'])->group(function(){
     Route::get('/purchase/{id}',[BuyController::class,'showBuyform'])->name('buy.show');
     Route::post('/purchase/store', [PurchaseController::class, 'store'])->name('purchase.store');
-    Route::get('/purchase/complete', [PurchaseController::class, 'complete'])->name('purchase.complete');
+    Route::post('/purchase/complete', [PurchaseController::class, 'complete'])->name('purchase.complete');
+});
+
+//住所変更ルート
+Route::middleware(['auth'])->group(function () {
+    Route::get('/goods/address-change', [BuyController::class, 'showForm'])->name('address.change.form');
+    Route::post('/goods/address-change', [BuyController::class, 'updateAddress'])->name('address.change.update');
+    Route::get('/purchase', [BuyController::class, 'showAll'])->name('buy.index');
 });
 
 //いいね、マイリスト機能関連のルート、コメントするためのルート
 Route::middleware(['auth'])->group(function () {
-    Route::post('/favorites/{good}', [ItemController::class, 'toggle'])->name('favorites.toggle');
+    Route::post('/like', [ItemController::class, 'toggle'])->name('like.store');
+    Route::post('/unlike/{id}', [ItemController::class, 'destroy'])->name('like.destroy');
     Route::post('/comments/{good}', [ItemController::class, 'store'])->name('comments.store');
 });
 

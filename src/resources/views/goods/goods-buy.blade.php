@@ -10,7 +10,7 @@
                     <img src="{{ asset('storage/' . $good->image) }}" alt="商品画像" class="img-fluid border">
                 </div>
                 <div class="col-md-8">
-                    <h3>商品名</h3>
+                    <h2>{{ $good->name }}</h2>
                     <h3 class="text-danger">¥{{ number_format($good->price) }}（税込）</h3>
                     <hr>
                     <form action="{{ route('purchase.store') }}" method="POST">
@@ -28,7 +28,7 @@
                             <p>
                                 〒 {{ Auth::user()->postal_code ?? '未登録' }}<br>
                                 {{ Auth::user()->address ?? '住所未登録' }}<br>
-                                {{ Auth::user()->building ?? '' }}
+                                {{ Auth::user()->building_name ?? '' }}
                             </p>
                         @elseif ($errors->has('address'))  <!-- ここを elseif に変更 -->
                             <div class="alert alert-danger">
@@ -39,7 +39,7 @@
                                 住所が登録されていません。プロフィールページで登録してください。
                             </div>
                         @endif
-                        <a href="#" class="btn btn-link">変更する</a>
+                        <a href="{{ route('address.change.form') }}" class="btn btn-link">変更する</a>
                         <hr>
                         <button typr="submit" class="btn btn-danger btn-lg btn-block">購入する</button>
                     </form>

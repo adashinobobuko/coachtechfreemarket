@@ -39,7 +39,7 @@ class Good extends Model
     //いいね、マイリスト関連
     public function favorites()
     {
-        return $this->hasMany(Favorite::class);
+        return $this->hasMany(Favorite::class, 'good_id');
     }
 
     public function getFavoritesCountAttribute()

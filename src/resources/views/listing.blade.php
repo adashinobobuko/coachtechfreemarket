@@ -47,7 +47,6 @@
         <div class="mb-4">
             <label class="block text-gray-700">商品の状態</label>
             <select name="condition" class="w-full border p-2 rounded mt-1">
-                <option value="">選択してください</option>
                 <option value="良好">良好</option>
                 <option value="目立った傷や汚れ無し">目立った傷や汚れ無し</option>
                 <option value="やや傷や汚れあり">やや傷や汚れあり</option>

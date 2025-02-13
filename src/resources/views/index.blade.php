@@ -39,28 +39,25 @@
                 @endif
             </div>
         </div>
-        <div class="tab-content" id="tab2">
-            <h3>マイリスト</h3>
-            <div class="d-flex gap-3">
-                @if(Auth::check() && isset($mylist) && $mylist->isNotEmpty())
-                    @foreach($mylist as $item)
-                        <div class="p-3 border text-center position-relative">
-                            <a href="{{ route('goods.show', $item->id) }}">
-                                <div class="position-relative">
-                                    <img src="{{ asset('storage/' . $item->image) }}" alt="商品画像" class="img-fluid">
-                                    @if($item->is_sold_out)
-                                        <div class="sold-out-overlay">SOLD OUT</div>
-                                    @endif
+            <div class="tab-content" id="tab2">
+                <h3>マイリスト</h3>
+                <div class="d-flex gap-3">
+                    @if(Auth::check() && isset($favorites) && $favorites->isNotEmpty())
+                        @foreach($favorites as $favorite)
+                            @if($favorite->good) <!-- good リレーションが null でないことを確認 -->
+                                <div class="p-3 border text-center">
+                                    <a href="{{ route('goods.show', $favorite->good->id) }}">
+                                        <img src="{{ asset('storage/' . $favorite->good->image) }}" alt="商品画像" class="product-image">
+                                    </a>
+                                    <br>{{ $favorite->good->name }}
                                 </div>
-                                <br>{{ $item->name }}
-                            </a>
-                        </div>
-                    @endforeach
-                @else
-                    <p>マイリストには商品がありません。</p>
-                @endif
+                            @endif
+                        @endforeach
+                    @else
+                        <p>マイリストには商品がありません。</p>
+                    @endif
+                </div>
             </div>
-        </div>
     </div>
 
     <!-- JavaScriptでタブ切り替え -->

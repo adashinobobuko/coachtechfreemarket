@@ -1,74 +1,103 @@
-/* index.css */
-
-.tab-menu {
-    display: flex;
-    border-bottom: 2px solid #ccc;
-}
-
-.tab-menu button {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    background: none;
-    font-size: 16px;
-    cursor: pointer;
-    color: black;
-}
-
-.tab-menu button.active {
-    color: red;
-    font-weight: bold;
-    border-bottom: 3px solid red;
-}
-
-.tab-content {
-    display: none;
+/* 全体のレイアウト調整 */
+.container {
+    max-width: 1000px;
+    margin: auto;
     padding: 20px;
 }
 
-.tab-content.active {
-    display: block;
-}
-
-/* 商品一覧のスタイル */
-.d-flex {
+/* タブメニュー */
+.tab-menu {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    max-width: 1540px;
-    margin: 0 auto;
-    gap: 20px;
-}
-
-/* 商品アイテム */
-.product-item {
-    width: 290px;
-    height: 281px;
-    border: 1px solid #ccc;
-    text-align: center;
-    display: flex;
-    align-items: center;
     justify-content: center;
-    background-color: #f0f0f0;
-    position: relative;
+    gap: 30px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+}
+
+.tab-link {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s, border-bottom 0.3s;
+}
+
+.tab-link.active {
+    color: red;
+    font-weight: bold;
+    border-bottom: 2px solid red;
+}
+
+/* 商品セクション */
+.section-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
     margin-bottom: 20px;
 }
 
-/* 商品画像 */
-.product-item img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: cover;
+/* 商品グリッド */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    justify-content: center;
+}
+
+/* 商品カード */
+.product-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+    background: white;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+}
+
+.image-wrapper {
+    position: relative;
+}
+
+.product-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
 }
 
 /* 売り切れオーバーレイ */
 .sold-out-overlay {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.7);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
     color: white;
-    padding: 5px 10px;
+    font-size: 1.2rem;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 商品名 */
+.product-name {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* 商品がない場合 */
+.no-items {
+    text-align: center;
+    font-size: 1rem;
+    color: #666;
+    padding: 20px;
 }
