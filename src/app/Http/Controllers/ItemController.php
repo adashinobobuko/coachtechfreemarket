@@ -45,6 +45,11 @@ class ItemController extends Controller
 
     public function store(CommentRequest $request, Good $good)
     {
+        if (!Auth::check()) {
+            // 未認証ユーザーの場合、商品詳細ページにリダイレクトしエラーメッセージを表示
+            return redirect()->route('goods.show', $good->id)->with('error', 'コメントを投稿するにはログインが必要です。');
+        }
+
         // バリデーション
         $validated = $request->validated();
 

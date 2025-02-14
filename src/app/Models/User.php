@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -24,7 +25,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'profile_image',
         'postal_code',
         'address',
-        'building_name',        
+        'building_name',
+        'email_verified_at',
+        'email_verified_token',
+        'profile_completed',        
     ];
 
     /**
@@ -58,5 +62,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Favorite::class);
     }
 
+    //メール認証の際に必ずtokenが生成されるようにする
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($user) {
+            if (empty($user->email_verification_token)) {
+                $user->email_verification_token = Str::random(64);
+            }
+        });
+    }
 }
 

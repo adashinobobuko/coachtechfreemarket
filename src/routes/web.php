@@ -42,9 +42,9 @@ Route::middleware(['auth'])->group(function () {
 //いいね、マイリスト機能関連のルート、コメントするためのルート
 Route::middleware(['auth'])->group(function () {
     Route::post('/like', [ItemController::class, 'toggle'])->name('like.store');
-    Route::post('/unlike/{id}', [ItemController::class, 'destroy'])->name('like.destroy');
-    Route::post('/comments/{good}', [ItemController::class, 'store'])->name('comments.store');
+    Route::post('/unlike/{id}', [ItemController::class, 'destroy'])->name('like.destroy');    
 });
+Route::post('/comments/{good}', [ItemController::class, 'store'])->name('comments.store');
 
 //ユーザー登録のルート
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
@@ -75,7 +75,11 @@ Route::middleware(['auth'])->group(function () {
 //商品を検索するためのルート
 Route::get('/search',[ItemController::class,'search'])->name('search');
 
-//メール認証必要なルートのちに編集予定
-Route::middleware(['auth', 'verified'])->group(function () {
-    // 認証後、メール確認が必要なルートを記述
-});
+//メール認証関連
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::get('/verify-email/{token}', [AuthController::class, 'verifyEmail'])->name('verify.email');
+Route::post('/resend-email', [AuthController::class, 'resendVerificationEmail'])->middleware('auth')->name('resend.email');
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

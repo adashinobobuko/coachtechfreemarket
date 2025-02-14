@@ -35,5 +35,6 @@
   <div class="toregister">
     <a href="{{ route('register') }}">会員登録はこちら</a>
   </div>
+
 </div>
 @endsection

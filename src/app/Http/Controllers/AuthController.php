@@ -6,11 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\RegisterRequest;
-use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-
 
 class AuthController extends Controller
 {
@@ -23,52 +20,122 @@ class AuthController extends Controller
     }
 
     /**
-     * ユーザー登録処理
+     * ログインフォームの表示
      */
-    public function register(RegisterRequest $request)
+
+    public function showLoginForm()
     {
-        // バリデーションはRegisterRequestで行う
-        // ユーザーを作成
+        return view('auth.login');
+    }
+
+
+    /**
+     * ユーザー登録処理（仮登録）
+     */
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        // ✅ `email_verification_token` は `User` モデルの `boot()` で自動セットされる
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        // 作成したユーザーをログイン状態にする
-        Auth::login($user);
+        // 認証メール送信
+        Mail::send('emails.verify', ['user' => $user], function ($message) use ($user) {
+            $message->to($user->email);
+            $message->subject('メール認証のお願い');
+        });
 
-        // プロフィール編集画面にリダイレクト
-        return redirect()->route('profile.edit');
+        return redirect()->route('login')->with('message', '認証メールを送信しました！メールを確認してください。');
     }
 
-    // ログインフォームを表示
-    public function showLoginForm()
+    /**
+     * メール認証の処理
+     */
+    public function verifyEmail($token)
     {
-        return view('auth.login');
+        $user = User::where('email_verification_token', $token)->first();
+
+        if (!$user) {
+            return redirect()->route('login')->with('error', '無効な認証リンクです。');
+        }
+
+        $user->update([
+            'email_verified_at' => now(),
+            'email_verification_token' => null, // 認証完了後、トークンを削除
+        ]);
+
+        // ✅ `update()` の代わりに `save()` を使用
+        $user->email_verified_at = now();
+        $user->email_verification_token = null;
+        $success = $user->save();
+
+        return redirect()->route('login')->with('message', 'メール認証が完了しました！');
     }
 
-    // ログイン処理
-    public function login(LoginRequest $request)
+    /**
+     * 認証メール再送信
+     */
+    public function resendVerificationEmail()
     {
-        // バリデーション済みデータを取得
-        $credentials = $request->validated();
+        $user = Auth::user();
 
-        // 認証処理
+        if ($user->email_verified_at) {
+            return redirect()->route('home')->with('message', 'すでに認証済みです。');
+        }
+
+        Mail::send('emails.verify', ['user' => $user], function ($message) use ($user) {
+            $message->to($user->email);
+            $message->subject('メール認証のお願い（再送）');
+        });
+
+        return back()->with('message', '確認メールを再送しました！');
+    }
+
+    /**
+     * ログイン処理（未認証ユーザーはログイン不可）
+     */
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !$user->email_verified_at) {
+            return back()->withErrors([
+                'email' => 'メールアドレスが認証されていません。',
+            ]);
+        }
+
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
 
-            // 管理ページ(admin)にリダイレクト
+            // 初回ログイン時のみ `profile.blade.php` へリダイレクト
+            if (!$user->profile_completed) {
+                return redirect()->route('profile.edit'); 
+            }
+            //通常のログイン時
             return redirect()->intended('/');
         }
 
-        // 認証失敗時
         return back()->withErrors([
-            'email' => 'ログイン情報が登録されていません',
+            'email' => 'ログイン情報が正しくありません。',
         ])->onlyInput('email');
     }
 
-    // ログアウト処理
+    /**
+     * ログアウト処理
+     */    
     public function logout(Request $request)
     {
         Auth::logout();
@@ -76,6 +143,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect('/login')->with('message', 'ログアウトしました。');
     }
 }

@@ -82,6 +82,20 @@
                 <p>まだコメントはありません。</p>
             @endif
 
+
+        <!-- 成功・エラーメッセージの表示 -->
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <!-- コメント投稿フォーム -->
         <div class="mt-3">
             <h4>商品へのコメント</h4>

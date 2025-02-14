@@ -5,6 +5,6 @@
 </head>
 <body>
     <p>{{ $user->name }} さん、以下のリンクをクリックしてメール認証を完了してください。</p>
-    <a href="{{ url('/verify-email/' . $user->email_verification_token) }}">メール認証を完了する</a>
+    <a href="{{ route('verify.email', ['token' => $user->email_verification_token]) }}">メール認証を完了する</a>
 </body>
 </html>

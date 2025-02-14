@@ -48,6 +48,11 @@
     </div>
   </form>
 
+  <form method="POST" action="{{ route('resend.email') }}">
+    @csrf
+    <button type="submit">確認メールを再送信</button>
+  </form>
+
   <div class="tologin">
     <a href="{{ route('login') }}">ログインはこちら</a>
   </div>
