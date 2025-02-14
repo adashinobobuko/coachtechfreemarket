@@ -8,9 +8,13 @@ return new class extends Migration {
     public function up()
     {
         Schema::table('goods', function (Blueprint $table) {
-            // 外部キーを追加
+            if (!Schema::hasColumn('goods', 'user_id')) {
+                $table->unsignedBigInteger('user_id')->after('id');
+            }
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
+
     }
 
     public function down()
