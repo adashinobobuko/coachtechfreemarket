@@ -20,7 +20,10 @@ use App\Http\Controllers\PurchaseController;
 */
 
 //トップ（商品一覧）ページへ
-Route::get('/', [ItemController::class,'index'])->name('index');
+// デフォルト（トップページ）は「おすすめ」
+Route::get('/', [ItemController::class, 'recommend'])->name('index');
+// マイリストページ
+Route::get('/mylist', [ItemController::class, 'mylist'])->name('mylist');
 
 //商品詳細閲覧、購入のルート
 Route::get('/item/{id}', [ItemController::class, 'show'])->name('goods.show');//商品の詳細を表示

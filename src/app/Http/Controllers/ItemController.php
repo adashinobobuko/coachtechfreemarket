@@ -15,25 +15,36 @@ use Illuminate\Support\Facades\DB;
 
 class ItemController extends Controller
 {
-    public function index()
+    // 「おすすめ」タブ（デフォルトのトップページ）
+    public function recommend()
     {
         $goods = Good::all(); // 全商品の取得
         $favorites = Auth::check() ? Favorite::where('user_id', Auth::id())->with('good')->get() : collect();
 
-        // dd([
-        // 'favorites_count' => $favorites->count(),
-        // 'favorites_data' => $favorites,
-        // ]);
+        return view('index', [
+            'goods' => $goods,
+            'favorites' => $favorites,
+            'activeTab' => 'recommend'
+        ]);
+    }
 
-        return view('index', compact('goods','favorites'));
+    // 「マイリスト」タブ（/mylist ページ）
+    public function mylist()
+    {
+        $goods = Good::all(); // 全商品の取得
+        $favorites = Auth::check() ? Favorite::where('user_id', Auth::id())->with('good')->get() : collect();
+
+        return view('index', [
+            'goods' => $goods,
+            'favorites' => $favorites,
+            'activeTab' => 'mylist'
+        ]);
     }
 
     public function show($id)
     {
         // 商品情報を取得し、いいね（favorites）とコメントを一緒に取得
         $good = Good::with('favorites', 'comments.user')->findOrFail($id);
-
-        //dd($good->favorites->count());
 
         // 商品に紐づく全てのコメントを取得（新しい順）
         $comments = $good->comments()->latest()->get();
@@ -98,9 +109,23 @@ class ItemController extends Controller
             $query->keywordSearch($request->keyword);
         }
 
+        // どのタブから検索されたのかを判定
+        $activeTab = $request->input('tab', 'recommend'); // デフォルトは「おすすめ」
+
+        // 「マイリスト」タブで検索する場合は、ログインユーザーのお気に入りのみを取得
+        if ($activeTab === 'mylist' && Auth::check()) {
+            $query->whereHas('favorites', function ($q) {
+                $q->where('user_id', Auth::id());
+            });
+        }
+
         $goods = $query->get();
+        $favorites = Auth::check() ? Favorite::where('user_id', Auth::id())->with('good')->get() : collect();
 
-        return view('index', compact('goods'));
+        return view('index', [
+            'goods' => $goods,
+            'favorites' => $favorites,
+            'activeTab' => $activeTab // 検索時のタブ状態を保持
+        ]);
     }
-
 }

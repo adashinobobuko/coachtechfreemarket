@@ -22,6 +22,7 @@
     padding: 10px 20px;
     cursor: pointer;
     color: #666;
+    text-decoration: none;
     transition: color 0.3s, border-bottom 0.3s;
 }
 
@@ -29,6 +30,16 @@
     color: red;
     font-weight: bold;
     border-bottom: 2px solid red;
+}
+
+/* タブのコンテンツ */
+.tab-content {
+    display: none;
+    padding: 20px;
+}
+
+.tab-content.active {
+    display: block;
 }
 
 /* 商品セクション */

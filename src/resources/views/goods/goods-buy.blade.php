@@ -24,13 +24,16 @@
                             </select>
                         <hr>
                         <h5>配送先</h5>
-                        @if(Auth::check() && Auth::user()->address)
+                        @if(Auth::check() && optional(Auth::user()->purchasesAddresses->first())->address)
+                            @php
+                                $address = Auth::user()->purchasesAddresses->first();
+                            @endphp
                             <p>
-                                〒 {{ Auth::user()->postal_code ?? '未登録' }}<br>
-                                {{ Auth::user()->address ?? '住所未登録' }}<br>
-                                {{ Auth::user()->building_name ?? '' }}
+                                〒 {{ $address->postal_code ?? '未登録' }}<br>
+                                {{ $address->address ?? '住所未登録' }}<br>
+                                {{ $address->building_name ?? '' }}
                             </p>
-                        @elseif ($errors->has('address'))  <!-- ここを elseif に変更 -->
+                        @elseif ($errors->has('address'))
                             <div class="alert alert-danger">
                                 {{ $errors->first('address') }}
                             </div>

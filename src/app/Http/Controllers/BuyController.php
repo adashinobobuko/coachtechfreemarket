@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Good;
+use App\Models\PurchasesAddress;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+
 
 class BuyController extends Controller
 {
@@ -30,11 +32,10 @@ class BuyController extends Controller
 
     public function updateAddress(Request $request)
     {
-        // バリデーション設定
         $validator = Validator::make($request->all(), [
             'address' => 'required|string|max:255',
             'postal_code' => 'required|string|max:10',
-            'building_name' => 'required|string|max:30'
+            'building_name' => 'nullable|string|max:30'
         ]);
 
         if ($validator->fails()) {
@@ -44,19 +45,20 @@ class BuyController extends Controller
         }
 
         $user = Auth::user();
-        $user->update([
+
+        // 新しい購入先住所を追加（複数登録可能）
+        $address = PurchasesAddress::create([
+            'user_id' => $user->id,
             'address' => $request->address,
             'postal_code' => $request->postal_code,
-            'building_name' => $request->building_name,
+            'building_name' => $request->building_name
         ]);
 
-        // セッションから last_good_id を取得
+        // セッションデータの処理
         $goodId = session('last_good_id');
+        session()->forget('last_good_id');
 
         if ($goodId) {
-            // セッションデータを削除（不要なデータが残らないように）
-            session()->forget('last_good_id');
-            
             return redirect()->route('buy.show', ['id' => $goodId])
                 ->with('success', '住所が更新されました。');
         } else {

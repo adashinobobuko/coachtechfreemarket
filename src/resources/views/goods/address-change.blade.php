@@ -15,19 +15,19 @@
 
         <div class="form-group">
             <label for="postal_code">郵便番号:</label>
-            <input type="text" id="postal_code" name="postal_code" class="form-control" value="{{ old('postal_code', $user->postal_code) }}" required>
+            <input type="text" id="postal_code" name="postal_code" class="form-control" value="{{ old('postal_code', optional($user->purchasesAddresses->first())->postal_code) }}" required>
             @error('postal_code') <p class="text-danger">{{ $message }}</p> @enderror
         </div>
 
         <div class="form-group">
             <label for="address">住所:</label>
-            <input type="text" id="address" name="address" class="form-control" value="{{ old('address', $user->address) }}" required>
+            <input type="text" id="address" name="address" class="form-control" value="{{ old('address', optional($user->purchasesAddresses->first())->address) }}" required>
             @error('address') <p class="text-danger">{{ $message }}</p> @enderror
         </div>
 
         <div class="form-group">
             <label for="building_name">建物名:</label>
-            <input type="text" id="building_name" name="building_name" class="form-control" value="{{ old('building_name', $user->building_name) }}" required>
+            <input type="text" id="building_name" name="building_name" class="form-control" value="{{ old('building_name', optional($user->purchasesAddresses->first())->building_name) }}" required>
             @error('building_name') <p class="text-danger">{{ $message }}</p> @enderror
         </div>
 

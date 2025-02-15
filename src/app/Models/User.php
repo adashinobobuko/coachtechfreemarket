@@ -73,5 +73,12 @@ class User extends Authenticatable implements MustVerifyEmail
             }
         });
     }
+
+    //ユーザーことに複数の送り先を持つためのリレーション
+    public function purchasesAddresses()
+    {
+        return $this->hasMany(PurchasesAddress::class);
+    }
+
 }
 
