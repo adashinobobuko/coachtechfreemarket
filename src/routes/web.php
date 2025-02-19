@@ -28,11 +28,16 @@ Route::get('/mylist', [ItemController::class, 'mylist'])->name('mylist');
 //商品詳細閲覧、購入のルート
 Route::get('/item/{id}', [ItemController::class, 'show'])->name('goods.show');//商品の詳細を表示
 
+//マイページ関連のルート
+Route::middleware(['auth'])->group(function () {
+    Route::get('/mypage/buy',[ProfileController::class,'buy'])->name('mypage.buy');
+    Route::get('/mypage/sell',[ProfileController::class,'sell'])->name('mypage.sell');
+});
+
 //購入のルート
 Route::middleware(['auth'])->group(function(){
-    Route::get('/purchase/{id}',[BuyController::class,'showBuyform'])->name('buy.show');
+    Route::get('/purchase/{id}', [BuyController::class, 'showBuyform'])->name('buy.show');
     Route::post('/purchase/store', [PurchaseController::class, 'store'])->name('purchase.store');
-    Route::post('/purchase/complete', [PurchaseController::class, 'complete'])->name('purchase.complete');
 });
 
 //住所変更ルート
@@ -62,11 +67,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
     Route::get('/mypage/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/mypage/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-});
-
-//マイページ関連のルート
-Route::middleware(['auth'])->group(function () {
-    Route::get('/mypage',[ProfileController::class,'showMypage'])->name('mypage');
 });
 
 //出品関連のルート

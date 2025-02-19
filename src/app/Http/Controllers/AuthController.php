@@ -52,8 +52,9 @@ class AuthController extends Controller
             $message->to($user->email);
             $message->subject('メール認証のお願い');
         });
-
+        //TODO:新しくタスクが追加された、ログインページに行くのではなく専用のページにいくように
         return redirect()->route('login')->with('message', '認証メールを送信しました！メールを確認してください。');
+        //このメッセージは新しいページに表示されるように
     }
 
     /**
@@ -76,7 +77,7 @@ class AuthController extends Controller
         $user->email_verified_at = now();
         $user->email_verification_token = null;
         $success = $user->save();
-
+        //TODO:新しくタスクが追加された、ログインページに行くのではなく専用のページにいくように
         return redirect()->route('login')->with('message', 'メール認証が完了しました！');
     }
 
@@ -143,6 +144,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login')->with('message', 'ログアウトしました。');
+        return redirect('/')->with('message', 'ログアウトしました。');
     }
 }

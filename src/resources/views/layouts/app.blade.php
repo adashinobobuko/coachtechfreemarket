@@ -35,7 +35,7 @@
         </div>
         @endif
         <div class="tomypage">
-            <a href="{{ route('mypage') }}">マイページ</a>
+            <a href="{{ route('mypage.sell') }}">マイページ</a>
         </div>
         <div class="tosellform">
             <a href="{{ route('sellform') }}">出品</a>

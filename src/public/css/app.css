@@ -17,11 +17,6 @@
     border: 1px solid #ccc;
 }
 
-.login__content {
-    text-align: center;
-    margin-top: 50px;
-}
-
 .form {
     display: flex;
     flex-direction: column;
@@ -39,54 +34,45 @@
     border-radius: 5px;
 }
 
-.form__button-submit {
-    background-color: red;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
 .container {
     padding: 20px;
 }
-
+/*appにはないクラス*/
 .tab-menu {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
 }
-
+/*appにはないクラス*/
 .tab-link {
     padding: 10px 20px;
     border: none;
     cursor: pointer;
 }
-
+/*appにはないクラス*/
 .tab-link.active {
     border-bottom: 2px solid red;
 }
-
+/*appにはないクラス*/
 .tab-content {
     display: none;
 }
-
+/*appにはないクラス*/
 .tab-content.active {
     display: block;
 }
-
+/*appにはないクラス*/
 .d-flex {
     display: flex;
     gap: 20px;
 }
-
+/*appにはないクラス*/
 .p-3 {
     padding: 15px;
     border: 1px solid #ccc;
     text-align: center;
 }
-
+/*appにはないクラス*/
 .sold-out-overlay {
     position: absolute;
     top: 50%;

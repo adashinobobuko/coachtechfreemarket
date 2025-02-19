@@ -1,0 +1,59 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.register__content {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.form__group{
+    margin-bottom: 15px;
+}
+
+.form__label--name {
+    font-weight: bold;
+    margin-right: 12rem;
+}
+
+.form__label--mail {
+    font-weight: bold;
+    margin-right: 10rem;
+}
+
+.form__label--pass {
+    font-weight: bold;
+    margin-right: 12rem;
+}
+
+.form__label--confirm {
+    font-weight: bold;
+    margin-right: 9rem;
+}
+
+.form__input {
+    width: 280px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.tologin {
+    margin: 20px;
+}
+
+.tologin a{
+    color: #0073CC;
+}
+
+.form__button-submit {
+    background-color: #FF5555;
+    color: white;
+    padding: 10px 113px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+}

@@ -7,6 +7,8 @@ use App\Http\Requests\ProfileRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Good;
 use App\Models\User;
+use App\Models\Purchase;
+use App\Models\Favorite;
 
 class ProfileController extends Controller
 {
@@ -44,12 +46,31 @@ class ProfileController extends Controller
         return redirect()->route('profile.edit')->with('success', 'プロフィールが更新されました。');
     }
 
-    public function showMypage()
+    // 「出品した商品」タブ（出品した商品マイページ）
+    public function sell()
     {
-        $user = Auth::user();
-        $goods = Good::where('user_id', $user->id)->get();// 商品を取得（関係がある場合）
+        $goods = Good::where('user_id', Auth::id())->get(); // ログインユーザーの商品取得
+        $activeTab = 'sell';// デフォルトの値を定義
+        $favorites = Auth::check() ? Favorite::where('user_id', Auth::id())->with('good')->get() : collect();
 
-        return view('mypage.mypage', compact('goods'));
+        return view('mypage.mypage', [
+            'goods' => $goods,
+            'favorites' => $favorites,
+            'activeTab' => 'sell'
+        ]);
+    }
 
+    // 「購入した商品」タブ（購入した商品ページ）
+    public function buy()
+    {
+        $purchases = Purchase::all(); // 全商品の取得
+        $activeTab = 'buy';// 購入した商品リストをアクティブにする
+        $favorites = Auth::check() ? Favorite::where('user_id', Auth::id())->with('purchase')->get() : collect();
+
+        return view('mypage.mypage', [
+            'purchases' => $purchases,
+            'favorites' => $favorites,
+            'activeTab' => 'buy'
+        ]);
     }
 }

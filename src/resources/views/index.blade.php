@@ -6,6 +6,13 @@
 
 @section('content')
     <body>
+        <div class="flashmessage">
+            @if(session('message'))
+            <div class="flashmessage__success">
+                {{ session('message') }}
+            </div>
+            @endif
+        </div>
         <div class="container mt-4">
             <!-- タブメニュー -->
             <div class="tab-menu">
@@ -15,32 +22,28 @@
 
             <!-- タブの内容 -->
             <div class="tab-content {{ $activeTab === 'recommend' ? 'active' : '' }}">
-                <h3>おすすめ商品</h3>
-                <div class="d-flex gap-3">
-                    @if(isset($goods) && $goods->isNotEmpty())
+                @if(isset($goods) && $goods->isNotEmpty())
+                    <div class="d-flex gap-3">
                         @foreach($goods as $good)
-                            @if(!Auth::check() || Auth::id() !== $good->user_id)
-                                <div class="p-3 border text-center position-relative">
-                                    <a href="{{ route('goods.show', $good->id) }}">
-                                        <div class="position-relative">
-                                            <img src="{{ asset('storage/' . $good->image) }}" alt="商品画像" class="product-image">
-                                            @if($good->is_sold_out)
-                                                <div class="sold-out-overlay">SOLD OUT</div>
-                                            @endif
-                                        </div>
-                                        <br>{{ $good->name }}
-                                    </a>
-                                </div>
-                            @endif
+                            <div class="p-3 border text-center position-relative">
+                                <a href="{{ route('goods.show', $good->id) }}">
+                                    <div class="position-relative">
+                                        <img src="{{ asset('storage/' . $good->image) }}" alt="商品画像" class="product-image">
+                                        @if($good->isSold())
+                                            <div class="sold-out-overlay">SOLD OUT</div>
+                                        @endif
+                                    </div>
+                                    <p class="product-name">{{ $good->name }}</p>
+                                </a>
+                            </div>
                         @endforeach
-                    @else
-                        <p>おすすめの商品はありません。</p>
-                    @endif
-                </div>
+                    </div>
+                @else
+                    <p class="no-items text-center">おすすめの商品はありません。</p>
+                @endif
             </div>
 
             <div class="tab-content {{ $activeTab === 'mylist' ? 'active' : '' }}">
-                <h3>マイリスト</h3>
                 <div class="d-flex gap-3">
                     @if(Auth::check() && isset($favorites) && $favorites->isNotEmpty())
                         @foreach($favorites as $favorite)

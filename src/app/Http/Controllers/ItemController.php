@@ -18,7 +18,8 @@ class ItemController extends Controller
     // 「おすすめ」タブ（デフォルトのトップページ）
     public function recommend()
     {
-        $goods = Good::all(); // 全商品の取得
+        $goods = Good::where('user_id', '!=', Auth::id())->get();// 他人が出品した商品のみ取得
+        $activeTab = 'recommend';// デフォルトの値を定義
         $favorites = Auth::check() ? Favorite::where('user_id', Auth::id())->with('good')->get() : collect();
 
         return view('index', [
@@ -32,6 +33,7 @@ class ItemController extends Controller
     public function mylist()
     {
         $goods = Good::all(); // 全商品の取得
+        $activeTab = 'mylist';// マイリストをアクティブにする
         $favorites = Auth::check() ? Favorite::where('user_id', Auth::id())->with('good')->get() : collect();
 
         return view('index', [
@@ -47,7 +49,7 @@ class ItemController extends Controller
         $good = Good::with('favorites', 'comments.user')->findOrFail($id);
 
         // 商品に紐づく全てのコメントを取得（新しい順）
-        $comments = $good->comments()->latest()->get();
+        $comments = Comment::where('good_id', $good->id)->latest()->get();
 
         // いいね数を取得
         
@@ -57,7 +59,6 @@ class ItemController extends Controller
     public function store(CommentRequest $request, Good $good)
     {
         if (!Auth::check()) {
-            // 未認証ユーザーの場合、商品詳細ページにリダイレクトしエラーメッセージを表示
             return redirect()->route('goods.show', $good->id)->with('error', 'コメントを投稿するにはログインが必要です。');
         }
 
@@ -68,7 +69,8 @@ class ItemController extends Controller
         $comment = new Comment();
         $comment->user_id = Auth::id();
         $comment->good_id = $good->id;
-        $comment->content = $request->input('content');
+        $comment->content = $validated['content']; // 修正
+
         $comment->save();
 
         return redirect()->route('goods.show', $good->id)->with('success', 'コメントを投稿しました！');

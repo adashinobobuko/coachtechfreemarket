@@ -9,6 +9,8 @@ class Good extends Model
 {
     use HasFactory;
 
+    public $timestamps = true;
+
     protected $fillable = [
         'image',
         'category',
@@ -18,7 +20,8 @@ class Good extends Model
         'description',
         'price',
         'favorites_count',
-        'user_id'
+        'user_id',
+        'is_sold'
     ];
     
     // カテゴリーを配列に変換
@@ -60,4 +63,8 @@ class Good extends Model
     }
     }
 
+    //売り切れ処理
+    public function isSold(){
+        return $this->is_sold;
+    }
 }

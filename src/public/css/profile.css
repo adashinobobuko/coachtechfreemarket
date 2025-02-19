@@ -1,0 +1,30 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-control {
+    width: 300px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.mb-3 {
+    margin: 10px;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.form__button-submit {
+    background-color: #FF5555;
+    color: white;
+    padding: 10px 122px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}

@@ -22,12 +22,17 @@ class PurchaseController extends Controller
             'address' => $user->address
         ]);
 
-        return redirect()->route('purchase.complete')->with('success', '購入が完了しました');
+        //売り切れの処理フラグを更新
+        $good = Good::find($request->good_id);
+        if($good){
+            $good->update(['is_sold' => true]);
+        }
+
+        //フラッシュメッセージとともにindexへ遷移
+        return view('index')->with(['success' => '購入が完了しました',
+                                    'activeTab' => 'recommend'
+                                ]);
     }
 
-    public function complete()
-    {
-        return view('index');
-    }
 }
 

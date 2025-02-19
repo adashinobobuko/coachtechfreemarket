@@ -16,44 +16,55 @@
         <a href="{{ route('profile.edit') }}" class="btn btn-outline-danger edit-profile-btn">プロフィールを編集</a>
     </div>
 
-    <div class="mypage-tabs text-center">
-        <button class="tab-link active" onclick="switchTab('sell')">出品した商品</button>
-        <button class="tab-link" onclick="switchTab('bought')">購入した商品</button>
-    </div>
-
-    <div id="sell" class="item-list">
-        <div class="row row-cols-2 row-cols-md-4 g-3">
-            @if(($goods ?? collect())->isNotEmpty())
-                @foreach($goods as $good)
-                    <div class="col">
-                        <div class="card product-card">
-                            <a href="{{ route('goods.show', $good->id) }}">
-                                <img src="{{ asset('storage/' . $good->image) }}" alt="商品画像" class="card-img-top product-image">
-                                <div class="card-body text-center">
-                                    <p class="product-name">{{ $good->name }}</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                @endforeach
-            @else
-                <p class="text-muted">出品した商品はありません。</p>
-            @endif
+    <div class="container mt-4">
+            <!-- タブメニュー -->
+        <div class="tab-menu">
+            <a href="{{ route('mypage.sell') }}" class="tab-link {{ $activeTab === 'sell' ? 'active' : '' }}">出品した商品</a>
+            <a href="{{ route('mypage.buy') }}" class="tab-link {{ $activeTab === 'buy' ? 'active' : '' }}">購入した商品</a>
         </div>
     </div>
 
-    <div id="bought" class="item-list" style="display: none;">
-        <p class="text-muted">購入した商品はありません。</p>
+    <div class="tab-content {{ $activeTab === 'sell' ? 'active' : '' }}">
+        @if(isset($goods) && count($goods) > 0)
+            <div class="d-flex gap-3">
+                @foreach($goods as $good)
+                    <div class="p-3 border text-center position-relative">
+                        <a href="{{ route('goods.show', $good['id']) }}">
+                            <div class="position-relative">
+                                <img src="{{ asset('storage/' . $good['image']) }}" alt="商品画像" class="product-image">
+                                @if($good['is_sold'])
+                                    <div class="sold-out-overlay">SOLD OUT</div>
+                                @endif
+                            </div>
+                            <p class="product-name">{{ $good['name'] }}</p>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <p class="no-items text-center">出品した商品はありません。</p>
+        @endif
     </div>
-</div>
 
-<script>
-function switchTab(tab) {
-    document.getElementById('sell').style.display = (tab === 'sell') ? 'block' : 'none';
-    document.getElementById('bought').style.display = (tab === 'bought') ? 'block' : 'none';
-
-    document.querySelectorAll('.tab-link').forEach(btn => btn.classList.remove('active'));
-    document.querySelector(`button[onclick="switchTab('${tab}')"]`).classList.add('active');
-}
-</script>
+    <div class="tab-content {{ $activeTab === 'buy' ? 'active' : '' }}">
+        <div class="d-flex gap-3">
+            @if(isset($purchases) && $purchases->isNotEmpty())
+                @foreach($purchases as $purchase)
+                    <div class="p-3 border text-center position-relative">
+                        <a href="{{ route('goods.show', $purchase->id) }}">
+                            <div class="position-relative">
+                                <img src="{{ asset('storage/' . $purchase->image) }}" alt="商品画像" class="product-image">
+                                @if($purchase->isSold())
+                                    <div class="sold-out-overlay">SOLD OUT</div>
+                                @endif
+                            </div>
+                            <p class="product-name">{{ $purchase->name }}</p>
+                        </a>
+                    </div>
+                @endforeach
+            @else
+                <p class="no-items">購入した商品はありません。</p>
+            @endif
+        </div>
+    </div>
 @endsection

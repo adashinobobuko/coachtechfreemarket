@@ -12,7 +12,7 @@
   <form class="form" action="{{ route('register') }}" method="post">
     @csrf
     <div class="form__group">
-      <label for="name" class="form__label">ユーザー名</label>
+      <label for="name" class="form__label--name">ユーザー名</label><br>
       <input type="text" id="name" name="name" value="{{ old('name') }}" class="form__input">
       @error('name')
         <div class="form__error">{{ $message }}</div>
@@ -20,7 +20,7 @@
     </div>
 
     <div class="form__group">
-      <label for="email" class="form__label">メールアドレス</label>
+      <label for="email" class="form__label--mail">メールアドレス</label><br>
       <input type="email" id="email" name="email" value="{{ old('email') }}" class="form__input">
       @error('email')
         <div class="form__error">{{ $message }}</div>
@@ -28,7 +28,7 @@
     </div>
 
     <div class="form__group">
-      <label for="password" class="form__label">パスワード</label>
+      <label for="password" class="form__label--pass">パスワード</label><br>
       <input type="password" id="password" name="password" class="form__input">
       @error('password')
         <div class="form__error">{{ $message }}</div>
@@ -36,7 +36,7 @@
     </div>
 
     <div class="form__group">
-      <label for="password_confirmation" class="form__label">確認用パスワード</label>
+      <label for="password_confirmation" class="form__label--confirm">確認用パスワード</label><br>
       <input type="password" id="password_confirmation" name="password_confirmation" class="form__input">
       @error('password_confirmed')
         <div class="form__error">{{ $message }}</div>
@@ -44,13 +44,8 @@
     </div>
 
     <div class="form__group">
-      <button type="submit" class="button--primary">登録する</button>
+      <button type="submit" class="form__button-submit">登録する</button>
     </div>
-  </form>
-
-  <form method="POST" action="{{ route('resend.email') }}">
-    @csrf
-    <button type="submit">確認メールを再送信</button>
   </form>
 
   <div class="tologin">

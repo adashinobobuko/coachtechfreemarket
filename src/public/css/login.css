@@ -1,0 +1,53 @@
+.toregister{
+    margin: 50px;
+}
+
+.toregister a{
+    text-decoration: none;
+    color: #0073CC;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form__group {
+    margin-bottom: 40px;
+}
+
+.form__input--text {
+    width: 280px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form__button-submit {
+    background-color: #FF5555;
+    color: white;
+    padding: 10px 100px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login__content {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.form__label--item__mail{
+    font-weight: bold;
+    margin-right: 150px;
+}
+
+.form__label--item__pass{
+    font-weight: bold;
+    margin-right: 185px;
+}
+
+h3{
+    margin: 60px;
+}

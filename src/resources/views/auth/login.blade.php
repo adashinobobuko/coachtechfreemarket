@@ -12,7 +12,7 @@
   <form class="form" action="{{ route('login') }}" method="post">
     @csrf
     <div class="form__group">
-      <label for="email" class="form__label--item">メールアドレス</label>
+      <label for="email" class="form__label--item__mail">メールアドレス</label><br>
       <input type="email" id="email" name="email" value="{{ old('email') }}" class="form__input--text">
       @error('email')
       <div class="form__error">{{ $message }}</div>
@@ -20,7 +20,7 @@
     </div>
 
     <div class="form__group">
-      <label for="password" class="form__label--item">パスワード</label>
+      <label for="password" class="form__label--item__pass">パスワード</label><br>
       <input type="password" id="password" name="password" class="form__input--text">
       @error('password')
       <div class="form__error">{{ $message }}</div>
