@@ -1,8 +1,11 @@
 @extends('layouts.app')
 
+@section('css')
+<link rel="stylesheet" href="{{ asset('css/goods-buy.css') }}">
+@endsection
+
 @section('content')
 <div class="container">
-    <h2>購入画面</h2>
     <div class="card">
         <div class="card-body">
             <div class="row">
@@ -24,31 +27,56 @@
                             </select>
                         <hr>
                         <h5>配送先</h5>
-                        @if(Auth::check() && optional(Auth::user()->purchasesAddresses->first())->address)
-                            @php
-                                $address = Auth::user()->purchasesAddresses->first();
-                            @endphp
-                            <p>
-                                〒 {{ $address->postal_code ?? '未登録' }}<br>
-                                {{ $address->address ?? '住所未登録' }}<br>
-                                {{ $address->building_name ?? '' }}
-                            </p>
-                        @elseif ($errors->has('address'))
-                            <div class="alert alert-danger">
-                                {{ $errors->first('address') }}
-                            </div>
-                        @else
-                            <div class="alert alert-warning">
-                                住所が登録されていません。プロフィールページで登録してください。
-                            </div>
-                        @endif
+                            @if ($good->purchasesAddresses->first())
+                                @php
+                                    $address = $good->purchasesAddresses->first();
+                                @endphp
+                                <p>
+                                    〒 {{ $address->postal_code ?? '未登録' }}<br>
+                                    {{ $address->address ?? '住所未登録' }}<br>
+                                    {{ $address->building_name ?? '' }}
+                                </p>
+                            @elseif ($errors->has('address'))
+                                <div class="alert alert-danger">
+                                    {{ $errors->first('address') }}
+                                </div>
+                            @else
+                                <div class="alert alert-warning">
+                                    住所が登録されていません。プロフィールページで登録してください。
+                                </div>
+                            @endif
                         <a href="{{ route('address.change.form') }}" class="btn btn-link">変更する</a>
                         <hr>
-                        <button typr="submit" class="btn btn-danger btn-lg btn-block">購入する</button>
-                    </form>
                 </div>
             </div>
         </div>
     </div>
+    <div class="card">
+        <div class="displaygrid">
+            <table>
+                <tr>
+                    <td>商品代金</td>
+                    <td class="text-bold"> ¥{{ number_format($good->price) }}（税込）</td>
+                </tr>
+                <tr>
+                    <td>支払方法</td>
+                    <td id="payment-method-display">支払</td>
+                </tr>
+            </table>
+        </div>
+        <button typr="submit" class="btn btn-danger btn-lg btn-block">購入する</button>
+        </form>
+    </div>
 </div>
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const paymentSelect = document.querySelector('select[name="payment_method"]');
+        const paymentDisplay = document.getElementById('payment-method-display');
+
+        paymentSelect.addEventListener('change', function() {
+            paymentDisplay.textContent = paymentSelect.value;
+        });
+    });
+</script>

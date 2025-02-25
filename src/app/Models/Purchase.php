@@ -20,5 +20,15 @@ class Purchase extends Model
     {
         return $this->belongsTo(Good::class);
     }
-        
+
+    public function favorite()
+    {
+        return $this->belongsTo(Favorite::class);
+    }
+
+    public function isSold()
+    {
+        return $this->good->is_sold ?? false;
+    }
+      
 }

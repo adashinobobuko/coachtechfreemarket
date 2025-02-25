@@ -10,7 +10,7 @@ class CreatePurchasesAddressesTable extends Migration
     {
         Schema::create('purchases_addresses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // ユーザーID
+            $table->foreignId('goods_id')->constrained()->onDelete('cascade'); // グッズID
             $table->string('postal_code')->nullable();   // 郵便番号
             $table->string('address')->nullable();       // 住所
             $table->string('building_name')->nullable(); // 建物名 

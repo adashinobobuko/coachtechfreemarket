@@ -11,9 +11,15 @@ class PurchasesAddress extends Model
 
     protected $fillable = ['user_id', 'postal_code', 'address', 'building_name'];
 
-    // ユーザーとのリレーション（1ユーザーが複数の住所を持つ）
-    public function user()
+    // // ユーザーとのリレーション（1ユーザーが複数の住所を持つ）
+    // public function user()
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
+    
+    //グッズIDとのリレーション
+    public function good()
     {
-        return $this->belongsTo(User::class);
-    }    
+        return $this->belongsTo(good::class);
+    }
 }

@@ -51,8 +51,7 @@ class ItemController extends Controller
         // 商品に紐づく全てのコメントを取得（新しい順）
         $comments = Comment::where('good_id', $good->id)->latest()->get();
 
-        // いいね数を取得
-        
+        // いいね数を取得  
         return view('goods.goods-detail', compact('good', 'comments'));
     }
 
@@ -107,27 +106,29 @@ class ItemController extends Controller
     {
         $query = Good::query();
 
+        // 検索キーワードがある場合、商品名で検索
         if (!empty($request->keyword)) {
             $query->keywordSearch($request->keyword);
         }
 
-        // どのタブから検索されたのかを判定
-        $activeTab = $request->input('tab', 'recommend'); // デフォルトは「おすすめ」
+        // 現在のタブを取得（デフォルトは「おすすめ」）
+        $activeTab = $request->input('tab', 'recommend');
 
-        // 「マイリスト」タブで検索する場合は、ログインユーザーのお気に入りのみを取得
+        // 「マイリスト」タブの場合、ログインユーザーのお気に入りのみを取得
         if ($activeTab === 'mylist' && Auth::check()) {
-            $query->whereHas('favorites', function ($q) {
-                $q->where('user_id', Auth::id());
-            });
+            $favorites = Favorite::where('user_id', Auth::id())->with('good')->get();
+            $goods = collect(); // おすすめリストを空にする
+        } else {
+            $goods = $query->get();
+            $favorites = Auth::check() ? Favorite::where('user_id', Auth::id())->with('good')->get() : collect();
         }
-
-        $goods = $query->get();
-        $favorites = Auth::check() ? Favorite::where('user_id', Auth::id())->with('good')->get() : collect();
 
         return view('index', [
             'goods' => $goods,
             'favorites' => $favorites,
-            'activeTab' => $activeTab // 検索時のタブ状態を保持
+            'activeTab' => $activeTab, // タブの状態を保持
+            'keyword' => $request->keyword, // 検索キーワードをビューに渡す
         ]);
     }
+
 }

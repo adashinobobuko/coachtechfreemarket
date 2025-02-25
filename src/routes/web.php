@@ -7,6 +7,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\BuyController;
 use App\Http\Controllers\PurchaseController;
+use Illuminate\Support\Facades\Response;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,11 +59,6 @@ Route::post('/comments/{good}', [ItemController::class, 'store'])->name('comment
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 
-//ログイン関連のルート
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login'); // ログインフォーム表示
-Route::post('/login', [AuthController::class, 'login'])->name('login.submit'); // ログイン処理
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
 //プロフィール編集画面へのルート
 Route::middleware(['auth'])->group(function () {
     Route::get('/mypage/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -82,7 +78,8 @@ Route::get('/search',[ItemController::class,'search'])->name('search');
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/verify-email/{token}', [AuthController::class, 'verifyEmail'])->name('verify.email');
-Route::post('/resend-email', [AuthController::class, 'resendVerificationEmail'])->middleware('auth')->name('resend.email');
+Route::get('/verify-form', [AuthController::class, 'showVerifyForm'])->name('verify.form');
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/resend-email', [AuthController::class, 'resendVerificationEmail'])->name('resend.email');

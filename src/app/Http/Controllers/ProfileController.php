@@ -63,7 +63,7 @@ class ProfileController extends Controller
     // 「購入した商品」タブ（購入した商品ページ）
     public function buy()
     {
-        $purchases = Purchase::all(); // 全商品の取得
+        $purchases = Purchase::where('user_id', auth()->id())->with('good')->get();
         $activeTab = 'buy';// 購入した商品リストをアクティブにする
         $favorites = Auth::check() ? Favorite::where('user_id', Auth::id())->with('purchase')->get() : collect();
 

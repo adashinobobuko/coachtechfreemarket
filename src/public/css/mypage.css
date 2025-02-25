@@ -1,8 +1,11 @@
+/* 全体のレイアウト調整 */
 .mypage-container {
-    max-width: 900px;
+    max-width: 1000px;
     margin: auto;
+    padding: 20px;
 }
 
+/* プロフィールセクション */
 .profile-image {
     width: 100px;
     height: 100px;
@@ -20,53 +23,6 @@
     color: red;
     padding: 5px 15px;
     display: inline-block;
-}
-
-.mypage-tabs {
-    margin-top: 20px;
-}
-
-.tab-link {
-    background: none;
-    border: none;
-    font-size: 1.2rem;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.tab-link.active {
-    color: red;
-    font-weight: bold;
-    border-bottom: 2px solid red;
-}
-
-.product-card {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    overflow: hidden;
-    transition: transform 0.2s ease-in-out;
-}
-
-.product-card:hover {
-    transform: scale(1.05);
-}
-
-.product-image {
-    width: 100%;
-    height: auto;
-}
-
-.product-name {
-    font-size: 1rem;
-    font-weight: bold;
-}*/
-
-/*ここからindex.cssからのコピペ*/
-/* 全体のレイアウト調整 */
-.container {
-    max-width: 1000px;
-    margin: auto;
-    padding: 20px;
 }
 
 /* タブメニュー */
@@ -100,18 +56,11 @@
 .tab-content {
     display: none;
     text-align: center;
+    padding: 20px;
 }
 
 .tab-content.active {
     display: block;
-}
-
-/* 商品セクション */
-.section-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
 }
 
 /* 商品グリッド */
@@ -123,16 +72,19 @@
 }
 
 /* 商品カード */
-.product-card {
-    border: 1px solid #ddd;
+.p-3 {
+    border: none;
+    /* 枠線を削除 */
     border-radius: 10px;
     padding: 15px;
     text-align: center;
     transition: transform 0.2s ease-in-out;
     background: white;
+    box-shadow: none;
+    /* 影を削除 */
 }
 
-.product-card:hover {
+.p-3:hover {
     transform: scale(1.05);
 }
 
@@ -157,7 +109,6 @@
     padding: 10px 20px;
     font-size: 20px;
     font-weight: bold;
-    text-transform: uppercase;
     border-radius: 5px;
 }
 
@@ -175,5 +126,14 @@
     color: #666;
     padding: 20px;
     display: block;
-    /* 確実に表示されるようにする */
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(15, 15, 15);
+}
+
+.d-flex {
+    justify-content: center;
 }

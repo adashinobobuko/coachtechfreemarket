@@ -18,7 +18,7 @@
         </div>
         <form class="search-form" action="{{ route('search') }}" method="GET">
             <input type="text" class="search-form__item-input" name="keyword" value="{{ request('keyword') }}" placeholder="なにをお探しですか？">
-            <input type="hidden" name="tab" value="{{ request('tab', $activeTab ?? 'recommend') }}"> <!-- 現在のタブを送信 -->
+            <input type="hidden" name="tab" value="{{ request('tab', 'recommend') }}"> <!-- 現在のタブを維持 -->
         </form>
         @if (Auth::check())
         <div class="logged-out">

@@ -33,7 +33,7 @@
                             <div class="position-relative">
                                 <img src="{{ asset('storage/' . $good['image']) }}" alt="商品画像" class="product-image">
                                 @if($good['is_sold'])
-                                    <div class="sold-out-overlay">SOLD OUT</div>
+                                    <div class="sold-out-overlay">sold</div>
                                 @endif
                             </div>
                             <p class="product-name">{{ $good['name'] }}</p>
@@ -51,19 +51,19 @@
             @if(isset($purchases) && $purchases->isNotEmpty())
                 @foreach($purchases as $purchase)
                     <div class="p-3 border text-center position-relative">
-                        <a href="{{ route('goods.show', $purchase->id) }}">
+                        <a href="{{ route('goods.show', $purchase->good->id) }}">
                             <div class="position-relative">
-                                <img src="{{ asset('storage/' . $purchase->image) }}" alt="商品画像" class="product-image">
+                                <img src="{{ asset('storage/' . $purchase->good->image) }}" alt="商品画像" class="product-image">
                                 @if($purchase->isSold())
-                                    <div class="sold-out-overlay">SOLD OUT</div>
+                                    <div class="sold-out-overlay">sold</div>
                                 @endif
                             </div>
-                            <p class="product-name">{{ $purchase->name }}</p>
+                            <p class="product-name">{{ $purchase->good->name }}</p>
                         </a>
                     </div>
                 @endforeach
             @else
-                <p class="no-items">購入した商品はありません。</p>
+                <p class="no-items text-center">購入した商品はありません。</p>
             @endif
         </div>
     </div>

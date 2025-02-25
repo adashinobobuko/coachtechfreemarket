@@ -20,5 +20,9 @@ class Favorite extends Model
     {
         return $this->belongsTo(Good::class,'good_id');
     }
-        
+    
+    public function purchase()
+    {
+        return $this->belongsTo(Purchase::class);
+    }
 }

@@ -45,6 +45,11 @@ class Good extends Model
         return $this->hasMany(Favorite::class, 'good_id');
     }
 
+    public function purchase()
+    {
+        return $this->hasOne(Purchase::class, 'good_id');
+    }
+
     public function getFavoritesCountAttribute()
     {
         return $this->favorites()->count();
@@ -66,5 +71,10 @@ class Good extends Model
     //売り切れ処理
     public function isSold(){
         return $this->is_sold;
+    }
+
+    public function purchasesAddresses()
+    {
+        return $this->hasMany(PurchasesAddress::class, 'good_id', 'id');
     }
 }

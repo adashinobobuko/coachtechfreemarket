@@ -13,7 +13,7 @@ class BuyController extends Controller
 {
     public function showBuyform($id)
     {
-        $good = Good::find($id);
+        $good = Good::with('purchasesAddresses')->findOrFail($id);
 
         if (!$good) {
             abort(404, '商品が見つかりません');
@@ -27,7 +27,18 @@ class BuyController extends Controller
 
     public function showForm()
     {
-        return view('goods.address-change', ['user' => Auth::user()]);
+        $user = Auth::user();
+        $goodId = session('last_good_id');
+
+        // $goodId が null の場合に備えて $good を null 許容
+        $good = $goodId ? Good::with('purchasesAddresses')->find($goodId) : null;
+
+        // purchasesAddresses が null の場合でも空のコレクションを返す
+        if ($good) {
+            $good->loadMissing('purchasesAddresses');
+        }
+
+        return view('goods.address-change', compact('user', 'good'));
     }
 
     public function updateAddress(Request $request)

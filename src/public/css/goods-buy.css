@@ -1,0 +1,135 @@
+/* コンテナ全体のスタイル */
+.container {
+    max-width: 1500px;
+    margin: 50px auto;
+    padding: 20px;
+    display: flex;
+}
+
+/* 商品カードのスタイル */
+.card {
+    flex: 1;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* 商品画像 */
+.img-fluid {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+/* 商品名 */
+h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* 価格のスタイル */
+.text-danger {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+/* 支払い方法セクション */
+select.form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+/* 配送先のスタイル */
+p {
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+/* 住所変更ボタン */
+.btn-link {
+    color: blue;
+    font-size: 0.9rem;
+    text-decoration: underline;
+}
+
+/* 購入ボタン */
+.btn-danger {
+    background-color: #FF5555;
+    border: none;
+    color: white;
+    padding: 15px 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 100%;
+    display: block;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-danger:hover {
+    background-color: darkred;
+}
+
+/* 住所未登録の警告メッセージ */
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+/* エラーメッセージ */
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+/* テーブルのスタイル */
+.displaygrid {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    max-width: 600px;
+    border: 1px solid #ccc;
+}
+
+table tr {
+    border-bottom: 1px solid #ccc;
+}
+
+table td {
+    padding: 30px;
+    font-size: 1rem;
+    text-align: left;
+}
+
+table td:nth-child(1) {
+    width: 50%;
+    font-weight: bold;
+}
+
+table td:nth-child(2) {
+    text-align: right;
+}
+
+.text-bold {
+    font-size: 1.5rem;
+}

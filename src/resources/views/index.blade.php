@@ -16,8 +16,14 @@
         <div class="container mt-4">
             <!-- タブメニュー -->
             <div class="tab-menu">
-                <a href="{{ route('index') }}" class="tab-link {{ $activeTab === 'recommend' ? 'active' : '' }}">おすすめ</a>
-                <a href="{{ route('mylist') }}" class="tab-link {{ $activeTab === 'mylist' ? 'active' : '' }}">マイリスト</a>
+                <a href="{{ route('index', ['tab' => 'recommend', 'keyword' => request('keyword')]) }}" 
+                   class="tab-link {{ $activeTab === 'recommend' ? 'active' : '' }}">
+                    おすすめ
+                </a>
+                <a href="{{ route('mylist', ['tab' => 'mylist', 'keyword' => request('keyword')]) }}" 
+                   class="tab-link {{ $activeTab === 'mylist' ? 'active' : '' }}">
+                    マイリスト
+                </a>
             </div>
 
             <!-- タブの内容 -->
@@ -27,10 +33,10 @@
                         @foreach($goods as $good)
                             <div class="p-3 border text-center position-relative">
                                 <a href="{{ route('goods.show', $good->id) }}">
-                                    <div class="position-relative">
+                                    <div class="position-relative image-wrapper">
                                         <img src="{{ asset('storage/' . $good->image) }}" alt="商品画像" class="product-image">
                                         @if($good->isSold())
-                                            <div class="sold-out-overlay">SOLD OUT</div>
+                                            <div class="sold-out-overlay">sold</div>
                                         @endif
                                     </div>
                                     <p class="product-name">{{ $good->name }}</p>
@@ -48,9 +54,14 @@
                     @if(Auth::check() && isset($favorites) && $favorites->isNotEmpty())
                         @foreach($favorites as $favorite)
                             @if($favorite->good) <!-- good リレーションが null でないことを確認 -->
-                                <div class="p-3 border text-center">
+                                <div class="p-3 position-relative">
                                     <a href="{{ route('goods.show', $favorite->good->id) }}">
-                                        <img src="{{ asset('storage/' . $favorite->good->image) }}" alt="商品画像" class="product-image">
+                                        <div class="position-relative image-wrapper">
+                                            <img src="{{ asset('storage/' . $favorite->good->image) }}" alt="商品画像" class="product-image">
+                                            @if($good->isSold())
+                                                <div class="sold-out-overlay">sold</div>
+                                            @endif
+                                        </div>
                                     </a>
                                     <br>{{ $favorite->good->name }}
                                 </div>
@@ -61,6 +72,6 @@
                     @endif
                 </div>
             </div>
-        </div>
+
     </body>
 @endsection

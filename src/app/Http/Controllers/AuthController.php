@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
 {
@@ -32,7 +34,7 @@ class AuthController extends Controller
     /**
      * ユーザー登録処理（仮登録）
      */
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -40,11 +42,11 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        // ✅ `email_verification_token` は `User` モデルの `boot()` で自動セットされる
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'email_verification_token' => Str::random(64),
         ]);
 
         // 認証メール送信
@@ -52,9 +54,20 @@ class AuthController extends Controller
             $message->to($user->email);
             $message->subject('メール認証のお願い');
         });
-        //TODO:新しくタスクが追加された、ログインページに行くのではなく専用のページにいくように
-        return redirect()->route('login')->with('message', '認証メールを送信しました！メールを確認してください。');
-        //このメッセージは新しいページに表示されるように
+
+        // ✅ `verify-form` にリダイレクト
+        return redirect()->route('verify.form')->with([
+            'email' => $user->email,
+            'message' => '認証メールを送信しました！メールを確認してください。'
+        ]);
+    }
+
+    /**
+     * メール認証待機画面の表示
+     */
+    public function showVerifyForm()
+    {
+        return view('auth.verifyform');
     }
 
     /**
@@ -84,14 +97,23 @@ class AuthController extends Controller
     /**
      * 認証メール再送信
      */
-    public function resendVerificationEmail()
+    public function resendVerificationEmail(Request $request)
     {
-        $user = Auth::user();
+        $request->validate([
+            'email' => 'required|string|email|exists:users,email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
 
         if ($user->email_verified_at) {
-            return redirect()->route('home')->with('message', 'すでに認証済みです。');
+            return redirect()->route('login')->with('message', 'すでに認証済みです。');
         }
 
+        // 新しいトークンを発行
+        $user->email_verification_token = Str::random(64);
+        $user->save();
+
+        // 認証メール再送
         Mail::send('emails.verify', ['user' => $user], function ($message) use ($user) {
             $message->to($user->email);
             $message->subject('メール認証のお願い（再送）');
@@ -100,10 +122,11 @@ class AuthController extends Controller
         return back()->with('message', '確認メールを再送しました！');
     }
 
+
     /**
      * ログイン処理（未認証ユーザーはログイン不可）
      */
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
         $credentials = $request->validate([
             'email' => 'required|string|email',

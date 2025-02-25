@@ -29,9 +29,10 @@ class PurchaseController extends Controller
         }
 
         //フラッシュメッセージとともにindexへ遷移
-        return view('index')->with(['success' => '購入が完了しました',
+        return view('index',compact('good'))->with(['message' => '購入が完了しました',
                                     'activeTab' => 'recommend'
                                 ]);
+                                //FIXME:バリデーションメッセージは表示されるようになったがなぜか商品がないことになっている
     }
 
 }
