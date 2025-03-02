@@ -32,7 +32,7 @@
                         <a href="{{ route('goods.show', $good['id']) }}">
                             <div class="position-relative">
                                 <img src="{{ asset('storage/' . $good['image']) }}" alt="商品画像" class="product-image">
-                                @if($good['is_sold'])
+                                @if(isset($good['is_sold']) && $good['is_sold'] == true)
                                     <div class="sold-out-overlay">sold</div>
                                 @endif
                             </div>

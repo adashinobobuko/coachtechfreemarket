@@ -9,7 +9,7 @@ class PurchasesAddress extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'postal_code', 'address', 'building_name'];
+    protected $fillable = ['good_id', 'postal_code', 'address', 'building_name'];
 
     // // ユーザーとのリレーション（1ユーザーが複数の住所を持つ）
     // public function user()

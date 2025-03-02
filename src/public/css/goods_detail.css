@@ -17,7 +17,7 @@
 
 .text-center img {
     width: 100%;
-    max-width: 400px;
+    max-width: 600px;
     height: auto;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -169,26 +169,37 @@ textarea {
     /* 最大の高さ */
 }
 
-/* いいねボタンのスタイル */
-.btn-like {
-    display: inline-flex;
+button {
+    border: none;
+    background-color: white;
+}
+
+/* いいねボタンとカウントを縦方向に配置 */
+.like-container {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    background-color: #fff;
-    border: 2px solid #FF5555;
-    color: #FF5555;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s;
+    gap: 5px;
 }
 
-/* いいねされた状態のボタン */
-.like-checkbox:checked+.btn-like {
-    background-color: #FF5555;
-    color: white;
+/* いいね数のスタイル */
+.like-count {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
 }
 
-/* 送信用のボタンを隠す */
-.like-submit {
-    display: none;
+/* コメントアイコンとカウントを縦方向に配置 */
+.comment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+/* コメント数のスタイル */
+.comment-count {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
 }

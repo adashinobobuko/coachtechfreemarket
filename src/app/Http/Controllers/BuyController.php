@@ -56,25 +56,35 @@ class BuyController extends Controller
         }
 
         $user = Auth::user();
+        $goodId = session('last_good_id'); // セッションから取得
+
+        if (!$goodId) {
+            return redirect()->route('address.change.form')->withErrors('商品が選択されていません。');
+        }
+
+        // `$good` をデータベースから取得
+        $good = Good::find($goodId);
+
+        if (!$good) {
+            return redirect()->route('address.change.form')->withErrors('指定された商品が存在しません。');
+        }
+
+        // ログで `good_id` を確認
+        \Log::info('Good ID: ' . ($good->id ?? 'NULL'));
 
         // 新しい購入先住所を追加（複数登録可能）
         $address = PurchasesAddress::create([
-            'user_id' => $user->id,
+            'good_id' => $good->id,  // ここで `good_id` が null でないか確認
             'address' => $request->address,
             'postal_code' => $request->postal_code,
             'building_name' => $request->building_name
         ]);
 
         // セッションデータの処理
-        $goodId = session('last_good_id');
         session()->forget('last_good_id');
 
-        if ($goodId) {
-            return redirect()->route('buy.show', ['id' => $goodId])
-                ->with('success', '住所が更新されました。');
-        } else {
-            return redirect()->route('address.change.form')
-                ->with('success', '住所が更新されました。');
-        }
+        return redirect()->route('buy.show', ['id' => $good->id])
+            ->with('success', '住所が更新されました。');
     }
+
 }

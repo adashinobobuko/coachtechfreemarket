@@ -27,24 +27,26 @@
                             </select>
                         <hr>
                         <h5>配送先</h5>
-                            @if ($good->purchasesAddresses->first())
-                                @php
-                                    $address = $good->purchasesAddresses->first();
-                                @endphp
-                                <p>
-                                    〒 {{ $address->postal_code ?? '未登録' }}<br>
-                                    {{ $address->address ?? '住所未登録' }}<br>
-                                    {{ $address->building_name ?? '' }}
-                                </p>
-                            @elseif ($errors->has('address'))
-                                <div class="alert alert-danger">
-                                    {{ $errors->first('address') }}
-                                </div>
-                            @else
-                                <div class="alert alert-warning">
-                                    住所が登録されていません。プロフィールページで登録してください。
-                                </div>
-                            @endif
+                        @php
+                            $user = Auth::user();
+                            $address = $good->purchasesAddresses->first() ?? null;
+                            $postal_code = $address ? $address->postal_code : ($user->postal_code ?? '未登録');
+                            $user_address = $address ? $address->address : ($user->address ?? '住所未登録');
+                            $building_name = $address ? $address->building_name : ($user->building_name ?? '');
+                        @endphp
+
+                        <p>
+                            〒 {{ $postal_code }}<br>
+                            {{ $user_address }}<br>
+                            {{ $building_name }}
+                        </p>
+
+                        @if (!$user->postal_code || !$user->address)
+                            <div class="alert alert-warning">
+                                住所が登録されていません。プロフィールページで登録してください。
+                            </div>
+                        @endif
+
                         <a href="{{ route('address.change.form') }}" class="btn btn-link">変更する</a>
                         <hr>
                 </div>

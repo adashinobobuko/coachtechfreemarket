@@ -14,15 +14,6 @@ class ItemSeeder extends Seeder
      */
     public function run(): void 
     {
-        // 🔹 外部キー制約を無効化（最初に実行）
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-        // 🔹 `goods` テーブルのデータを削除
-        DB::table('goods')->truncate();
-
-        // 🔹 外部キー制約を再有効化
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
         DB::table('goods')->insert([
             [
                 'user_id' => 1,

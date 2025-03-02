@@ -1,6 +1,6 @@
 /* 全体のレイアウト調整 */
 .container {
-    max-width: 900px;
+    max-width: none;
     margin: auto;
     padding: 20px;
 }
@@ -8,7 +8,7 @@
 /* タブメニュー */
 .tab-menu {
     display: flex;
-    justify-content: center;
+    justify-content: left;
     gap: 30px;
     margin-bottom: 20px;
     border-bottom: 2px solid #ddd;
@@ -29,7 +29,7 @@
 .tab-link.active {
     color: red;
     font-weight: bold;
-    border-bottom: 2px solid red;
+    border: none;
 }
 
 /* タブのコンテンツ */
@@ -44,9 +44,8 @@
 
 .d-flex {
     display: grid;
-    grid-template-columns: repeat(4, 200px) !important;
+    grid-template-columns: repeat(4, 500px) !important;
     justify-content: start;
-    gap: 20px;
 }
 
 /* 商品セクション */
@@ -57,18 +56,10 @@
     margin-bottom: 20px;
 }
 
-/* 商品グリッド */
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 200px) !important;
-    /* 最大4列で固定 */
-    grid-auto-rows: auto;
-    /* 高さを自動調整 */
-}
-
 /* 商品カード */
 .p-3 {
-    width: 200px;
+    width: 290px;
+    height: 281px;
     position: relative;
     padding: 15px;
     text-align: center;

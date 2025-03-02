@@ -20,34 +20,34 @@
 
             <!-- お気に入り＆コメントアイコン -->
             <div class="d-flex align-items-center mb-3">
-                <!-- いいねボタン（フォーム利用） -->
-                @if(Auth::check() && optional(Auth::user()->favorites)->contains('good_id', $good->id))
-                    <form action="{{ route('like.destroy', ['id' => $good->id]) }}" method="POST">
-                        @csrf
-                        @method('POST')
-                        <button type="submit" class="btn btn-warning">
-                            <img src="{{ asset('images/1fc8ae66e54e525cb4afafb0a04b1debyellow.png') }}" alt="お気に入り解除" width="20">
-                            いいね解除
-                        </button>
-                    </form>
-                @else
-                    <form action="{{ route('like.store') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="good_id" value="{{ $good->id }}">
-                        <button type="submit" class="btn btn-outline-warning">
-                            <img src="{{ asset('images/1fc8ae66e54e525cb4afafb0a04b1deb.png') }}" alt="お気に入り" width="20">
-                            いいね
-                        </button>
-                    </form>
-                @endif
-                <!-- いいね数を表示 -->
-                <span class="ms-2">{{ $good->favorites->count() }}</span>
+                <!-- いいねボタン＆カウント -->
+                <div class="like-container">
+                    @if(Auth::check() && optional(Auth::user()->favorites)->contains('good_id', $good->id))
+                        <form action="{{ route('like.destroy', ['id' => $good->id]) }}" method="POST">
+                            @csrf
+                            @method('POST')
+                            <button type="submit" class="btn btn-warning">
+                                <img src="{{ asset('images/1fc8ae66e54e525cb4afafb0a04b1debyellow.png') }}" alt="お気に入り解除" width="40" class="favimg">
+                            </button>
+                        </form>
+                    @else
+                        <form action="{{ route('like.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="good_id" value="{{ $good->id }}">
+                            <button type="submit" class="btn btn-warning">
+                                <img src="{{ asset('images/1fc8ae66e54e525cb4afafb0a04b1deb.png') }}" alt="お気に入り" width="40" class="favimg">
+                            </button>
+                        </form>
+                    @endif
+                    <!-- いいね数 -->
+                    <span class="like-count">{{ $good->favorites->count() }}</span>
+                </div>
 
-                <!-- コメント数表示 -->
-                <span>
-                    <img src="{{ asset('images/9403a7440cf0d1765014bcdbe8540f70.png') }}" alt="コメント" width="20">
-                    <span>{{ isset($comments) ? $comments->count() : 0 }}</span>
-                </span>
+                <!-- コメントアイコン＆カウント -->
+                <div class="comment-container">
+                    <img src="{{ asset('images/9403a7440cf0d1765014bcdbe8540f70.png') }}" alt="コメント" width="40">
+                    <span class="comment-count">{{ isset($comments) ? $comments->count() : 0 }}</span>
+                </div>
             </div>
 
             <!-- 購入ボタン -->

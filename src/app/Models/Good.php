@@ -63,14 +63,16 @@ class Good extends Model
     //検索機能のローカルスコープ
     public function scopeKeywordSearch($query, $keyword)
     {
-    if (!empty($keyword)) {
-        $query->where('name', 'like', '%' . $keyword . '%');
-    }
+        if (!empty($keyword)) {
+            return $query->where('name', 'like', '%' . $keyword . '%');
+        }
+        return $query; // ここで明示的に $query を返す
     }
 
     //売り切れ処理
-    public function isSold(){
-        return $this->is_sold;
+    public function isSold()
+    {
+        return (bool) $this->is_sold; // 明示的に boolean に変換
     }
 
     public function purchasesAddresses()

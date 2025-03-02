@@ -10,7 +10,7 @@
     <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="form">
         @csrf
         <div class="mb-3">
-            <input type="file" id="profile_image" name="profile_image" class="form-control">
+            <input type="file" id="profile_image" name="profile_image" class="img-form">
             @if(Auth::user()->profile_image)
                 <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" alt="プロフィール画像" class="mt-3" style="width: 100px; height: 100px; border-radius: 50%;">
             @endif
