@@ -21,7 +21,7 @@
                 class="tab-link {{ $activeTab === 'recommend' ? 'active' : '' }}">
                     おすすめ
                 </a>
-                <a href="{{ route('search', ['tab' => 'mylist', 'keyword' => request('keyword')]) }}" 
+                <a href="{{ route('mylist') }}" 
                 class="tab-link {{ $activeTab === 'mylist' ? 'active' : '' }}">
                     マイリスト
                 </a>
@@ -68,7 +68,7 @@
                         @endforeach
                     </div>
                 @else
-                    <p class="no-items text-center">マイリストには検索結果がありません。</p>
+                    <p class="no-items text-center">マイリストには商品がありません。</p>
                 @endif
             </div>
 

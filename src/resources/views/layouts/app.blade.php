@@ -19,7 +19,6 @@
         <form class="search-form" action="{{ route('search') }}" method="GET">
             <input type="text" class="search-form__item-input" name="keyword" value="{{ request('keyword') }}" placeholder="なにをお探しですか？">
             <input type="hidden" name="tab" value="recommend"> <!-- 検索時に強制的にrecommend -->
-            <button type="submit">検索</button>
         </form>
 
         @if (Auth::check())

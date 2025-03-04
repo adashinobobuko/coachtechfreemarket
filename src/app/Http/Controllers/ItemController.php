@@ -121,46 +121,54 @@ class ItemController extends Controller
         ]);
 
         $query = Good::query();
-
-        // `tab` の値を取得（デフォルトは「recommend」）
         $activeTab = $request->input('tab', 'recommend');
 
-        // 検索時に「おすすめ」タブを開いたら、自分の商品を除外
-        if ($activeTab === 'recommend' && Auth::check()) {
-            $query->where('user_id', '!=', Auth::id());
-        }
+        // 「マイリスト」タブの処理（認証ユーザーのみ）
+        if ($activeTab === 'mylist') {
+            if (!Auth::check()) {
+                return view('index', [
+                    'goods' => collect(), 
+                    'favorites' => collect(),
+                    'activeTab' => 'mylist',
+                    'keyword' => $request->keyword,
+                ]);
+            }
 
-        // 検索が実行された場合は `recommend` に変更するが、タブが `mylist` の場合は変更しない
-        if ($request->has('keyword') && $activeTab !== 'mylist') {
-            $activeTab = 'recommend';
-        }
+            // ユーザーのお気に入り商品のIDを取得
+            $favoriteIds = Favorite::where('user_id', Auth::id())->pluck('good_id')->toArray();
 
-        \Log::info('最終的なタブの値', ['activeTab' => $activeTab]);
-
-        // ユーザーのお気に入り商品のIDを取得
-        $favoriteIds = Favorite::where('user_id', Auth::id())->pluck('good_id')->toArray();
-
-        // マイリストを表示する場合は `whereIn()` を適用
-        if ($activeTab === 'mylist' && Auth::check()) {
+            // マイリストに登録された商品を取得
             if (!empty($favoriteIds)) {
                 $query->whereIn('id', $favoriteIds);
-                \Log::info('マイリストの検索適用', ['favoriteIds' => $favoriteIds]);
+
+                // 検索キーワードがあれば適用
+                if (!empty($request->keyword)) {
+                    $query->where(function ($q) use ($request) {
+                        $q->where('name', 'like', '%' . $request->keyword . '%')
+                        ->orWhere('description', 'like', '%' . $request->keyword . '%');
+                    });
+                }
             } else {
                 return view('index', [
-                    'goods' => collect(), // マイリストが空なら結果も空にする
-                    'favorites' => ($activeTab === 'mylist' && !$request->has('keyword')) 
-                    ? Favorite::where('user_id', Auth::id())->with('good')->get() 
-                    : collect(), // 検索時はマイリストの商品を取得しない
+                    'goods' => collect(),
+                    'favorites' => Favorite::where('user_id', Auth::id())->with('good')->get(),
                     'activeTab' => 'mylist',
                     'keyword' => $request->keyword,
                 ]);
             }
         }
 
-        // キーワード検索を適用
-        if (!empty($request->keyword)) {
-            $query->keywordSearch($request->keyword);
-            \Log::info('キーワード検索を適用', ['keyword' => $request->keyword]);
+        // 「おすすめ」タブの場合（自分の出品商品を除外）
+        if ($activeTab === 'recommend' && Auth::check()) {
+            $query->where('user_id', '!=', Auth::id());
+        }
+
+        // キーワード検索の適用（おすすめタブの場合）
+        if (!empty($request->keyword) && $activeTab !== 'mylist') {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->keyword . '%')
+                ->orWhere('description', 'like', '%' . $request->keyword . '%');
+            });
         }
 
         // 検索結果を取得

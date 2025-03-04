@@ -17,17 +17,26 @@
     margin-bottom: 40px;
 }
 
-.form__input--text {
-    width: 280px;
+.form__input--text,
+.form_button {
+    width: 680px;
+    height: 57px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-sizing: border-box;
+    /* パディングやボーダーを含めてサイズを調整 */
+}
+
+.form_button {
+    padding: 0;
+    /* ボタンの余計な余白を消す */
 }
 
 .form__button-submit {
     background-color: #FF5555;
+    padding: 19px 300px;
     color: white;
-    padding: 10px 100px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -40,12 +49,12 @@
 
 .form__label--item__mail{
     font-weight: bold;
-    margin-right: 150px;
+    margin-right: 35rem;
 }
 
 .form__label--item__pass{
     font-weight: bold;
-    margin-right: 185px;
+    margin-right: 37rem;
 }
 
 h3{

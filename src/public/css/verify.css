@@ -5,9 +5,18 @@
 }
 
 h2 {
-    margin: 60px;
+    margin: 10px;
 }
 
-a {
+.verify__button {
+    background-color: #D9D9D9;
+    padding: 69px 257px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+}
+
+.btn-warning {
+    background: none;
+    background-color: rgba(255, 255, 255, 0);
     color: #0073CC;
 }

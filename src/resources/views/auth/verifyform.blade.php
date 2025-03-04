@@ -6,11 +6,13 @@
 
 @section('content')
 <div class="container">
-    <h2>録していただいたメールアドレスに認証メールを送付しました。メール認証を完了してください。</h2>
 
-    @if (session('email'))
-        <p>登録したメールアドレス: <strong>{{ session('email') }}</strong></p>
-    @endif
+    <h2>登録していただいたメールアドレスに認証メールを送付しました。</h2>
+    <h2>メール認証を完了してください。</h2>
+
+    <a class="verify__button" href="{{ route('verify.email', ['token' => $user->email_verification_token ?? '']) }}">
+        メール認証を完了する
+    </a>
 
     <form action="{{ route('resend.email') }}" method="POST">
         @csrf
@@ -18,6 +20,5 @@
         <button type="submit" class="btn btn-warning">認証メールを再送する</button>
     </form>
 
-    <p><a href="{{ route('login') }}">ログインページに戻る</a></p>
 </div>
 @endsection

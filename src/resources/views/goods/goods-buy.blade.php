@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="container">
-    <div class="card">
+    <div class="card flex-item1">
         <div class="card-body">
             <div class="row">
                 <div class="col-md-4">
@@ -53,7 +53,7 @@
             </div>
         </div>
     </div>
-    <div class="card">
+    <div class="card flex-item2">
         <div class="displaygrid">
             <table>
                 <tr>

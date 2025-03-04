@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Response;
 Route::get('/', [ItemController::class, 'recommend'])->name('index');
 // マイリストページ
 Route::get('/mylist', [ItemController::class, 'mylist'])->name('mylist');
+Route::get('/search', [ItemController::class, 'search'])->name('search');
 
 //商品詳細閲覧、購入のルート
 Route::get('/item/{id}', [ItemController::class, 'show'])->name('goods.show');//商品の詳細を表示

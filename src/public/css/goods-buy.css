@@ -9,16 +9,14 @@
 /* 商品カードのスタイル */
 .card {
     flex: 1;
-    border: none;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
     border-radius: 10px;
 }
 
 /* 商品画像 */
 .img-fluid {
-    width: 100%;
-    height: auto;
+    width: 177px;
+    height: 177px;
     border-radius: 5px;
 }
 
@@ -48,13 +46,6 @@ select.form-control {
 p {
     font-size: 1rem;
     margin-top: 10px;
-}
-
-/* 住所変更ボタン */
-.btn-link {
-    color: blue;
-    font-size: 0.9rem;
-    text-decoration: underline;
 }
 
 /* 購入ボタン */
@@ -134,7 +125,15 @@ table td:nth-child(2) {
     font-size: 1.5rem;
 }
 
-a {
+.btn-link {
     text-decoration: none;
     color: #0073CC;
+}
+
+.flex-item1 {
+    flex-basis: 60%;
+}
+
+.flex-item2 {
+    flex-basis: 40%;
 }

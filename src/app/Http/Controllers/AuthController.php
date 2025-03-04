@@ -55,7 +55,10 @@ class AuthController extends Controller
             $message->subject('メール認証のお願い');
         });
 
-        // ✅ `verify-form` にリダイレクト
+        // ✅ `session()->put()` を使ってユーザー情報を保存
+        session()->put('user_id', $user->id);
+
+        // ✅ `verify.form` にリダイレクト
         return redirect()->route('verify.form')->with([
             'email' => $user->email,
             'message' => '認証メールを送信しました！メールを確認してください。'
@@ -67,7 +70,14 @@ class AuthController extends Controller
      */
     public function showVerifyForm()
     {
-        return view('auth.verifyform');
+        // セッションからユーザーを取得
+        $user = User::find(session('user_id'));
+
+        if (!$user) {
+            return redirect()->route('register.form')->with('error', '登録情報が見つかりませんでした。');
+        }
+
+        return view('auth.verifyform', compact('user'));
     }
 
     /**

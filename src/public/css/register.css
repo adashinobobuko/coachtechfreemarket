@@ -15,27 +15,27 @@
 
 .form__label--name {
     font-weight: bold;
-    margin-right: 12rem;
+    margin-right: 37rem;
 }
 
 .form__label--mail {
     font-weight: bold;
-    margin-right: 10rem;
+    margin-right: 35rem;
 }
 
 .form__label--pass {
     font-weight: bold;
-    margin-right: 12rem;
+    margin-right: 37rem;
 }
 
 .form__label--confirm {
     font-weight: bold;
-    margin-right: 9rem;
+    margin-right: 34rem;
 }
 
 .form__input {
-    width: 280px;
-    padding: 8px;
+    width: 680px;
+    height: 59px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -51,7 +51,7 @@
 .form__button-submit {
     background-color: #FF5555;
     color: white;
-    padding: 10px 113px;
+    padding: 19px 312px;
     border: none;
     border-radius: 5px;
     cursor: pointer;

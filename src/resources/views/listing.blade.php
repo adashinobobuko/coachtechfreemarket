@@ -25,10 +25,13 @@
         <!-- 商品画像 -->
         <div class="mb-4">
             <label class="block text-gray-700">商品画像</label>
-            <input type="file" name="image" class="w-full border p-2 rounded mt-1">
-            @error('image')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+            <input type="file" name="image" class="img-form">
+            @error('image')<p class="text-red-500 text-sm">{{ $message }}</p>@enderror
         </div>
         
+        <!-- 商品詳細ラベル-->
+        <h2>商品の詳細</h2>
+
         <!-- 商品の詳細 -->
         <div class="mb-4">
             <label class="block text-gray-700">カテゴリー</label>
@@ -46,7 +49,7 @@
         <!-- 商品の状態 -->
         <div class="mb-4">
             <label class="block text-gray-700">商品の状態</label>
-            <select name="condition" class="w-full border p-2 rounded mt-1">
+            <select name="condition" class="selecter">
                 <option value="良好">良好</option>
                 <option value="目立った傷や汚れ無し">目立った傷や汚れ無し</option>
                 <option value="やや傷や汚れあり">やや傷や汚れあり</option>
@@ -72,7 +75,7 @@
         <!-- 商品の説明 -->
         <div class="mb-4">
             <label class="block text-gray-700">商品の説明</label>
-            <textarea name="description" class="w-full border p-2 rounded mt-1" rows="4" required></textarea>
+            <textarea name="description" class="description__form" rows="4" required></textarea>
             @error('description')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
         </div>
         
