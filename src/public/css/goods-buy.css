@@ -137,3 +137,83 @@ table td:nth-child(2) {
 .flex-item2 {
     flex-basis: 40%;
 }
+
+/* レスポンシブ対応 */
+
+/* PC (1400px - 1540px) */
+@media screen and (min-width: 1400px) and (max-width: 1540px) {
+    .container {
+        max-width: 1200px;
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    .card {
+        flex: 1;
+    }
+
+    table {
+        max-width: 100%;
+    }
+}
+
+/* タブレット (768px - 850px) */
+@media screen and (min-width: 768px) and (max-width: 850px) {
+    .container {
+        max-width: 90%;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 100%;
+    }
+
+    table {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .displaygrid {
+        overflow-x: auto;
+    }
+
+    .btn-danger {
+        width: 100%;
+    }
+}
+
+/* スマホ (767px 以下) */
+@media screen and (max-width: 767px) {
+    .container {
+        max-width: 95%;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 100%;
+    }
+
+    .img-fluid {
+        width: 100%;
+        max-width: 200px;
+        height: auto;
+        margin: auto;
+    }
+
+    table {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .displaygrid {
+        overflow-x: auto;
+    }
+
+    .btn-danger {
+        width: 100%;
+        padding: 12px;
+    }
+}

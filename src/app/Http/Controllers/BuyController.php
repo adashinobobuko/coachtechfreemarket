@@ -25,15 +25,14 @@ class BuyController extends Controller
         return view('goods.goods-buy', compact('good'));
     }
 
-    public function showForm()
+    public function showForm($goodsid) // goodsidをルートパラメータとして受け取る
     {
         $user = Auth::user();
-        $goodId = session('last_good_id');
 
-        // $goodId が null の場合に備えて $good を null 許容
-        $good = $goodId ? Good::with('purchasesAddresses')->find($goodId) : null;
+        // 指定されたgoodsidを取得
+        $good = Good::with('purchasesAddresses')->find($goodsid);
 
-        // purchasesAddresses が null の場合でも空のコレクションを返す
+        // purchasesAddressesがnullのときの対策
         if ($good) {
             $good->loadMissing('purchasesAddresses');
         }
@@ -43,48 +42,27 @@ class BuyController extends Controller
 
     public function updateAddress(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'address' => 'required|string|max:255',
+        $request->validate([
+            'goodsid' => 'required|exists:goods,id',
             'postal_code' => 'required|string|max:10',
-            'building_name' => 'nullable|string|max:30'
+            'address' => 'required|string|max:255',
+            'building_name' => 'nullable|string|max:255',
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->route('address.change.form')
-                ->withErrors($validator)
-                ->withInput();
+        $goodsid = $request->input('goodsid');
+
+        // 商品に関連する購入履歴の住所を更新（仮の処理）
+        $good = Good::find($goodsid);
+        if ($good && $good->purchasesAddresses->isNotEmpty()) {
+            $purchaseAddress = $good->purchasesAddresses->first();
+            $purchaseAddress->update([
+                'postal_code' => $request->input('postal_code'),
+                'address' => $request->input('address'),
+                'building_name' => $request->input('building_name'),
+            ]);
         }
-
-        $user = Auth::user();
-        $goodId = session('last_good_id'); // セッションから取得
-
-        if (!$goodId) {
-            return redirect()->route('address.change.form')->withErrors('商品が選択されていません。');
-        }
-
-        // `$good` をデータベースから取得
-        $good = Good::find($goodId);
-
-        if (!$good) {
-            return redirect()->route('address.change.form')->withErrors('指定された商品が存在しません。');
-        }
-
-        // ログで `good_id` を確認
-        \Log::info('Good ID: ' . ($good->id ?? 'NULL'));
-
-        // 新しい購入先住所を追加（複数登録可能）
-        $address = PurchasesAddress::create([
-            'good_id' => $good->id,  // ここで `good_id` が null でないか確認
-            'address' => $request->address,
-            'postal_code' => $request->postal_code,
-            'building_name' => $request->building_name
-        ]);
-
-        // セッションデータの処理
-        session()->forget('last_good_id');
-
-        return redirect()->route('buy.show', ['id' => $good->id])
-            ->with('success', '住所が更新されました。');
+        dd('stop');
+        return redirect()->route('buy.index')->with('success', '住所を変更しました');//FIXMEグッズページに戻るように
     }
 
 }

@@ -47,7 +47,7 @@
                             </div>
                         @endif
 
-                        <a href="{{ route('address.change.form') }}" class="btn btn-link">変更する</a>
+                        <a href="{{ route('address.change.form', ['goodsid' => $good->id]) }}">変更する</a>
                         <hr>
                 </div>
             </div>

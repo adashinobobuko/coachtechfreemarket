@@ -16,6 +16,7 @@
 
     <form action="{{ route('address.change.update') }}" method="POST">
         @csrf
+        <input type="hidden" name="goodsid" value="{{ $good ? $good->id : '' }}">
         @if($good && $good->purchasesAddresses && $good->purchasesAddresses->isNotEmpty())
             <p>郵便番号</p>
             <input type="text" id="postal_code" name="postal_code" class="form-control" 

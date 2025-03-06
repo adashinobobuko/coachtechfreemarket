@@ -11,8 +11,9 @@
     <h2>メール認証を完了してください。</h2>
 
     <a class="verify__button" href="{{ route('verify.email', ['token' => $user->email_verification_token ?? '']) }}">
-        メール認証を完了する
+        認証はこちらから
     </a>
+    <!--セッションを使いログインを行う-->
 
     <form action="{{ route('resend.email') }}" method="POST">
         @csrf

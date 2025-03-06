@@ -44,10 +44,14 @@ Route::middleware(['auth'])->group(function(){
 
 //住所変更ルート
 Route::middleware(['auth'])->group(function () {
-    Route::get('/goods/address-change', [BuyController::class, 'showForm'])->name('address.change.form');
-    Route::post('/goods/address-change', [BuyController::class, 'updateAddress'])->name('address.change.update');
-    Route::get('/purchase', [BuyController::class, 'showAll'])->name('buy.index');
+    Route::get('/purchase/address/{goodsid}', [BuyController::class, 'showForm'])
+        ->name('address.change.form'); // goodsidを渡せるように変更
+    Route::post('/goods/address-change', [BuyController::class, 'updateAddress'])
+        ->name('address.change.update');
+    Route::get('/purchase', [BuyController::class, 'showAll'])
+        ->name('buy.index');
 });
+
 
 //いいね、マイリスト機能関連のルート、コメントするためのルート
 Route::middleware(['auth'])->group(function () {

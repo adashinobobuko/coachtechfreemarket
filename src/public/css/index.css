@@ -13,6 +13,9 @@
     margin-bottom: 20px;
     border-bottom: 2px solid #ddd;
     padding-bottom: 5px;
+    overflow-x: auto;
+    /* タブが収まりきらない場合は横スクロール */
+    white-space: nowrap;
 }
 
 .tab-link {
@@ -42,23 +45,18 @@
     display: block;
 }
 
+/* 商品グリッド */
 .d-flex {
     display: grid;
-    grid-template-columns: repeat(4, 500px) !important;
-    justify-content: start;
-}
-
-/* 商品セクション */
-.section-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
+    grid-template-columns: repeat(4, minmax(290px, 1fr));
+    gap: 30px;
+    justify-content: center;
 }
 
 /* 商品カード */
 .p-3 {
-    width: 290px;
+    width: 100%;
+    max-width: 290px;
     height: 281px;
     position: relative;
     padding: 15px;
@@ -66,9 +64,7 @@
     transition: transform 0.2s ease-in-out;
     background: white;
     border: none;
-    /* 枠線を削除 */
     box-shadow: none;
-    /* 影を削除 */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -90,10 +86,6 @@
 }
 
 /* 売り切れオーバーレイ */
-.image-wrapper {
-    position: relative;
-}
-
 .sold-out-overlay {
     position: absolute;
     top: 50%;
@@ -106,7 +98,6 @@
     font-weight: bold;
     border-radius: 5px;
     z-index: 10;
-    /* 重なり順を強化 */
 }
 
 /* 商品名 */
@@ -131,4 +122,48 @@
 a {
     text-decoration: none;
     color: rgb(15, 15, 15);
+}
+
+/* ------------------ */
+/* レスポンシブ対応  */
+/* ------------------ */
+
+/* PC (1400px - 1540px) の調整 */
+@media screen and (min-width: 1400px) and (max-width: 1540px) {
+    .d-flex {
+        grid-template-columns: repeat(4, 1fr);
+        /* 4列表示 */
+        gap: 10px;
+        /* 商品間の感覚を狭める */
+    }
+
+    .tab-menu {
+        justify-content: center;
+        /* タブメニューを中央寄せ */
+    }
+}
+
+/* タブレット (768px - 850px) */
+@media screen and (min-width: 768px) and (max-width: 850px) {
+    .d-flex {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tab-menu {
+        overflow-x: auto;
+        /* スクロール可能に */
+        justify-content: left;
+    }
+}
+
+/* スマホ (767px 以下) */
+@media screen and (max-width: 767px) {
+    .d-flex {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .tab-menu {
+        overflow-x: auto;
+        justify-content: left;
+    }
 }

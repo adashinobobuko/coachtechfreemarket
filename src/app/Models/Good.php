@@ -65,8 +65,8 @@ class Good extends Model
     {
         if (!empty($keyword)) {
             return $query->where('name', 'like', '%' . $keyword . '%');
-        }
-        return $query; // ここで明示的に $query を返す
+        };
+        return $query;
     }
 
     //売り切れ処理

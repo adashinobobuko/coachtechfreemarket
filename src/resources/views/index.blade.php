@@ -17,7 +17,7 @@
         <div class="container mt-4">
             <!-- タブメニュー -->
             <div class="tab-menu">
-                <a href="{{ route('search', ['tab' => 'recommend', 'keyword' => request('keyword')]) }}" 
+                <a href="{{ route('index') }}" 
                 class="tab-link {{ $activeTab === 'recommend' ? 'active' : '' }}">
                     おすすめ
                 </a>

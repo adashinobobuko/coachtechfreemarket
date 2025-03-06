@@ -137,3 +137,77 @@ h2 {
     border-bottom: 1px solid #5F5F5F;
     color: #5F5F5F;
 }
+
+/* レスポンシブ対応 */
+
+/* PC (1400px - 1540px) */
+@media screen and (min-width: 1400px) and (max-width: 1540px) {
+    .container {
+        max-width: 700px;
+    }
+}
+
+/* タブレット (768px - 850px) */
+@media screen and (min-width: 768px) and (max-width: 850px) {
+    .container {
+        max-width: 90%;
+    }
+
+    .category-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .category-container label {
+        flex: 1 1 calc(50% - 10px);
+        /* 2列表示 */
+    }
+
+    .img-form {
+        width: 90%;
+        height: auto;
+    }
+
+    button {
+        padding: 12px;
+    }
+}
+
+/* スマホ (767px 以下) */
+@media screen and (max-width: 767px) {
+    .container {
+        max-width: 95%;
+        padding: 10px;
+    }
+
+    .listing-form {
+        padding: 10px;
+    }
+
+    .category-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .category-container label {
+        flex: 1 1 calc(100% - 10px);
+        /* 1列表示 */
+    }
+
+    .img-form {
+        width: 95%;
+        height: auto;
+    }
+
+    input,
+    textarea,
+    select {
+        width: 100%;
+    }
+
+    button {
+        padding: 10px;
+    }
+}
