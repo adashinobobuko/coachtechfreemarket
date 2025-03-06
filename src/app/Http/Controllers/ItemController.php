@@ -118,13 +118,28 @@ class ItemController extends Controller
         //Good::get()で取得　whenキーワードがあったらキーワードを検索　タブがマイリストだったらいいねがついているものから検索する
         // 「マイリスト」タブの処理（認証ユーザーのみ）
         // 検索キーワードがあれば適用  whenも試してみる
-        $goods = Good::query()
-            ->KeywordSearch($request->keyword) // ローカルスコープを適用
-            ->get();
-
         $activeTab = $request->tab ?? 'recommend';
 
-        //dd($goods); // 画面で確認
+        $query = Good::query();
+
+        //dd($activeTab, $request->tab);
+
+        //マイリスト検索機能を実装
+        if (Auth::check() && $activeTab === 'mylist') {
+            $favoriteIds = Favorite::where('user_id', auth()->id())->pluck('good_id')->toArray(); // いいねした商品IDを取得
+            
+            if (!empty($favoriteIds)) {
+                $query->whereIn('id', $favoriteIds); // いいねした商品だけを取得
+            } else {
+                $query->whereRaw('1 = 0'); // いいねがない場合、結果を空にする
+            }
+        }
+
+        //dd($request->tab, $activeTab);
+
+        $goods = Good::query()
+        ->KeywordSearch($request->keyword) // ローカルスコープを適用
+        ->get();
 
         return view('index', compact('goods','activeTab'));
     }
