@@ -115,33 +115,29 @@ class ItemController extends Controller
     //検索 FIXME 全部リセットする　まずはおすすめの検索から作成し、そこから応用しマイリストの検索ができるように
     public function search(Request $request)
     {
-        //Good::get()で取得　whenキーワードがあったらキーワードを検索　タブがマイリストだったらいいねがついているものから検索する
-        // 「マイリスト」タブの処理（認証ユーザーのみ）
-        // 検索キーワードがあれば適用  whenも試してみる
         $activeTab = $request->tab ?? 'recommend';
-
         $query = Good::query();
 
-        //dd($activeTab, $request->tab);
-
-        //マイリスト検索機能を実装
+        // マイリスト検索機能
         if (Auth::check() && $activeTab === 'mylist') {
             $favoriteIds = Favorite::where('user_id', auth()->id())->pluck('good_id')->toArray(); // いいねした商品IDを取得
-            
-            if (!empty($favoriteIds)) {
-                $query->whereIn('id', $favoriteIds); // いいねした商品だけを取得
-            } else {
-                $query->whereRaw('1 = 0'); // いいねがない場合、結果を空にする
-            }
+
+            $query->when(!empty($favoriteIds), function ($query) use ($favoriteIds) {
+                return $query->whereIn('id', $favoriteIds);
+            }, function ($query) {
+                return $query->whereRaw('1 = 0'); // いいねがない場合、結果を空にする
+            });
         }
 
-        //dd($request->tab, $activeTab);
+        // キーワード検索を適用
+        $query->when($request->filled('keyword'), function ($query) use ($request) {
+            return $query->KeywordSearch($request->keyword);
+        });
 
-        $goods = Good::query()
-        ->KeywordSearch($request->keyword) // ローカルスコープを適用
-        ->get();
+        // 検索結果取得
+        $goods = $query->get();
 
-        return view('index', compact('goods','activeTab'));
+        return view('index', compact('goods', 'activeTab'));
     }
 
 }

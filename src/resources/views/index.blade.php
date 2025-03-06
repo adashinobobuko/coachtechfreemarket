@@ -17,11 +17,11 @@
         <div class="container mt-4">
             <!-- タブメニュー -->
             <div class="tab-menu">
-                <a href="{{ route('index') }}" 
+                <a href="{{ route('search', ['tab' => 'recommend', 'keyword' => request('keyword')]) }}" 
                 class="tab-link {{ $activeTab === 'recommend' ? 'active' : '' }}">
                     おすすめ
                 </a>
-                <a href="{{ route('mylist') }}" 
+                <a href="{{ route('search', ['tab' => 'mylist', 'keyword' => request('keyword')]) }}" 
                 class="tab-link {{ $activeTab === 'mylist' ? 'active' : '' }}">
                     マイリスト
                 </a>

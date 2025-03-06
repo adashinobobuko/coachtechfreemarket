@@ -16,12 +16,11 @@
                 <img src="{{ asset('images/logo.svg') }}" alt="coachtechのロゴ">
             </a>
         </div>
-    <form class="search-form" action="{{ route('search') }}" method="GET">
-        <input type="hidden" name="tab" value="{{ request('tab', $activeTab ?? 'mylist') }}"> 
-        <input type="text" class="search-form__item-input" name="keyword" value="{{ request('keyword') }}" placeholder="なにをお探しですか？">
-        <button type="submit">検索</button>
-    </form>
-
+        <form class="search-form" action="{{ route('search') }}" method="GET">
+            <input type="hidden" name="tab" value="{{ request('tab', $activeTab ?? 'recommend') }}"> 
+            <input type="text" class="search-form__item-input" name="keyword" value="{{ request('keyword') }}" placeholder="なにをお探しですか？">
+            <button type="submit">検索</button>
+        </form>
         @if (Auth::check())
         <div class="logged-out">
              <a href=""  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
