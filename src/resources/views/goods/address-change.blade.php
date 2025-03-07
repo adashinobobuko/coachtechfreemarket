@@ -14,7 +14,7 @@
         </div>
     @endif
 
-    <form action="{{ route('address.change.update') }}" method="POST">
+    <form action="{{ route('address.change.update', ['goodsid' => $good->id]) }}" method="POST">
         @csrf
         <input type="hidden" name="goodsid" value="{{ $good ? $good->id : '' }}">
         @if($good && $good->purchasesAddresses && $good->purchasesAddresses->isNotEmpty())

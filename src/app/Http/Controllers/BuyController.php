@@ -51,7 +51,7 @@ class BuyController extends Controller
 
         $goodsid = $request->input('goodsid');
 
-        // 商品に関連する購入履歴の住所を更新（仮の処理）
+        // 商品に関連する購入履歴の住所を更新
         $good = Good::find($goodsid);
         if ($good && $good->purchasesAddresses->isNotEmpty()) {
             $purchaseAddress = $good->purchasesAddresses->first();
@@ -61,8 +61,9 @@ class BuyController extends Controller
                 'building_name' => $request->input('building_name'),
             ]);
         }
-        dd('stop');
-        return redirect()->route('buy.index')->with('success', '住所を変更しました');//FIXMEグッズページに戻るように
+
+        // 修正: goodsid を渡してリダイレクト
+        return redirect()->route('buy.show', ['id' => $goodsid])->with('success', '住所を変更しました');
     }
 
 }

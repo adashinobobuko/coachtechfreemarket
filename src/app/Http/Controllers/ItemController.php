@@ -112,7 +112,7 @@ class ItemController extends Controller
         return back()->with('success', 'いいねを解除しました！');
     }
 
-    //検索 FIXME 全部リセットする　まずはおすすめの検索から作成し、そこから応用しマイリストの検索ができるように
+    //検索
     public function search(Request $request)
     {
         $activeTab = $request->tab ?? 'recommend';
