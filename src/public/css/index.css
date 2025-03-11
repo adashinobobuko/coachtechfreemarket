@@ -80,8 +80,8 @@
 }
 
 .product-image {
-    width: 200px;
-    height: auto;
+    width: 290px;
+    height: 281px;
     border-radius: 5px;
 }
 
@@ -138,7 +138,7 @@ a {
     }
 
     .tab-menu {
-        justify-content: center;
+        justify-content: left;
         /* タブメニューを中央寄せ */
     }
 }

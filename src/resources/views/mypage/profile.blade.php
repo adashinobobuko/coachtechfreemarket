@@ -9,11 +9,11 @@
     <h1>プロフィール設定</h1>
     <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="form">
         @csrf
-        <div class="mb-3">
-            <input type="file" id="profile_image" name="profile_image" class="img-form">
+        <div class="mb-3 image_container">
             @if(Auth::user()->profile_image)
                 <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" alt="プロフィール画像" class="mt-3" style="width: 100px; height: 100px; border-radius: 50%;">
             @endif
+            <input type="file" id="profile_image" name="profile_image" class="img-form">
         </div>
         <div class="mb-3">
             <label for="name" class="form-label">ユーザー名</label><br>
@@ -31,7 +31,9 @@
             <label for="building_name" class="form-label">建物名</label><br>
             <input type="text" id="building_name" name="building_name" value="{{ old('building_name', Auth::user()->building_name) }}" class="form-control">
         </div>
-        <button type="submit" class="form__button-submit">更新する</button>
+        <div class="mb-4">
+            <button type="submit" class="form__button-submit">更新する</button>
+        </div>
     </form>
 </div>
 @endsection

@@ -19,27 +19,28 @@
         <form class="search-form" action="{{ route('search') }}" method="GET">
             <input type="hidden" name="tab" value="{{ request('tab', $activeTab ?? 'recommend') }}"> 
             <input type="text" class="search-form__item-input" name="keyword" value="{{ request('keyword') }}" placeholder="なにをお探しですか？">
-            <button type="submit">検索</button>
         </form>
-        @if (Auth::check())
-        <div class="logged-out">
-             <a href=""  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                   ログアウト
-             </a>
-             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-             </form>
-         </div>
-        @else
-        <div class="tologin">
-            <a href="{{ route('login') }}">ログイン</a>
-        </div>
-        @endif
-        <div class="tomypage">
-            <a href="{{ route('mypage.sell') }}">マイページ</a>
-        </div>
-        <div class="tosellform">
-            <a href="{{ route('sellform') }}">出品</a>
+        <div class="taball">
+            @if (Auth::check())
+            <div class="logged-out">
+                <a href=""  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    ログアウト
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                </form>
+            </div>
+            @else
+            <div class="tologin">
+                <a href="{{ route('login') }}">ログイン</a>
+            </div>
+            @endif
+            <div class="tomypage">
+                <a href="{{ route('mypage.sell') }}">マイページ</a>
+            </div>
+            <div class="tosellform">
+                <a href="{{ route('sellform') }}">出品</a>
+            </div>
         </div>        
     </div>    
     <main>@yield('content')</main>

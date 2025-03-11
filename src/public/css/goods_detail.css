@@ -73,9 +73,21 @@ h2 {
     margin-top: 20px;
 }
 
+.category {
+    display: flex;
+    /* 横並び */
+    gap: 20px;
+    /* バッジ同士の間隔 */
+    flex-wrap: wrap;
+    /* 画面が狭いとき折り返す */
+}
+
 .badge {
-    font-size: 14px;
-    padding: 5px 10px;
+    background-color: #ddd;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    display: inline-block;
 }
 
 .border {

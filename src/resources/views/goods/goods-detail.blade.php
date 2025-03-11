@@ -62,7 +62,15 @@
             <!-- 商品の情報 -->
             <div class="mt-3">
                 <h4>商品の情報</h4>
-                <span class="badge bg-secondary">{{ $good->category ?? 'カテゴリ不明' }}</span>
+                    @php
+                        $categories = is_array($good->category) ? $good->category : explode(',', $good->category);
+                    @endphp
+
+                    <div class="category">
+                        @foreach($categories as $category)
+                            <span class="badge">{{ trim($category) }}</span>
+                        @endforeach
+                    </div>
                 <p><strong>状態：</strong>{{ $good->condition ?? '不明' }}</p>
             </div>
 

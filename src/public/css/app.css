@@ -1,18 +1,26 @@
+/* ヘッダーのスタイル */
 .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-color: black;
-    padding: 10px 20px;
+    height: 80px;
+    width: auto;
+    flex-wrap: wrap;
 }
 
 .header-logo img {
-    height: 40px;
+    width: 370px;
+    height: 36px;
+}
+
+.search-form {
+    height: 50px;
 }
 
 .search-form__item-input {
-    width: 300px;
-    padding: 5px;
+    width: 500px;
+    height: 100%;
     border-radius: 5px;
     border: 1px solid #ccc;
 }
@@ -34,77 +42,68 @@
     border-radius: 5px;
 }
 
-.container {
-    padding: 20px;
-}
-/*appにはないクラス*/
-.tab-menu {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-/*appにはないクラス*/
-.tab-link {
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-}
-/*appにはないクラス*/
-.tab-link.active {
-    border-bottom: 2px solid red;
-}
-/*appにはないクラス*/
-.tab-content {
-    display: none;
-}
-/*appにはないクラス*/
-.tab-content.active {
-    display: block;
-}
-/*appにはないクラス*/
-.d-flex {
-    display: flex;
-    gap: 20px;
-}
-/*appにはないクラス*/
-.p-3 {
-    padding: 15px;
-    border: 1px solid #ccc;
-    text-align: center;
-}
-/*appにはないクラス*/
-.sold-out-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 5px 10px;
-    font-weight: bold;
-}
-
-.tologin a{
+.tologin a,
+.tomypage a,
+.logged-out a {
     text-decoration: none;
     color: white;
 }
 
-.tomypage a{
-    text-decoration: none;
-    color: white;
-}
-
-.tosellform{
+.tosellform {
     background: #fff;
-    padding: 5px 10px;
+    width: 100px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    /* 垂直方向の中央揃え */
+    justify-content: center;
+    /* 水平方向の中央揃え */
+    border-radius: 5px;
+    /* 角を少し丸くする（オプション） */
 }
 
-.tosellform a{
+.tosellform a {
     text-decoration: none;
     color: black;
+    font-size: 24px;
 }
 
-.logged-out a{
-    text-decoration: none;
-    color: white;
+.taball {
+    display: flex;
+    gap: 40px;
+    margin-right: 50px;
+    font-size: 24px;
+}
+
+/* タブレット (768px - 850px) */
+@media screen and (max-width: 850px) {
+    .search-form__item-input {
+        width: 200px;
+    }
+
+    .header {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+/* スマホ (767px 以下) */
+@media screen and (max-width: 767px) {
+    .header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .search-form__item-input {
+        width: 100%;
+        max-width: 300px;
+        margin-top: 10px;
+    }
+
+    .tologin,
+    .tomypage,
+    .tosellform,
+    .logged-out {
+        margin-top: 5px;
+    }
 }

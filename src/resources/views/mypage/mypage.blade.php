@@ -6,14 +6,16 @@
 
 @section('content')
 <div class="container mypage-container">
-    <div class="mypage-header text-center">
-        @if(Auth::user()->profile_image)
-            <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" alt="プロフィール画像" class="profile-image">
-        @else
-            <img src="{{ asset('images/default-user.png') }}" alt="デフォルトプロフィール画像" class="profile-image">
-        @endif
-        <h2 class="username">{{ Auth::user()->name }}</h2>
-        <a href="{{ route('profile.edit') }}" class="btn btn-outline-danger edit-profile-btn">プロフィールを編集</a>
+    <div class="mypage-header">
+        <div class="profile-container">
+            @if(Auth::user()->profile_image)
+                <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" alt="プロフィール画像" class="profile-image">
+            @else
+                <img src="{{ asset('images/default-user.png') }}" alt="デフォルトプロフィール画像" class="profile-image">
+            @endif
+            <h2 class="username">{{ Auth::user()->name }}</h2>
+            <a href="{{ route('profile.edit') }}" class="btn btn-outline-danger edit-profile-btn">プロフィールを編集</a>
+        </div>
     </div>
 
     <div class="container mt-4">
@@ -26,9 +28,9 @@
 
     <div class="tab-content {{ $activeTab === 'sell' ? 'active' : '' }}">
         @if(isset($goods) && count($goods) > 0)
-            <div class="d-flex gap-3">
+            <div class="d-flex gap-3 product-grid">
                 @foreach($goods as $good)
-                    <div class="p-3 border text-center position-relative">
+                    <div class="p-3 position-relative">
                         <a href="{{ route('goods.show', $good['id']) }}">
                             <div class="position-relative">
                                 <img src="{{ asset('storage/' . $good['image']) }}" alt="商品画像" class="product-image">

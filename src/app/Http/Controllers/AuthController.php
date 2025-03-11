@@ -13,27 +13,20 @@ use App\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
 {
-    /**
-     * 登録フォームの表示
-     */
+    // 登録フォームの表示
     public function showRegisterForm()
     {
         return view('auth.register');
     }
 
-    /**
-     * ログインフォームの表示
-     */
-
+    // ログインフォームの表示
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
 
-    /**
-     * ユーザー登録処理（仮登録）
-     */
+    //ユーザー登録処理
     public function register(RegisterRequest $request)
     {
         $request->validate([
@@ -65,9 +58,7 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * メール認証待機画面の表示
-     */
+    //メール認証待機画面の表示
     public function showVerifyForm()
     {
         // セッションからユーザーを取得
@@ -80,9 +71,7 @@ class AuthController extends Controller
         return view('auth.verifyform', compact('user'));
     }
 
-    /**
-     * メール認証の処理
-     */
+    //メール認証の処理
     public function verifyEmail($token)
     {
         $user = User::where('email_verification_token', $token)->first();
@@ -91,22 +80,19 @@ class AuthController extends Controller
             return redirect()->route('login')->with('error', '無効な認証リンクです。');
         }
 
-        $user->update([
-            'email_verified_at' => now(),
-            'email_verification_token' => null, // 認証完了後、トークンを削除
-        ]);
-
-        // ✅ `update()` の代わりに `save()` を使用
+        // 認証を完了させる
         $user->email_verified_at = now();
         $user->email_verification_token = null;
-        $success = $user->save();
-        //TODO:新しくタスクが追加された、ログインページに行くのではなく専用のページにいくように
-        return redirect()->route('login')->with('message', 'メール認証が完了しました！');
+        $user->save();
+
+        // 自動ログイン
+        Auth::login($user);
+
+        // プロフィール編集ページへリダイレクト
+        return redirect()->route('profile.edit')->with('message', 'メール認証が完了しました！プロフィールを編集してください。');
     }
 
-    /**
-     * 認証メール再送信
-     */
+    //認証メール再送信
     public function resendVerificationEmail(Request $request)
     {
         $request->validate([
@@ -133,9 +119,7 @@ class AuthController extends Controller
     }
 
 
-    /**
-     * ログイン処理（未認証ユーザーはログイン不可）
-     */
+    //ログイン処理
     public function login(LoginRequest $request)
     {
         $credentials = $request->validate([
@@ -167,9 +151,7 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    /**
-     * ログアウト処理
-     */    
+    //ログアウト処理
     public function logout(Request $request)
     {
         Auth::logout();

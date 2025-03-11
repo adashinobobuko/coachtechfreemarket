@@ -5,10 +5,11 @@
 }
 
 .form-control {
-    width: 400px;
+    width: 680px;
+    height: 100%;
     padding: 5px;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    border: 1px solid #5F5F5F;
 }
 
 .img-form::file-selector-button {
@@ -23,7 +24,14 @@
 }
 
 .mb-3 {
-    margin: 10px;
+    margin: 40px auto;
+    height: 55px;
+}
+
+.mb-4 {
+    width: 680px;
+    height: 60px;
+    margin-top: 40px;
 }
 
 .form-label {
@@ -38,5 +46,22 @@
     border-radius: 5px;
     cursor: pointer;
     margin-top: 10px;
+    width: 680px;
+    height: 100%;
 }
 
+h1 {
+    font-size: 36px;
+}
+
+.image_container {
+    display: flex;
+    align-items: center;
+    /* 縦方向の中央揃え */
+    gap: 10px;
+    /* 画像とボタンの間の余白 */
+    justify-content: flex-start;
+    /* 左寄せ */
+    width: 100%;
+    /* 幅を指定して左揃えを維持 */
+}
