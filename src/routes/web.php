@@ -58,10 +58,6 @@ Route::middleware(['auth'])->group(function () {
 });
 Route::post('/comments/{good}', [ItemController::class, 'store'])->name('comments.store');
 
-//ユーザー登録のルート
-Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
-Route::post('/register', [AuthController::class, 'register'])->name('register');
-
 //プロフィール編集画面へのルート
 Route::middleware(['auth'])->group(function () {
     Route::get('/mypage/profile', [ProfileController::class, 'edit'])->name('profile.edit');
