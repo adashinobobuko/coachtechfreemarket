@@ -36,6 +36,7 @@
 
 .form-label {
     font-weight: bold;
+    font-size: 24px;
 }
 
 .form__button-submit {
@@ -48,6 +49,7 @@
     margin-top: 10px;
     width: 680px;
     height: 100%;
+    font-size: 26px;
 }
 
 h1 {

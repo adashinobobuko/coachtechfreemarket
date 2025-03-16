@@ -55,6 +55,7 @@ class ItemController extends Controller
         ]);
     }
 
+    //詳細ページ
     public function show($id)
     {
         // 商品情報を取得し、いいね（favorites）とコメントを一緒に取得
@@ -67,6 +68,7 @@ class ItemController extends Controller
         return view('goods.goods-detail', compact('good', 'comments'));
     }
 
+    //コメント機能
     public function store(CommentRequest $request, Good $good)
     {
         if (!Auth::check()) {
@@ -117,6 +119,11 @@ class ItemController extends Controller
     {
         $activeTab = $request->tab ?? 'recommend';
         $query = Good::query();
+
+        // おすすめタブの場合は自分の出品した商品を除外
+        if ($activeTab === 'recommend') {
+            $query->where('user_id', '!=', Auth::id());
+        }
 
         // マイリスト検索機能
         if (Auth::check() && $activeTab === 'mylist') {

@@ -6,7 +6,6 @@
 
 @section('content')
     <body>
-        <!-- デバッグ -->
         <div class="flashmessage">
             @if(session('message'))
             <div class="flashmessage__success">
@@ -14,7 +13,7 @@
             </div>
             @endif
         </div>
-        <div class="container mt-4">
+        <div class="container">
             <!-- タブメニュー -->
             <div class="tab-menu">
                 <a href="{{ route('search', ['tab' => 'recommend', 'keyword' => request('keyword')]) }}" 
@@ -30,11 +29,11 @@
             <!-- タブの内容 -->
             <div class="tab-content {{ $activeTab === 'recommend' ? 'active' : '' }}">
                 @if(isset($goods) && $goods->isNotEmpty())
-                    <div class="d-flex gap-3">
+                    <div class="d-flex">
                         @foreach($goods as $good)
-                            <div class="p-3 border text-center position-relative">
+                            <div class="p-3">
                                 <a href="{{ route('goods.show', $good->id) }}">
-                                    <div class="position-relative image-wrapper">
+                                    <div class="image-wrapper">
                                         <img src="{{ asset('storage/' . $good->image) }}" alt="商品画像" class="product-image">
                                         @if($good->isSold())
                                             <div class="sold-out-overlay">sold</div>
@@ -46,17 +45,17 @@
                         @endforeach
                     </div>
                 @else
-                    <p class="no-items text-center">おすすめの商品はありません。</p>
+                    <p class="no-items">おすすめの商品はありません。</p>
                 @endif
             </div>
 
             <div class="tab-content {{ $activeTab === 'mylist' ? 'active' : '' }}">
-                @if(isset($goods) && $goods->isNotEmpty())
+                @if(auth()->check() && isset($goods) && $goods->isNotEmpty())
                     <div class="d-flex gap-3">
                         @foreach($goods as $good)
-                            <div class="p-3 border text-center position-relative">
+                            <div class="p-3">
                                 <a href="{{ route('goods.show', $good->id) }}">
-                                    <div class="position-relative image-wrapper">
+                                    <div class="image-wrapper">
                                         <img src="{{ asset('storage/' . $good->image) }}" alt="商品画像" class="product-image">
                                         @if($good->isSold())
                                             <div class="sold-out-overlay">sold</div>
@@ -67,10 +66,11 @@
                             </div>
                         @endforeach
                     </div>
+                @elseif(!auth()->check())
+                    <p class="no-items">マイリストには商品がありません。</p>
                 @else
-                    <p class="no-items text-center">マイリストには商品がありません。</p>
+                    <p class="no-items">マイリストには商品がありません。</p>
                 @endif
             </div>
-
     </body>
 @endsection

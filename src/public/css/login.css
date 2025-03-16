@@ -5,6 +5,7 @@
 .toregister a{
     text-decoration: none;
     color: #0073CC;
+    font-size: 20px;
 }
 
 .form {
@@ -35,11 +36,13 @@
 
 .form__button-submit {
     background-color: #FF5555;
-    padding: 19px 300px;
+    padding: 13.5px 262px;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 26px;
+    margin-top: 50px;
 }
 
 .login__content {
@@ -47,16 +50,17 @@
     margin-top: 50px;
 }
 
-.form__label--item__mail{
+.form__label--item__mail,
+.form__label--item__pass {
     font-weight: bold;
-    margin-right: 35rem;
-}
-
-.form__label--item__pass{
-    font-weight: bold;
-    margin-right: 37rem;
+    font-size: 24px;
+    text-align: left;
+    display: flex;
+    margin-bottom: 0;
+    line-height: 5px;
+    /* ラベルの余白をなくす */
 }
 
 h3{
-    margin: 60px;
+    font-size: 36px;
 }

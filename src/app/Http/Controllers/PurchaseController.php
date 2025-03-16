@@ -32,7 +32,6 @@ class PurchaseController extends Controller
         return redirect()->route('index')->with(['message' => '購入が完了しました',
                                     'activeTab' => 'recommend'
                                 ]);
-                                //FIXME:バリデーションメッセージは表示されるようになったがなぜか商品がないことになっている
     }
 
 }

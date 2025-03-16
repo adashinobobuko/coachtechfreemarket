@@ -17,7 +17,7 @@
 
 .username {
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 36px;
     margin-right: 250px;
 }
 
@@ -39,16 +39,13 @@
     justify-content: center;
     align-items: center;
     gap: 20px;
-    /* アイコンとボタンの間の余白 */
     margin: 50px auto;
 }
 
 .profile-container {
     display: flex;
     align-items: center;
-    /* 縦方向の中央揃え */
     gap: 15px;
-    /* 画像とテキストの間の余白 */
 }
 
 /* タブメニュー */
@@ -57,14 +54,14 @@
     justify-content: left;
     gap: 30px;
     margin: 20px auto;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 2px solid #5F5F5F;
     padding-bottom: 5px;
 }
 
 .tab-link {
     background: none;
     border: none;
-    font-size: 1.2rem;
+    font-size: 24px;
     padding: 10px 20px;
     cursor: pointer;
     color: #666;
@@ -100,12 +97,10 @@
 /* 商品カード */
 .p-3 {
     border: none;
-    /* 枠線を削除 */
     padding: 15px;
     transition: transform 0.2s ease-in-out;
     background: white;
     box-shadow: none;
-    /* 影を削除 */
 }
 
 .p-3:hover {
@@ -134,12 +129,11 @@
     font-weight: bold;
     border-radius: 5px;
     z-index: 10;
-    /* 重なり順を強化 */
 }
 
 /* 商品名 */
 .product-name {
-    font-size: 1rem;
+    font-size: 25px;
     font-weight: bold;
     margin-top: 10px;
     justify-content: left;
@@ -166,4 +160,47 @@ a {
 
 .position-relative {
     position: relative;
+}
+
+/* タブレット (768px - 1024px) */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .mypage-container {
+        padding: 15px;
+    }
+
+    .profile-image {
+        width: 120px;
+        height: 120px;
+    }
+
+    .username {
+        font-size: 28px;
+        margin-right: 150px;
+    }
+
+    .edit-profile-btn {
+        width: 250px;
+        font-size: 20px;
+        padding: 8px 0;
+    }
+
+    .tab-menu {
+        gap: 15px;
+        justify-content: center;
+    }
+
+    .tab-link {
+        font-size: 20px;
+        padding: 8px 15px;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .product-image {
+        width: 220px;
+        height: auto;
+    }
 }

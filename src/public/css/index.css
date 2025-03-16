@@ -21,12 +21,12 @@
 .tab-link {
     background: none;
     border: none;
-    font-size: 1.2rem;
     padding: 10px 20px;
     cursor: pointer;
     color: #666;
     text-decoration: none;
     transition: color 0.3s, border-bottom 0.3s;
+    font-size: 24px;
 }
 
 .tab-link.active {
@@ -71,10 +71,6 @@
     justify-content: flex-start;
 }
 
-.p-3:hover {
-    transform: scale(1.05);
-}
-
 .image-wrapper {
     position: relative;
 }
@@ -102,7 +98,7 @@
 
 /* 商品名 */
 .product-name {
-    font-size: 1rem;
+    font-size: 25px;
     font-weight: bold;
     margin-top: 10px;
     position: relative;
@@ -143,27 +139,31 @@ a {
     }
 }
 
-/* タブレット (768px - 850px) */
-@media screen and (min-width: 768px) and (max-width: 850px) {
+@media screen and (min-width: 768px) and (max-width: 1024px) {
     .d-flex {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .tab-menu {
-        overflow-x: auto;
-        /* スクロール可能に */
+        display: grid;
+        grid-template-columns: repeat(2, minmax(200px, 300px));
+        /* 最大幅を設定 */
+        gap: 10px;
+        /* 商品の間隔を狭める */
         justify-content: left;
-    }
-}
-
-/* スマホ (767px 以下) */
-@media screen and (max-width: 767px) {
-    .d-flex {
-        grid-template-columns: repeat(1, 1fr);
+        /* 中央寄せ */
+        max-width: 650px;
+        /* 商品リストの最大幅を指定 */
+        margin: auto;
+        /* 画面中央に配置 */
     }
 
-    .tab-menu {
-        overflow-x: auto;
-        justify-content: left;
+    .p-3 {
+        max-width: 100%;
+        /* 商品カードの幅を調整 */
+        padding: 10px;
+        /* 余白を調整 */
+    }
+
+    .product-image {
+        width: 70%;
+        /* 画像の横幅を調整 */
+        height: auto;
     }
 }

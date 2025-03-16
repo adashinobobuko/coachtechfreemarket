@@ -11,7 +11,7 @@ body {
 
 h1 {
     text-align: center;
-    font-size: 24px;
+    font-size: 36px;
     font-weight: bold;
     margin-bottom: 20px;
 }
@@ -68,18 +68,37 @@ button:hover {
     gap: 10px;
 }
 
+.category-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    /* カテゴリーの間隔を広げる */
+    justify-content: flex-start;
+}
+
+.category-item {
+    flex: 1 1 calc(33.333% - 15px);
+    /* 3列に配置 */
+    max-width: calc(33.333% - 15px);
+    /* 3列の幅を調整 */
+    text-align: center;
+}
+
 .category-container label {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 10px;
+    padding: 10px 15px;
     border: 2px solid #ff6b6b;
-    border-radius: 20px;
-    font-size: 14px;
+    border-radius: 35px;
+    font-size: 15px;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     background-color: white;
     color: #ff6b6b;
+    width: 100%;
+    /* 幅を統一 */
+    box-sizing: border-box;
 }
 
 .category-container label input {
@@ -105,7 +124,19 @@ button:hover {
     position: relative;
 }
 
-.img-form::file-selector-button {
+.imgbox {
+    width: 680px;
+    height: 150px;
+    border: dotted 1px #5F5F5F;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-bottom: 50px;
+}
+
+.custom-file-upload {
     font-weight: bold;
     color: #FF5555;
     background: white;
@@ -114,10 +145,13 @@ button:hover {
     border-radius: 10px;
     padding: 8px 16px;
     text-align: center;
+    cursor: pointer;
+    display: inline-block;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+}
+
+.hidden {
+    display: none;
 }
 
 .description__form {
@@ -134,10 +168,20 @@ h2 {
     text-align: left;
     border-bottom: 1px solid #5F5F5F;
     color: #5F5F5F;
+    font-size: 30px;
 }
 
 .search-form {
     margin: 0 !important;
+}
+
+.block {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.listing-button {
+    margin-top: 50px;
 }
 
 /* レスポンシブ対応 */

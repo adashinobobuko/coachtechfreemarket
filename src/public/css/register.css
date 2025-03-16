@@ -15,22 +15,26 @@
 
 .form__label--name {
     font-weight: bold;
-    margin-right: 37rem;
+    margin-right: 34rem;
+    font-size: 24px;
 }
 
 .form__label--mail {
     font-weight: bold;
-    margin-right: 35rem;
+    margin-right: 32rem;
+    font-size: 24px;
 }
 
 .form__label--pass {
     font-weight: bold;
-    margin-right: 37rem;
+    margin-right: 35rem;
+    font-size: 24px;
 }
 
 .form__label--confirm {
     font-weight: bold;
-    margin-right: 34rem;
+    margin-right: 30rem;
+    font-size: 24px;
 }
 
 .form__input {
@@ -46,14 +50,20 @@
 
 .tologin a{
     color: #0073CC;
+    font-size: 20px;
 }
 
 .form__button-submit {
     background-color: #FF5555;
     color: white;
-    padding: 19px 312px;
+    padding: 13.5px 288px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 15px;
+    margin-top: 90px;
+    font-size: 26px;
+}
+
+h3 {
+    font-size: 36px;
 }

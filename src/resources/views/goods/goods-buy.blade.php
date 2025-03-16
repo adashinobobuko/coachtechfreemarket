@@ -2,11 +2,20 @@
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/goods-buy.css') }}">
+<script src="https://js.stripe.com/v3/"></script>
+<meta name="stripe-key" content="{{ config('services.stripe.public') }}">
 @endsection
 
 @section('content')
 <div class="container">
     <div class="card flex-item1">
+        <div class="flashmessage">
+            @if(session('message'))
+            <div class="flashmessage__success">
+                {{ session('message') }}
+            </div>
+            @endif
+        </div>
         <div class="card-body">
             <div class="row">
                 <div class="col-md-4">
@@ -16,15 +25,19 @@
                     <h2>{{ $good->name }}</h2>
                     <h3 class="text-danger">¥{{ number_format($good->price) }}（税込）</h3>
                     <hr>
-                    <form action="{{ route('purchase.store') }}" method="POST">
+                    <form id="payment-form" action="{{ route('checkout.process', ['goodsid' => $good->id]) }}" method="POST">
                         @csrf
                         <input type="hidden" name="good_id" value="{{ $good->id }}">
+                        <input type="hidden" id="payment-method" name="payment_method">
+                        <input type="hidden" id="stripe-token" name="stripe_token">
+
                         <h5>支払い方法</h5>
-                            <select name="payment_method" class="form-control" required>
-                                <option value="">選択してください</option>
-                                <option value="コンビニ払い">コンビニ払い</option>
-                                <option value="カード払い">カード払い</option>
-                            </select>
+                        <select id="payment-select" name="payment_method" class="form-control" required>
+                            <option value="">選択してください</option>
+                            <option value="コンビニ払い">コンビニ払い</option>
+                            <option value="カード払い">カード払い</option>
+                        </select>
+
                         <hr>
                         <h5>配送先</h5>
                         @php
@@ -46,13 +59,18 @@
                                 住所が登録されていません。プロフィールページで登録してください。
                             </div>
                         @endif
-
                         <a href="{{ route('address.change.form', ['goodsid' => $good->id]) }}">変更する</a>
                         <hr>
+
+                        <!-- Stripe カード入力欄 -->
+                        <div id="card-element" class="form-control"></div>
+                        <div id="card-errors" class="text-danger"></div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="card flex-item2">
         <div class="displaygrid">
             <table>
@@ -66,10 +84,10 @@
                 </tr>
             </table>
         </div>
-        <button typr="submit" class="btn btn-danger btn-lg btn-block">購入する</button>
-        </form>
+        <button id="checkout-button" type="button" class="btn btn-danger btn-lg btn-block">購入する</button>
     </div>
 </div>
+
 @endsection
 
 <script>
@@ -81,4 +99,34 @@
             paymentDisplay.textContent = paymentSelect.value;
         });
     });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const stripeKey = document.querySelector('meta[name="stripe-key"]').getAttribute("content");
+    const stripe = Stripe(stripeKey);
+    const checkoutButton = document.getElementById("checkout-button");
+
+    checkoutButton.addEventListener("click", function () {
+        fetch("http://localhost/checkout/15", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(session => {
+
+            if (!session.sessionId) {
+                throw new Error("セッションIDが取得できませんでした。");
+            }
+
+            return stripe.redirectToCheckout({ sessionId: session.sessionId });
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("決済処理中にエラーが発生しました: " + error.message);
+        });
+    });
+});
 </script>

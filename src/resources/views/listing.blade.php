@@ -13,7 +13,7 @@
         
         <!-- エラーメッセージ表示 -->
         @if ($errors->any())
-            <div class="mb-4 p-4 bg-red-100 text-red-700 rounded">
+            <div class="mb-4 rounded">
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -24,9 +24,14 @@
         
         <!-- 商品画像 -->
         <div class="mb-4">
-            <label class="block text-gray-700">商品画像</label>
-            <input type="file" name="image" class="img-form">
-            @error('image')<p class="text-red-500 text-sm">{{ $message }}</p>@enderror
+            <label class="block">商品画像</label>
+            <div class="imgbox">
+                <label for="file-upload" class="custom-file-upload">
+                    画像を選択する
+                </label>
+                <input id="file-upload" type="file" name="image" class="img-form hidden">
+                @error('image')<p class="text-red-500">{{ $message }}</p>@enderror
+            </div>
         </div>
         
         <!-- 商品詳細ラベル-->
@@ -35,7 +40,7 @@
         <!-- 商品の詳細 -->
         <div class="mb-4">
             <label class="block text-gray-700">カテゴリー</label>
-            <div class="category-container flex flex-wrap gap-2 mt-2">
+            <div class="category-container flex-wrap">
                 @foreach(['ファッション', '家電', 'インテリア', 'レディース', 'メンズ', 'コスメ', '本', 'ゲーム', 'スポーツ', 'キッチン', 'ハンドメイド', 'アクセサリー', 'おもちゃ', 'ベビー・キッズ'] as $category)
                     <label class="category-item">
                         <input type="checkbox" name="category[]" value="{{ $category }}"> {{ $category }}
@@ -82,11 +87,14 @@
         <!-- 販売価格 -->
         <div class="mb-4">
             <label class="block text-gray-700">販売価格</label>
-            <input type="number" name="price" class="w-full border p-2 rounded mt-1" required min="0">
+            <div class="input-wrapper">
+                <span class="yen-symbol">¥</span>
+                <input type="number" name="price" class="price-field" required min="0">
+            </div>
             @error('price')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
         </div>
         
-        <button type="submit" class="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600">出品する</button>
+        <button type="submit" class="listing-button">出品する</button>
     </form>
 </div>
 @endsection

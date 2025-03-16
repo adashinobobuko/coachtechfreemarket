@@ -1,5 +1,5 @@
 .container {
-    max-width: 900px;
+    max-width: 1800px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -8,37 +8,44 @@
     display: flex;
     flex-wrap: wrap;
     align-items: start;
+    justify-content: center;
+    font-size: 24px;
 }
 
 .col-md-6 {
-    flex: 1;
     padding: 35px;
+    display: flex;
+    flex-direction: column;
+}
+
+.vertical-align {
+    display: flex;
 }
 
 .text-center img {
-    width: 100%;
-    max-width: 600px;
+    width: 600px;
     height: auto;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 10px;
     background: #f9f9f9;
+    margin-top: 40px;
 }
 
 h2 {
-    font-size: 24px;
+    font-size: 45px;
     font-weight: bold;
     margin-bottom: 5px;
 }
 
 .text-muted {
-    color: #777;
-    font-size: 16px;
+    color: #000000;
+    font-size: 20px;
     margin-bottom: 15px;
 }
 
 .text-danger {
-    font-size: 22px;
+    font-size: 30px;
     font-weight: bold;
 }
 
@@ -56,16 +63,15 @@ h2 {
 .btn-purchase {
     background: #FF5555;
     color: white;
-    font-size: 16px;
+    font-size: 30px;
     padding: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    width: 100%;
-}
-
-.btn-purchase:hover {
-    background: #cc001f;
+    width: 570px;
+    display: block;
+    text-align: center;
+    margin: auto;
 }
 
 .mt-4,
@@ -75,18 +81,15 @@ h2 {
 
 .category {
     display: flex;
-    /* 横並び */
     gap: 20px;
-    /* バッジ同士の間隔 */
     flex-wrap: wrap;
-    /* 画面が狭いとき折り返す */
 }
 
 .badge {
     background-color: #ddd;
     padding: 8px 12px;
-    border-radius: 20px;
-    font-size: 10px;
+    border-radius: 25px;
+    font-size: 20px;
     display: inline-block;
 }
 
@@ -158,10 +161,11 @@ mb-3 {
     border-radius: 5px;
     cursor: pointer;
     margin-top: 20px;
-}
-
-.btn-comment:hover {
-    background: #cc001f;
+    width: 570px;
+    display: block;
+    text-align: center;
+    margin-top: 30px;
+    font-size: 25px;
 }
 
 mt-3 {
@@ -185,6 +189,8 @@ button {
     border: none;
     background-color: white;
 }
+
+
 
 /* いいねボタンとカウントを縦方向に配置 */
 .like-container {

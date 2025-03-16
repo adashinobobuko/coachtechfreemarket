@@ -40,13 +40,14 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function(){
     Route::get('/purchase/{id}', [BuyController::class, 'showBuyform'])->name('buy.show');
     Route::post('/purchase/store', [PurchaseController::class, 'store'])->name('purchase.store');
+    Route::post('/checkout/{goodsid}', [BuyController::class, 'processCheckout'])->name('checkout.process');
 });
 
 //住所変更ルート
 Route::middleware(['auth'])->group(function () {
     Route::get('/purchase/address/{goodsid}', [BuyController::class, 'showForm'])
         ->name('address.change.form'); 
-    Route::post('/goods/address-change', [BuyController::class, 'updateAddress'])
+    Route::post('/goods/address-change/{goodsid}', [BuyController::class, 'updateAddress'])
         ->name('address.change.update');
 });
 
