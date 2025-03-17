@@ -33,20 +33,24 @@ class ItemController extends Controller
     public function mylist()
     {
         if (!Auth::check()) {
-        // 未認証ユーザーは空の商品リストを返す
-        return view('index', [
-            'goods' => collect(), 
-            'favorites' => collect(),
-            'activeTab' => 'mylist'
-        ]);
+            // 未認証ユーザーは空の商品リストを返す
+            return view('index', [
+                'goods' => collect(), 
+                'favorites' => collect(),
+                'activeTab' => 'mylist'
+            ]);
         }
 
         // ユーザーのお気に入り商品のIDを取得
-        $favoriteIds = Favorite::where('user_id', Auth::id())->pluck('good_id')->toArray();
+        $favoriteIds = Favorite::where('user_id', Auth::id())->pluck('good_id');
 
-        $favorites = Auth::check() ? Favorite::where('user_id', Auth::id())->with('good')->get() : collect();
-        $goods =!empty($favoriteIds) ? Good::whereIn('id', $favoriteIds)->get() : collect();//マイリストに入れたもののみを表示
-        $activeTab = 'mylist';// マイリストをアクティブにする
+        // マイリストに入れたものの中から、ユーザーが出品した商品を除外
+        $goods = Good::whereIn('id', $favoriteIds)
+                    ->where('user_id', '!=', Auth::id()) // ユーザー自身の商品を除外
+                    ->get();
+
+        // ユーザーのお気に入り商品（詳細情報も取得）
+        $favorites = Favorite::where('user_id', Auth::id())->with('good')->get();
 
         return view('index', [
             'goods' => $goods,
@@ -130,7 +134,8 @@ class ItemController extends Controller
             $favoriteIds = Favorite::where('user_id', auth()->id())->pluck('good_id')->toArray(); // いいねした商品IDを取得
 
             $query->when(!empty($favoriteIds), function ($query) use ($favoriteIds) {
-                return $query->whereIn('id', $favoriteIds);
+                return $query->whereIn('id', $favoriteIds)
+                            ->where('user_id', '!=', Auth::id()); // 自分の商品は除外
             }, function ($query) {
                 return $query->whereRaw('1 = 0'); // いいねがない場合、結果を空にする
             });

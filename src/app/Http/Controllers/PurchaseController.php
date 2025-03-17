@@ -33,6 +33,5 @@ class PurchaseController extends Controller
                                     'activeTab' => 'recommend'
                                 ]);
     }
-
 }
 

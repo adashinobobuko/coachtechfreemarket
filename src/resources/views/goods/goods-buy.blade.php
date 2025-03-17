@@ -100,33 +100,42 @@
         });
     });
 
-document.addEventListener("DOMContentLoaded", function () {
-    const stripeKey = document.querySelector('meta[name="stripe-key"]').getAttribute("content");
-    const stripe = Stripe(stripeKey);
-    const checkoutButton = document.getElementById("checkout-button");
+    document.addEventListener("DOMContentLoaded", function () {
+        const stripeKey = document.querySelector('meta[name="stripe-key"]').getAttribute("content");
+        const stripe = Stripe(stripeKey);
+        const checkoutButton = document.getElementById("checkout-button");
 
-    checkoutButton.addEventListener("click", function () {
-        fetch("http://localhost/checkout/15", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({})
-        })
-        .then(response => response.json())
-        .then(session => {
+        checkoutButton.addEventListener("click", function () {
+            const paymentMethod = document.getElementById("payment-select").value;
+            const goodId = "{{ $good->id }}";
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-            if (!session.sessionId) {
-                throw new Error("セッションIDが取得できませんでした。");
+            if (paymentMethod === "カード払い") {
+                fetch(`{{ route('checkout.process', ['goodsid' => $good->id]) }}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken
+                    },
+                    body: JSON.stringify({})
+                })
+                .then(response => response.json())
+                .then(session => {
+                    if (!session.sessionId) {
+                        throw new Error("セッションIDが取得できませんでした。");
+                    }
+                    return stripe.redirectToCheckout({ sessionId: session.sessionId });
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("決済処理中にエラーが発生しました: " + error.message);
+                });
+            } else if (paymentMethod === "コンビニ払い") {
+                document.getElementById("payment-form").action = "{{ route('purchase.store') }}";
+                document.getElementById("payment-form").submit();
+            } else {
+                alert("支払い方法を選択してください。");
             }
-
-            return stripe.redirectToCheckout({ sessionId: session.sessionId });
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            alert("決済処理中にエラーが発生しました: " + error.message);
         });
     });
-});
 </script>
