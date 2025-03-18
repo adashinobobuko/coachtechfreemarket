@@ -42,5 +42,4 @@ class ListingController extends Controller
 
         return redirect()->route('index')->with('success', '商品が出品されました');
     }
-
 }

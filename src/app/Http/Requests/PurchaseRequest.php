@@ -20,7 +20,6 @@ class Purchaserequest extends FormRequest
     public function rules()
     {
         return [
-            //'good_id' => 'required|exists:goods,id',
             'payment_method' => 'required|in:コンビニ払い,カード払い',
         ];
     }
@@ -39,8 +38,6 @@ class Purchaserequest extends FormRequest
     public function messages()
     {
         return [
-            //'good_id.required' => '商品が選択されていません。',
-            //'good_id.exists' => '選択された商品が存在しません。',
             'payment_method.required' => '支払い方法を選択してください。',
             'payment_method.in' => '支払い方法はコンビニ払いまたはカード払いを選択してください。',
         ];

@@ -170,6 +170,4 @@ class PurchaseTest extends TestCase
         $mypageResponse->assertSee('test-image.jpg'); // 商品画像
     }
 
-    
-
 }
