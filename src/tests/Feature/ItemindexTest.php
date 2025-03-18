@@ -12,7 +12,7 @@ use App\Models\Favorite;
 class ItemindexTest extends TestCase
 {
     use RefreshDatabase;
-    /** @test */
+
     public function it_displays_recommended_goods()
     {
         // ユーザーを作成

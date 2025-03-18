@@ -12,7 +12,6 @@ class HelloTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
     public function testUserCannotRegisterWithoutName()
     {
         // 会員登録ページを開く

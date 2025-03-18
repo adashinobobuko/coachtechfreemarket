@@ -86,7 +86,7 @@ class ItemController extends Controller
         $comment = new Comment();
         $comment->user_id = Auth::id();
         $comment->good_id = $good->id;
-        $comment->content = $validated['content']; // 修正
+        $comment->content = $validated['content']; 
 
         $comment->save();
 
