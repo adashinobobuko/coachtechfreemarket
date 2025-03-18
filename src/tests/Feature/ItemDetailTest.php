@@ -52,7 +52,7 @@ class ItemDetailTest extends TestCase
         // 商品情報の表示確認
         $response->assertSeeText('Test Product');  // 商品名
         $response->assertSeeText('Test Brand');    // ブランド
-        $response->assertSeeText('¥1,000（税込）'); // 価格（フォーマット統一）
+        $response->assertSeeText('¥1,000（税込）'); // 価格　
         $response->assertSeeText('This is a test product.'); // 商品説明
         $response->assertSeeText('Electronics');   // カテゴリ
         $response->assertSeeText('New');           // 商品の状態
@@ -65,6 +65,6 @@ class ItemDetailTest extends TestCase
             $response->assertSeeText($comment->content);
             $response->assertSeeText($user->name);
         }
-    }//FIXME:コメントといいねの機能をテストした後に実装
+    }//FIXME:コメントといいねの機能をテストした後に実装、画像の挿入もテスト
 
 }

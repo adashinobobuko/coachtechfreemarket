@@ -87,7 +87,6 @@
         <button id="checkout-button" type="button" class="btn btn-danger btn-lg btn-block">購入する</button>
     </div>
 </div>
-
 @endsection
 
 <script>
