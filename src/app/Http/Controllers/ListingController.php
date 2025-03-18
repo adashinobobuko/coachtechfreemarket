@@ -18,9 +18,6 @@ class ListingController extends Controller
 
     public function store(ExhibitionRequest $request)
     {
-        //デバッグ用: リクエストされたデータを確認
-        //dd($request->all());
-
         // 画像アップロード処理
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('goods', 'public'); // storage/app/public/goods に保存
