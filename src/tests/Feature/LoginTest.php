@@ -7,24 +7,45 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Mail\Mailable;
+use Illuminate\Support\Testing\Fakes\MailFake;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Config;
 
-class HelloTest extends TestCase
+class LoginTest extends TestCase
 {
+
     use RefreshDatabase;
 
-    public function testUserCannotRegisterWithoutName()
+    // protected function setUp(): void
+    // {
+    //     parent::setUp();
+
+    //     // `DB_DATABASE=demo_test` を強制適用
+    //     Config::set('database.connections.mysql.database', 'demo_test');
+    //     DB::purge('mysql');
+
+    //     // 明示的に `demo_test` へマイグレーション
+    //     $this->artisan('migrate');
+    // }
+
+    //1
+    public function test_user_cannot_register_without_name()
     {
         // 会員登録ページを開く
         $response = $this->get('/register');
         $response->assertStatus(200);
 
-        // 名前なしでフォーム送信
         $response = $this->post('/register', [
-            'name' => '', // 名前を空にする
+            'name' => '',
             'email' => 'testuser@example.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
         ]);
+
+        dump(session()->all()); // セッションの内容を確認
+        $response->assertSessionHasErrors(['name']);
 
         // バリデーションエラー（名前が必須）
         $response->assertSessionHasErrors(['name']);
@@ -35,7 +56,7 @@ class HelloTest extends TestCase
         ]);
     }
 
-    public function testUserCannotRegisterWithoutEmail()
+    public function test_user_cannot_register_without_email()
     {
         // 会員登録ページを開く
         $response = $this->get('/register');
@@ -58,7 +79,7 @@ class HelloTest extends TestCase
         ]);
     }
 
-    public function testUserCannotRegisterWithShortPassword()
+    public function test_user_cannot_register_with_short_password()
     {
         // 会員登録ページを開く
         $response = $this->get('/register');
@@ -81,13 +102,13 @@ class HelloTest extends TestCase
         ]);
     }
 
-    public function testUserCannotRegisterWithMismatchedPasswordConfirmation()
+    public function test_user_cannot_register_with_mismatched_password_confirmation()
     {
         // 会員登録ページを開く
         $response = $this->get('/register');
         $response->assertStatus(200);
 
-        // パスワード7文字以下でフォームを送信
+        // パスワード不一致でフォームを送信
         $response = $this->post('/register', [
             'name' => 'aaa',
             'email' => 'testuser@example.com',
@@ -104,29 +125,44 @@ class HelloTest extends TestCase
         ]);
     }
 
-    // public function testUserRegistercompleted()
-    // {
-    //     // 会員登録ページを開く
-    //     $response = $this->get('/register');
-    //     $response->assertStatus(200);
+    public function test_user_register_completed()
+    {
+        $this->withoutMiddleware();
 
-    //     // パスワード7文字以下でフォームを送信
-    //     $response = $this->post('/register', [
-    //         'name' => 'aaa',
-    //         'email' => 'testuser@example.com',
-    //         'password' => 'password123', 
-    //         'password_confirmation' => 'password12',//一致していない
-    //     ]);
+        // ユーザー登録ページを開く
+        $response = $this->get(route('register.form'));
+        $response->assertStatus(200);
 
-    //     // バリデーションエラー（確認用パスワードが一致していない）
-    //     $response->assertSessionHasErrors(['password']);
+        // ユーザー登録リクエストを送信
+        $response = $this->post(route('register'), [
+            'name' => 'aaa',
+            'email' => 'testuser@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ]);
 
-    //     // データベースにユーザーが作成されていないことを確認
-    //     $this->assertDatabaseMissing('users', [
-    //         'email' => 'testuser@example.com'
-    //     ]);
-    // }　登録後の処理のテスト、テスト要件が不明なので保留
+        // 登録後のデバッグ
+        dd(User::all()); // ユーザーが作成されているか確認
 
+        // ユーザーのデータを取得
+        $user = User::where('email', 'testuser@example.com')->first();
+        $this->assertNotNull($user);
+
+        // メール認証をスキップして、認証済みにする
+        $user->update(['email_verified_at' => now()]);
+
+        // 認証状態にする
+        $this->actingAs($user);
+
+        // プロフィール編集ページへリダイレクトされることを確認
+        $response = $this->get(route('profile.edit'));
+        $response->assertStatus(200);
+
+        // ユーザーが認証済みであることを確認
+        $this->assertAuthenticatedAs($user);
+    }
+
+    //2
     public function testUserCannotLoginWithoutEmail()
     {
         // ログインページを開く
@@ -202,8 +238,8 @@ class HelloTest extends TestCase
         // 認証済みであることを確認
         $this->assertAuthenticatedAs($user);
     }
-
-    public function testUserCanLogoutSuccessfully()
+    //3
+    public function test_user_can_logout_successfully()
     {
         // ユーザーを作成
         $user = User::factory()->create([

@@ -13,7 +13,7 @@ class ItemindexTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function it_displays_recommended_goods()
+    public function test_it_displays_recommended_goods()
     {
         // ユーザーを作成
         $user = User::factory()->create();

@@ -25,15 +25,10 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-
     //ユーザー登録処理
     public function register(RegisterRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
+        dd($request->all());
 
         $user = User::create([
             'name' => $request->name,

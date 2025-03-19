@@ -19,6 +19,8 @@ Laravel 8.83.8
 PHP 7.4.9
 mysql  Ver 15.1 
 Docker
+mailhog
+stripe
 ## ER図
 ![ER図](free-market.drawio.png)
 ## URL

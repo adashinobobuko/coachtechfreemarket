@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Good;
 
-class GoodTest extends TestCase
+class ListingTest extends TestCase
 {
     use RefreshDatabase; 
     //15
