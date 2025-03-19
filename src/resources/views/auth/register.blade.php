@@ -14,9 +14,9 @@
     <div class="form__group">
       <label for="name" class="form__label--name">ユーザー名</label><br>
       <input type="text" id="name" name="name" value="{{ old('name') }}" class="form__input">
-      @error('name')
-        <div class="form__error">{{ $message }}</div>
-      @enderror
+      @if ($errors && $errors->has('name'))
+          <div class="form__error">{{ $errors->first('name') }}</div>
+      @endif
     </div>
 
     <div class="form__group">
@@ -38,7 +38,7 @@
     <div class="form__group">
       <label for="password_confirmation" class="form__label--confirm">確認用パスワード</label><br>
       <input type="password" id="password_confirmation" name="password_confirmation" class="form__input">
-      @error('password_confirmed')
+      @error('password_confirmation')
         <div class="form__error">{{ $message }}</div>
       @enderror
     </div>

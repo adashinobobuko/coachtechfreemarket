@@ -7,8 +7,8 @@
 @section('content')
 <div class="container">
 
-    <h2>登録していただいたメールアドレスに認証メールを送付しました。</h2>
-    <h2>メール認証を完了してください。</h2>
+    <h4>登録していただいたメールアドレスに認証メールを送付しました。</br>
+    メール認証を完了してください。</h4>
 
     <a class="verify__button" href="{{ route('verify.email', ['token' => $user->email_verification_token ?? '']) }}">
         認証はこちらから

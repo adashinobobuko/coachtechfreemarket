@@ -6,6 +6,13 @@
 
 @section('content')
 <div class="login__content">
+  <div class="flashmessage">
+      @if(session('message'))
+        <div class="flashmessage__success">
+            {{ session('message') }}
+        </div>
+      @endif
+  </div>
   <div class="login-form__heading">
     <h3>ログイン</h3>
   </div>

@@ -30,17 +30,22 @@ class BuyController extends Controller
     public function processCheckout(Request $request, $goodsid)
     {
         try {
+            // 商品を取得
+            $good = Good::findOrFail($goodsid);
+
+            // Stripe APIキー設定
             Stripe::setApiKey(config('services.stripe.secret'));
 
+            // Stripe セッション作成
             $session = Session::create([
                 'payment_method_types' => ['card'],
                 'line_items' => [[
                     'price_data' => [
                         'currency' => 'jpy',
                         'product_data' => [
-                            'name' => '商品名', // ここを `$good->name` に変更可
+                            'name' => $good->name ?? '不明な商品', // 変数を正しく適用
                         ],
-                        'unit_amount' => 1500 * 100, // `$good->price * 100` に変更 仮の名前と価格なので余力があれば記載
+                        'unit_amount' => (int) $good->price * 0.01 * 100, // 金額を正しく適用
                     ],
                     'quantity' => 1,
                 ]],

@@ -16,7 +16,7 @@ class ItemSeeder extends Seeder
     {
         DB::table('goods')->insert([
             [
-                'user_id' => 12,
+                'user_id' => 1,
                 'name' => '腕時計',
                 'price' => 15000,
                 'category' => 'ファッション,メンズ,アクセサリー',
@@ -25,7 +25,7 @@ class ItemSeeder extends Seeder
                 'condition' => '良好'
             ],
             [
-                'user_id' => 12,
+                'user_id' => 1,
                 'name' => 'HDD',
                 'price' => 5000,
                 'category' => '家電',
@@ -34,7 +34,7 @@ class ItemSeeder extends Seeder
                 'condition' => '目立った傷や汚れなし'
             ],
             [
-                'user_id' => 12,
+                'user_id' => 1,
                 'name' => '玉ねぎ3束',
                 'price' => 300,
                 'category' => 'キッチン',
@@ -43,7 +43,7 @@ class ItemSeeder extends Seeder
                 'condition' => 'やや傷や汚れあり'
             ],
             [
-                'user_id' => 12,
+                'user_id' => 1,
                 'name' => '革靴',
                 'price' => 4000,
                 'category' => 'ファッション,メンズ',
@@ -52,7 +52,7 @@ class ItemSeeder extends Seeder
                 'condition' => '状態が悪い'
             ],
             [
-                'user_id' => 12,
+                'user_id' => 1,
                 'name' => 'ノートPC',
                 'price' => 45000,
                 'category' => '家電',
@@ -61,7 +61,7 @@ class ItemSeeder extends Seeder
                 'condition' => '良好'
             ],
             [
-                'user_id' => 13,
+                'user_id' => 4,
                 'name' => 'マイク',
                 'price' => 8000,
                 'category' => '家電,アクセサリー',
@@ -70,7 +70,7 @@ class ItemSeeder extends Seeder
                 'condition' => '目立った傷や汚れなし'
             ],
             [
-                'user_id' => 13,
+                'user_id' => 4,
                 'name' => 'ショルダーバッグ',
                 'price' => 3500,
                 'category' => 'ファッション,レディース,アクセサリー',
@@ -79,7 +79,7 @@ class ItemSeeder extends Seeder
                 'condition' => 'やや傷や汚れあり'
             ],
             [
-                'user_id' => 13,
+                'user_id' => 4,
                 'name' => 'タンブラー',
                 'price' => 500,
                 'category' => 'キッチン',
@@ -88,7 +88,7 @@ class ItemSeeder extends Seeder
                 'condition' => '状態が悪い'
             ],
             [
-                'user_id' => 13,
+                'user_id' => 4,
                 'name' => 'コーヒーミル',
                 'price' => 4000,
                 'category' => 'キッチン',
@@ -97,7 +97,7 @@ class ItemSeeder extends Seeder
                 'condition' => '良好'
             ],
             [
-                'user_id' => 13,
+                'user_id' => 4,
                 'name' => 'メイクセット',
                 'price' => 2500,
                 'category' => 'ファッション,レディース',

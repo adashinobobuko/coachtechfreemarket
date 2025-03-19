@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\ProfileRequest;
+use App\Http\Requests\AddressRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Good;
 use App\Models\User;
@@ -23,7 +23,7 @@ class ProfileController extends Controller
     }
 
     // プロフィール情報を更新
-    public function update(ProfileRequest $request)
+    public function update(AddressRequest $request)
     {
         $user = Auth::user();
 
@@ -37,7 +37,7 @@ class ProfileController extends Controller
         $user->update($request->only('name','postal_code', 'address', 
         'building_name'));
 
-        // ✅ プロフィールが初回なら `profile_completed` を `true` にする
+        // プロフィールが初回なら `profile_completed` を `true` にする
         if (!$user->profile_completed) {
             $user->profile_completed = true;
             $user->save();

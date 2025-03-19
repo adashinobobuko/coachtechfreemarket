@@ -24,7 +24,6 @@ class ProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
             'profile_image' => 'nullable|image|max:2048|mimes:jpeg,png', // 画像は最大2MB
         ];
     }

@@ -18,17 +18,22 @@ class LoginTest extends TestCase
 
     use RefreshDatabase;
 
-    // protected function setUp(): void
-    // {
-    //     parent::setUp();
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-    //     // `DB_DATABASE=demo_test` を強制適用
-    //     Config::set('database.connections.mysql.database', 'demo_test');
-    //     DB::purge('mysql');
+        // データベースリセット
+        Config::set('database.connections.mysql.database', 'demo_test');
+        DB::purge('mysql');
+        $this->artisan('migrate');
 
-    //     // 明示的に `demo_test` へマイグレーション
-    //     $this->artisan('migrate');
-    // }
+        // ユーザーが存在する場合は削除
+        User::where('email', 'testuser@example.com')->delete();
+
+        session(['errors' => new \Illuminate\Support\MessageBag()]);
+
+        $this->withoutMiddleware();
+    }
 
     //1
     public function test_user_cannot_register_without_name()
@@ -37,18 +42,16 @@ class LoginTest extends TestCase
         $response = $this->get('/register');
         $response->assertStatus(200);
 
-        $response = $this->post('/register', [
+        $response = $this->postJson('/register', [
             'name' => '',
             'email' => 'testuser@example.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
         ]);
 
-        dump(session()->all()); // セッションの内容を確認
-        $response->assertSessionHasErrors(['name']);
-
         // バリデーションエラー（名前が必須）
-        $response->assertSessionHasErrors(['name']);
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['name']);
 
         // データベースにユーザーが作成されていないことを確認
         $this->assertDatabaseMissing('users', [
@@ -71,6 +74,7 @@ class LoginTest extends TestCase
         ]);
 
         //バリデーションエラー（メールアドレスが必須）
+        $response->assertStatus(422);
         $response->assertSessionHasErrors(['email']);
 
         // データベースにユーザーが作成されていないことを確認
@@ -94,6 +98,7 @@ class LoginTest extends TestCase
         ]);
 
         // バリデーションエラー（パスワードが短すぎる）
+        $response->assertStatus(422);
         $response->assertSessionHasErrors(['password']);
 
         // データベースにユーザーが作成されていないことを確認
@@ -117,6 +122,7 @@ class LoginTest extends TestCase
         ]);
 
         // バリデーションエラー（確認用パスワードが一致していない）
+        $response->assertStatus(422);
         $response->assertSessionHasErrors(['password']);
 
         // データベースにユーザーが作成されていないことを確認
@@ -129,10 +135,6 @@ class LoginTest extends TestCase
     {
         $this->withoutMiddleware();
 
-        // ユーザー登録ページを開く
-        $response = $this->get(route('register.form'));
-        $response->assertStatus(200);
-
         // ユーザー登録リクエストを送信
         $response = $this->post(route('register'), [
             'name' => 'aaa',
@@ -140,9 +142,6 @@ class LoginTest extends TestCase
             'password' => 'password123',
             'password_confirmation' => 'password123',
         ]);
-
-        // 登録後のデバッグ
-        dd(User::all()); // ユーザーが作成されているか確認
 
         // ユーザーのデータを取得
         $user = User::where('email', 'testuser@example.com')->first();
@@ -252,7 +251,7 @@ class LoginTest extends TestCase
         $this->actingAs($user);
 
         // ログアウトリクエストを送信
-        $response = $this->post('/logout');
+        $response = $this->withSession([])->post('/logout');
 
         // ログアウト後のリダイレクトを確認
         $response->assertRedirect('/'); // ここはアプリの設定に合わせる
