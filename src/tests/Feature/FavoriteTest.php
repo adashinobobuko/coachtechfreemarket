@@ -12,7 +12,7 @@ use App\Models\Favorite;
 class FavoriteTest extends TestCase
 {
     use RefreshDatabase;
-
+    //8
     public function test_authenticated_user_can_favorite_a_good()
     {
         // ユーザーを作成してログイン

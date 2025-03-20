@@ -12,7 +12,7 @@ use App\Models\Favorite;
 class ItemindexTest extends TestCase
 {
     use RefreshDatabase;
-
+    //4
     public function test_it_displays_recommended_goods()
     {
         // ユーザーを作成
@@ -110,7 +110,7 @@ class ItemindexTest extends TestCase
         $response->assertDontSeeText($ownGood->name); // 自分の商品が表示されない
     }
 
-    //ここからマイリスト
+    //5
     public function test_only_favorited_goods_are_displayed_in_mylist()
     {
         // ユーザーを作成してログイン

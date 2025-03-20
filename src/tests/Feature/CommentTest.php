@@ -11,7 +11,7 @@ use App\Models\Good;
 class CommentTest extends TestCase
 {
     use RefreshDatabase;
-
+    //9
     public function test_authenticated_user_can_post_comment()
     {
         // ユーザーと商品を作成

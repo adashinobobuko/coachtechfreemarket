@@ -12,7 +12,7 @@ use App\Models\Purchase;
 class PurchaseTest extends TestCase
 {
     use RefreshDatabase;
-
+    //10
     public function test_purchase_button_buy_completed()
     {
         // ユーザーを作成

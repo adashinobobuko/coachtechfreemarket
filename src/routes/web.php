@@ -62,6 +62,7 @@ Route::post('/comments/{good}', [ItemController::class, 'store'])->name('comment
 Route::middleware(['auth'])->group(function () {
     Route::get('/mypage/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/mypage/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/mypage/profile/imgupdate',[ProfileController::class,'imgupdate'])->name('profile.imgupdate');
 });
 
 //出品関連のルート

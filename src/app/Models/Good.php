@@ -52,7 +52,7 @@ class Good extends Model
 
     public function getFavoritesCountAttribute()
     {
-        return $this->favorites()->count();
+        return $this->attributes['favorites_count'];
     }
 
     public function isFavoritedBy($user)

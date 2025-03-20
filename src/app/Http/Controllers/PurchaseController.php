@@ -8,11 +8,13 @@ use App\Models\Good;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PurchaseRequest;
+use Illuminate\Support\Facades\DB;
 
 class PurchaseController extends Controller
 {
     public function store(PurchaseRequest $request)
     {
+
         $user = Auth::user();
 
         Purchase::create([

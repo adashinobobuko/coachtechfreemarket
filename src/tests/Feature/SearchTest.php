@@ -12,7 +12,7 @@ use App\Models\Favorite;
 class SearchTest extends TestCase
 {
     use RefreshDatabase;
-
+    //6
     public function test_search_filters_goods_by_keyword()
     {
         // ユーザーを作成してログイン

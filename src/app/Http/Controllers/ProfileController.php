@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\AddressRequest;
+use App\Http\Requests\ProfileRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Good;
 use App\Models\User;
 use App\Models\Purchase;
 use App\Models\Favorite;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -22,18 +24,40 @@ class ProfileController extends Controller
         return view('mypage/profile', compact('user'));
     }
 
+    public function imgupdate(ProfileRequest $request)
+    {
+        
+        $user = Auth::user();
+
+        if ($request->hasFile('profile_image')) {
+            // 画像のバリデーション
+            $request->validate([
+                'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            ]);
+
+            // 画像を保存
+            $path = $request->file('profile_image')->store('profile_images', 'public');
+
+            // 古い画像を削除（必要なら）
+            if ($user->profile_image) {
+                Storage::disk('public')->delete($user->profile_image);
+            }
+
+            // プロフィール画像のパスを更新
+            $user->profile_image = $path;
+            $user->save();
+        }
+
+
+        return back()->with('success', 'プロフィール画像が更新されました。');
+    }
+
+
     // プロフィール情報を更新
     public function update(AddressRequest $request)
     {
         $user = Auth::user();
 
-        // プロフィール画像のアップロード処理
-        if ($request->hasFile('profile_image')) {
-            $path = $request->file('profile_image')->store('profile_images', 'public');
-            $user->profile_image = $path;
-        }
-
-        // 他のフィールドを更新
         $user->update($request->only('name','postal_code', 'address', 
         'building_name'));
 

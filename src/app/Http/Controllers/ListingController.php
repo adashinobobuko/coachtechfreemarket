@@ -12,8 +12,7 @@ class ListingController extends Controller
 {
     public function showSellForm()
     {
-        $goods = Good::all(); // 商品データを取得
-        return view('listing', compact('goods'));
+        return view('listing');
     }
 
     public function store(ExhibitionRequest $request)

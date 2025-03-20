@@ -6,21 +6,19 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
+    @if (isset($errors) && $errors->any())
+        <div class="mb-4 rounded">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <h1 class="text-2xl font-bold text-center mb-6">商品の出品</h1>
     
     <form action="{{ route('sellform.store') }}" method="POST" enctype="multipart/form-data" class="listing-form max-w-lg mx-auto bg-white p-6 rounded-lg shadow">
         @csrf
-        
-        <!-- エラーメッセージ表示 -->
-        @if ($errors->any())
-            <div class="mb-4 rounded">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
         
         <!-- 商品画像 -->
         <div class="mb-4">
@@ -88,7 +86,6 @@
         <div class="mb-4">
             <label class="block text-gray-700">販売価格</label>
             <div class="input-wrapper">
-                <span class="yen-symbol">¥</span>
                 <input type="number" name="price" class="price-field" required min="0">
             </div>
             @error('price')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror

@@ -41,10 +41,10 @@ class AuthController extends Controller
             $message->subject('メール認証のお願い');
         });
 
-        // ✅ `session()->put()` を使ってユーザー情報を保存
+        // `session()->put()` を使ってユーザー情報を保存
         session()->put('user_id', $user->id);
 
-        // ✅ `verify.form` にリダイレクト
+        // `verify.form` にリダイレクト
         return redirect()->route('verify.form')->with([
             'email' => $user->email,
             'message' => '認証メールを送信しました！メールを確認してください。'
@@ -129,13 +129,19 @@ class AuthController extends Controller
         }
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
+            // セッションが開始されていなければ、開始する
+            if (!session()->isStarted()) {
+                session()->start();
+            }
+
+            // セッションを再生成
             $request->session()->regenerate();
 
-            // 初回ログイン時のみ `profile.blade.php` へリダイレクト
+            // 初回ログイン時のみプロフィール編集画面へ
             if (!$user->profile_completed) {
                 return redirect()->route('profile.edit'); 
             }
-            //通常のログイン時
+
             return redirect()->intended('/');
         }
 

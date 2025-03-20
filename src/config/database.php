@@ -64,24 +64,24 @@ return [
         ],
 
         'mysql_test' => [
-            'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
-            'host'=> env('DB_HOST','127.0.0.1'),
-            'port' => env('DB_POST','3306'),
-            'database' => 'demo_test',
-            'username' => 'root',
-            'password' => 'root',
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'strict' => true,
-            'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
-            ],
+                    'driver' => 'mysql',
+                    'url' => env('DATABASE_URL'),
+                    'host' => env('DB_HOST', '127.0.0.1'),
+                    'port' => env('DB_PORT', '3306'),
+                    'database' => 'demo_test',
+                    'username' => 'root',
+                    'password' => 'root',
+                    'unix_socket' => env('DB_SOCKET', ''),
+                    'charset' => 'utf8mb4',
+                    'collation' => 'utf8mb4_unicode_ci',
+                    'prefix' => '',
+                    'prefix_indexes' => true,
+                    'strict' => true,
+                    'engine' => null,
+                    'options' => extension_loaded('pdo_mysql') ? array_filter([
+                        PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                    ]) : [],
+        ],
 
         'pgsql' => [
             'driver' => 'pgsql',
@@ -163,5 +163,8 @@ return [
         ],
 
     ],
+
+    'default' => env('DB_CONNECTION', php_sapi_name() === 'cli' && isset($_SERVER['PHPUNIT_RUNNING']) ? 'mysql_test' : 'mysql'),
+
 
 ];

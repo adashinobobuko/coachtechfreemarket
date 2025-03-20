@@ -8,11 +8,34 @@ use App\Models\User;
 use App\Models\Good;
 use App\Models\PurchasesAddress;
 use App\Models\Purchase;
+use Illuminate\Support\Facades\DB;
 
 class AddressChangeTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // データベースリセット
+        Config::set('database.connections.mysql.database', 'demo_test');
+        DB::purge('mysql');
+        $this->artisan('migrate');
+
+        // ユーザーが存在する場合は削除
+        User::where('email', 'testuser@example.com')->delete();
+
+        session(['errors' => new \Illuminate\Support\MessageBag()]);
+
+        $this->withoutMiddleware();
+
+        // セッションを強制的に開始
+        Session::start();
+        $this->withSession([]); 
+    }
+
+    //12
     public function test_address_change_reflects_on_purchase_screen()
     {
         // ユーザーを作成してログイン
@@ -100,7 +123,8 @@ class AddressChangeTest extends TestCase
             'payment_method' => 'コンビニ払い',
         ]);
 
-        dump($purchaseResponse->content());
+        $purchases = DB::table('purchases')->get();
+        dd($purchases);
         
         // 購入情報がDBに保存されたことを確認
         $this->assertDatabaseHas('purchases', [
@@ -116,6 +140,6 @@ class AddressChangeTest extends TestCase
             'address' => $newAddressData['address'],
             'building_name' => $newAddressData['building_name'],
         ]);
-
+        
     }
 }

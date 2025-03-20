@@ -11,7 +11,7 @@ use App\Models\Good;
 class PaymentMethodTest extends TestCase
 {
     use RefreshDatabase;
-
+    //11
     public function test_payment_method_selection_updates_display()
     {
         // ユーザー作成

@@ -14,7 +14,7 @@
     <div class="form__group">
       <label for="name" class="form__label--name">ユーザー名</label><br>
       <input type="text" id="name" name="name" value="{{ old('name') }}" class="form__input">
-      @if ($errors && $errors->has('name'))
+      @if ($errors->has('name'))
           <div class="form__error">{{ $errors->first('name') }}</div>
       @endif
     </div>
