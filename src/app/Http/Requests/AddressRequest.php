@@ -32,4 +32,17 @@ class AddressRequest extends FormRequest
         ];
         
     }
+
+    /**
+     * カスタムエラーメッセージ
+     */
+    public function messages()
+    {
+        return [
+            'name.required' => '名前を入力してください。',
+            'postal_code.string' => '郵便番号は文字列である必要があります。',
+            'address.string' => '住所は文字列である必要があります。',
+            'building_name' => '建物名は文字列である必要があります。',
+        ];
+    }
 }
