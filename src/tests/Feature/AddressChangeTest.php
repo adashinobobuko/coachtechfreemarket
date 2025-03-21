@@ -14,27 +14,6 @@ class AddressChangeTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // データベースリセット
-        Config::set('database.connections.mysql.database', 'demo_test');
-        DB::purge('mysql');
-        $this->artisan('migrate');
-
-        // ユーザーが存在する場合は削除
-        User::where('email', 'testuser@example.com')->delete();
-
-        session(['errors' => new \Illuminate\Support\MessageBag()]);
-
-        $this->withoutMiddleware();
-
-        // セッションを強制的に開始
-        Session::start();
-        $this->withSession([]); 
-    }
-
     //12
     public function test_address_change_reflects_on_purchase_screen()
     {
@@ -80,7 +59,9 @@ class AddressChangeTest extends TestCase
     public function test_purchase_registers_with_updated_address()//FIXMEなぜか購入商品が登録できない
     {
         // ユーザーを作成してログイン
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'address' => '東京都渋谷区1-2-3',
+        ]);
         $this->actingAs($user);
 
         // 商品を作成
@@ -124,7 +105,6 @@ class AddressChangeTest extends TestCase
         ]);
 
         $purchases = DB::table('purchases')->get();
-        dd($purchases);
         
         // 購入情報がDBに保存されたことを確認
         $this->assertDatabaseHas('purchases', [
