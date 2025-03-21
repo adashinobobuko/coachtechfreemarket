@@ -19,27 +19,6 @@ class LoginTest extends TestCase
 
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // データベースリセット
-        Config::set('database.connections.mysql.database', 'demo_test');
-        DB::purge('mysql');
-        $this->artisan('migrate');
-
-        // ユーザーが存在する場合は削除
-        User::where('email', 'testuser@example.com')->delete();
-
-        session(['errors' => new \Illuminate\Support\MessageBag()]);
-
-        $this->withoutMiddleware();
-
-        // セッションを強制的に開始
-        Session::start();
-        $this->withSession([]); 
-    }
-
     //1
     public function test_user_cannot_register_without_name()
     {
@@ -130,7 +109,8 @@ class LoginTest extends TestCase
 
     public function test_user_register_completed()
     {
-        $this->withoutMiddleware();
+        // Viewでの$errors未定義対策（テスト用）
+        \Illuminate\Support\Facades\View::share('errors', new \Illuminate\Support\ViewErrorBag());
 
         // ユーザー登録リクエストを送信
         $response = $this->post(route('register'), [
