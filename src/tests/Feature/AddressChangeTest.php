@@ -17,6 +17,8 @@ class AddressChangeTest extends TestCase
     //12
     public function test_address_change_reflects_on_purchase_screen()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // ユーザーを作成してログイン
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -56,8 +58,10 @@ class AddressChangeTest extends TestCase
         $purchaseScreenResponse->assertSee('新しいビル202号室');
     }
 
-    public function test_purchase_registers_with_updated_address()//FIXMEなぜか購入商品が登録できない
+    public function test_purchase_registers_with_updated_address()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // ユーザーを作成してログイン
         $user = User::factory()->create([
             'address' => '東京都渋谷区1-2-3',

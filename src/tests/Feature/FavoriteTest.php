@@ -15,6 +15,8 @@ class FavoriteTest extends TestCase
     //8
     public function test_authenticated_user_can_favorite_a_good()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // ユーザーを作成してログイン
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -39,6 +41,8 @@ class FavoriteTest extends TestCase
 
     public function test_authenticated_user_can_toggle_favorite_icon()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // ユーザーを作成しログイン
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -91,6 +95,8 @@ class FavoriteTest extends TestCase
 
     public function test_authenticated_user_can_unfavorite_a_good()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // ユーザーを作成してログイン
         $user = User::factory()->create();
         $this->actingAs($user);

@@ -113,6 +113,8 @@ class ItemindexTest extends TestCase
     //5
     public function test_only_favorited_goods_are_displayed_in_mylist()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // ユーザーを作成してログイン
         $user = User::factory()->create();
         $this->actingAs($user);

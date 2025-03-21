@@ -99,42 +99,68 @@
         });
     });
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const stripeKey = document.querySelector('meta[name="stripe-key"]').getAttribute("content");
-        const stripe = Stripe(stripeKey);
-        const checkoutButton = document.getElementById("checkout-button");
+document.addEventListener("DOMContentLoaded", function () {
+    const stripeKey = document.querySelector('meta[name="stripe-key"]').getAttribute("content");
+    const stripe = Stripe(stripeKey);
+    const checkoutButton = document.getElementById("checkout-button");
 
-        checkoutButton.addEventListener("click", function () {
-            const paymentMethod = document.getElementById("payment-select").value;
-            const goodId = "{{ $good->id }}";
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    checkoutButton.addEventListener("click", function () {
+        const paymentMethod = document.getElementById("payment-select").value;
+        const goodId = "{{ $good->id }}";
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-            if (paymentMethod === "カード払い") {
-                fetch(`{{ route('checkout.process', ['goodsid' => $good->id]) }}`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": csrfToken
-                    },
-                    body: JSON.stringify({})
-                })
-                .then(response => response.json())
-                .then(session => {
-                    if (!session.sessionId) {
-                        throw new Error("セッションIDが取得できませんでした。");
-                    }
-                    return stripe.redirectToCheckout({ sessionId: session.sessionId });
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    alert("決済処理中にエラーが発生しました: " + error.message);
-                });
-            } else if (paymentMethod === "コンビニ払い") {
-                document.getElementById("payment-form").action = "{{ route('purchase.store') }}";
-                document.getElementById("payment-form").submit();
-            } else {
-                alert("支払い方法を選択してください。");
-            }
-        });
+        if (paymentMethod === "カード払い") {
+            fetch(`{{ route('checkout.process', ['goodsid' => $good->id]) }}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": csrfToken
+                },
+                body: JSON.stringify({ payment_method: "カード払い" })
+            })
+            .then(response => response.json())
+            .then(session => {
+                if (!session.sessionId) {
+                    throw new Error("セッションIDが取得できませんでした。");
+                }
+                return stripe.redirectToCheckout({ sessionId: session.sessionId });
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("決済処理中にエラーが発生しました: " + error.message);
+            });
+
+        } else if (paymentMethod === "コンビニ払い") {
+            fetch(`{{ route('checkout.process', ['goodsid' => $good->id]) }}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": csrfToken
+                },
+                body: JSON.stringify({ payment_method: "コンビニ払い" })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.client_secret) {
+                    throw new Error("クライアントシークレットが取得できませんでした。");
+                }
+                return stripe.confirmKonbiniPayment(data.client_secret);
+            })
+            .then(result => {
+                if (result.error) {
+                    alert("決済エラー: " + result.error.message);
+                } else {
+                    alert("コンビニ決済の支払い情報が発行されました。支払い後に注文が確定します。");
+                    window.location.href = "{{ route('index') }}";
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("決済処理中にエラーが発生しました: " + error.message);
+            });
+        } else {
+            alert("支払い方法を選択してください。");
+        }
     });
+});
 </script>

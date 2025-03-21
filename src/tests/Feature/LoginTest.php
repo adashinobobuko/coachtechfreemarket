@@ -22,6 +22,8 @@ class LoginTest extends TestCase
     //1
     public function test_user_cannot_register_without_name()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // 会員登録ページを開く
         $response = $this->get('/register');
 
@@ -43,6 +45,8 @@ class LoginTest extends TestCase
 
     public function test_user_cannot_register_without_email()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // 会員登録ページを開く
         $response = $this->get('/register');
 
@@ -65,6 +69,8 @@ class LoginTest extends TestCase
 
     public function test_user_cannot_register_with_short_password()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // 会員登録ページを開く
         $response = $this->get('/register');
 
@@ -87,6 +93,8 @@ class LoginTest extends TestCase
 
     public function test_user_cannot_register_with_mismatched_password_confirmation()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // 会員登録ページを開く
         $response = $this->get('/register');
 
@@ -109,6 +117,8 @@ class LoginTest extends TestCase
 
     public function test_user_register_completed()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // Viewでの$errors未定義対策（テスト用）
         \Illuminate\Support\Facades\View::share('errors', new \Illuminate\Support\ViewErrorBag());
 
@@ -141,6 +151,8 @@ class LoginTest extends TestCase
     //2
     public function test_user_cannot_login_without_email()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // ログインページを開く
         $response = $this->get('/login');
 
@@ -156,6 +168,8 @@ class LoginTest extends TestCase
 
     public function test_user_cannot_login_without_password()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // ログインページを開く
         $response = $this->get('/login');
 
@@ -171,6 +185,8 @@ class LoginTest extends TestCase
 
     public function test_user_cannot_login_with_unregistered_credentials()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // ログインページを開く
         $response = $this->get('/login');
 
@@ -189,6 +205,8 @@ class LoginTest extends TestCase
 
     public function test_user_can_login_with_valid_credentials()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // セッションを開始
         $this->withSession([]);
 
@@ -214,6 +232,8 @@ class LoginTest extends TestCase
     //3
     public function test_user_can_logout_successfully()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // ユーザーを作成
         $user = User::factory()->create([
             'email' => 'testuser@example.com',

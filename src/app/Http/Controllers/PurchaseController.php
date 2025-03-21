@@ -14,26 +14,32 @@ class PurchaseController extends Controller
 {
     public function store(PurchaseRequest $request)
     {
-
         $user = Auth::user();
+        $paymentMethod = $request->payment_method;
 
-        Purchase::create([
-            'user_id' => $user->id,
-            'good_id' => $request->good_id,
-            'payment_method' => $request->payment_method,
-            'address' => $user->address
-        ]);
+        DB::beginTransaction();
+        try {
+            Purchase::create([
+                'user_id' => $user->id,
+                'good_id' => $request->good_id,
+                'payment_method' => $paymentMethod,
+                'address' => $user->address
+            ]);
 
-        //売り切れの処理フラグを更新
-        $good = Good::find($request->good_id);
-        if($good){
-            $good->update(['is_sold' => true]);
+            $good = Good::find($request->good_id);
+            if ($good) {
+                $good->update(['is_sold' => true]);
+            }
+
+            DB::commit();
+
+            return redirect()->route('index')->with(['message' => '購入が完了しました', 'activeTab' => 'recommend']);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('購入処理エラー: ' . $e->getMessage());
+            return redirect()->route('index')->with('error', '購入処理中にエラーが発生しました。');
         }
-
-        //フラッシュメッセージとともにindexへ遷移
-        return redirect()->route('index')->with(['message' => '購入が完了しました',
-                                    'activeTab' => 'recommend'
-                                ]);
-    }
+}
 }
 

@@ -14,6 +14,8 @@ class CommentTest extends TestCase
     //9
     public function test_authenticated_user_can_post_comment()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // ユーザーと商品を作成
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -41,6 +43,8 @@ class CommentTest extends TestCase
 
     public function test_guest_cannot_post_comment()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // 商品を作成
         $good = Good::factory()->create();
 
@@ -63,6 +67,8 @@ class CommentTest extends TestCase
 
     public function test_comment_cannot_be_256over()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // ユーザーと商品を作成
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -87,6 +93,8 @@ class CommentTest extends TestCase
 
     public function test_comment_cannnot_be_empty()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // ユーザーと商品を作成
         $user = User::factory()->create();
         $this->actingAs($user);

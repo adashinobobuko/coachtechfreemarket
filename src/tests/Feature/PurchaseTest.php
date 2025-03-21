@@ -8,6 +8,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Good;
 use App\Models\Purchase;
+use Illuminate\Support\Facades\DB;
 
 class PurchaseTest extends TestCase
 {
@@ -15,6 +16,8 @@ class PurchaseTest extends TestCase
     //10
     public function test_purchase_button_buy_completed()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // ユーザーを作成
         $user = User::factory()->create([
             'postal_code' => '123-4567',
@@ -57,6 +60,8 @@ class PurchaseTest extends TestCase
 
     public function test_solddisplay_after_purchase_button_buy_completed()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // ユーザーを作成
         $user = User::factory()->create([
             'postal_code' => '123-4567',
@@ -113,6 +118,8 @@ class PurchaseTest extends TestCase
 
     public function test_mypage_display_purchase_button_buy_completed()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // ユーザーを作成
         $user = User::factory()->create([
             'postal_code' => '123-4567',

@@ -48,7 +48,6 @@ class ProfileController extends Controller
             $user->save();
         }
 
-
         return back()->with('success', 'プロフィール画像が更新されました。');
     }
 

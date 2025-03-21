@@ -83,3 +83,28 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/resend-email', [AuthController::class, 'resendVerificationEmail'])->name('resend.email');
+
+Route::post('/stripe/webhook', function (Request $request) {
+    Stripe::setApiKey(config('services.stripe.secret'));
+
+    $payload = $request->getContent();
+    $sig_header = $request->header('Stripe-Signature');
+    $endpoint_secret = config('services.stripe.webhook_secret');
+
+    try {
+        $event = \Stripe\Webhook::constructEvent($payload, $sig_header, $endpoint_secret);
+
+        if ($event->type == 'payment_intent.succeeded') {
+            $paymentIntent = $event->data->object;
+            $purchase = Purchase::where('stripe_payment_id', $paymentIntent->id)->first();
+            
+            if ($purchase) {
+                $purchase->update(['status' => 'paid']);
+            }
+        }
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Webhook error'], 400);
+    }
+
+    return response()->json(['status' => 'success'], 200);
+});

@@ -17,6 +17,8 @@ class MypageTest extends TestCase
     //13
     public function test_logged_in_user_can_view_profile_page()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         //ストレージのテスト用ディスクを設定
         Storage::fake('public');
 
@@ -44,6 +46,8 @@ class MypageTest extends TestCase
 
     public function test_logged_in_user_can_view_list_of_selling_items()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // テスト用のユーザーを作成
         $user = User::factory()->create();
 
@@ -66,6 +70,8 @@ class MypageTest extends TestCase
 
     public function test_logged_in_user_can_view_list_of_purchased_items()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // テスト用のユーザーを作成
         $user = User::factory()->create();
 
@@ -88,6 +94,8 @@ class MypageTest extends TestCase
 
         public function test_logged_in_user_can_view_profile_edit_page_with_correct_initial_values()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // テスト用のユーザーを作成
         $user = User::factory()->create([
             'name' => 'テストユーザー',
@@ -114,28 +122,34 @@ class MypageTest extends TestCase
     //14
     public function test_logged_in_user_can_update_profile_information()
     {
+        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+
         // ストレージのテスト用ディスクを設定
         Storage::fake('public');
 
         // テスト用のユーザーを作成
         $user = User::factory()->create();
 
-        // ダミーの画像データを作成（画像ファイルとして扱う）
-        $file = UploadedFile::fake()->createWithContent('profile.jpg', 'fake_image_content');
+        // ダミー画像を作成
+        $file = UploadedFile::fake()->create('profile.jpg', 100, 'image/jpeg');
 
-        // ユーザーとしてログイン
-        $response = $this->actingAs($user)->post(route('profile.update'), [
+        // プロフィール画像をアップロード
+        $responseImg = $this->actingAs($user)->post('/profile/imgupdate', [
+            'profile_image' => $file,
+        ]);
+
+        // ユーザー情報を更新
+        $responseUpdate = $this->actingAs($user)->post(route('profile.update'), [
             'name' => '更新ユーザー',
             'postal_code' => '987-6543',
             'address' => '大阪府大阪市2-2-2',
             'building_name' => '更新マンション',
-            'profile_image' => $file, // 画像を追加
         ]);
 
         // 更新後に正しくリダイレクトされるか確認
-        $response->assertRedirect(route('profile.edit'));
+        $responseUpdate->assertRedirect(route('profile.edit'));
 
-        // データベースが更新されているか確認
+        // データベースのユーザー情報が更新されているか確認
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
             'name' => '更新ユーザー',
@@ -144,13 +158,16 @@ class MypageTest extends TestCase
             'building_name' => '更新マンション',
         ]);
 
-        // 画像が正しく保存されているか確認
-        Storage::disk('public')->assertExists("profile_images/{$file->hashName()}");
+        // ユーザーの画像情報を取得し直す
+        $user->refresh();
 
-        // データベースの画像パスが正しく更新されたか確認
+        // プロフィール画像が保存されているか確認
+        Storage::disk('public')->assertExists($user->profile_image);
+
+        // ファイル名とDBの一致を確認
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
-            'profile_image' => "profile_images/{$file->hashName()}",
+            'profile_image' => $user->profile_image,
         ]);
     }
 

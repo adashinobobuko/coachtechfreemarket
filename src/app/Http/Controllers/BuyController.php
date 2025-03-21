@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use Illuminate\Support\Facades\Log;
-
+use Stripe\PaymentIntent;
 
 class BuyController extends Controller
 {
@@ -36,28 +36,57 @@ class BuyController extends Controller
             // Stripe APIキー設定
             Stripe::setApiKey(config('services.stripe.secret'));
 
-            // Stripe セッション作成
-            $session = Session::create([
-                'payment_method_types' => ['card'],
-                'line_items' => [[
-                    'price_data' => [
-                        'currency' => 'jpy',
-                        'product_data' => [
-                            'name' => $good->name ?? '不明な商品', // 変数を正しく適用
-                        ],
-                        'unit_amount' => (int) $good->price * 0.01 * 100, // 金額を正しく適用
-                    ],
-                    'quantity' => 1,
-                ]],
-                'mode' => 'payment',
-                'success_url' => url('/success'),
-                'cancel_url' => url('/cancel'),
-            ]);
+            $paymentMethod = $request->input('payment_method');
 
-            return response()->json(['sessionId' => $session->id]);
+            $amount = (int) $good->price * 0.01 * 100;
+
+            // Stripe セッション作成
+            if ($paymentMethod === "カード払い") {
+                // Stripe Checkout セッション作成 (クレジットカード)
+                $session = Session::create([
+                    'payment_method_types' => ['card'],
+                    'line_items' => [[
+                        'price_data' => [
+                            'currency' => 'jpy',
+                            'product_data' => ['name' => $good->name],
+                            'unit_amount' => $amount,
+                        ],
+                        'quantity' => 1,
+                    ]],
+                    'mode' => 'payment',
+                    'success_url' => url('/success'),
+                    'cancel_url' => url('/cancel'),
+                ]);
+
+                return response()->json(['sessionId' => $session->id]);
+
+            } elseif ($paymentMethod === "コンビニ払い") {
+                $paymentIntent = PaymentIntent::create([
+                    'amount' => $amount,
+                    'currency' => 'jpy',
+                    'payment_method_types' => ['konbini'],
+                    'payment_method_data' => [
+                        'type' => 'konbini',
+                        'billing_details' => [
+                            'name' => Auth::user()->name ?? 'ゲストユーザー',
+                            'email' => Auth::user()->email ?? 'test@example.com',
+                        ],
+                        'konbini' => [
+                        ],
+                    ],
+                    'confirm' => true,
+                    'confirmation_method' => 'automatic',
+                    'capture_method' => 'automatic',
+                ]);
+
+                return response()->json(['client_secret' => $paymentIntent->client_secret]);
+            }
+
+            return response()->json(['error' => '支払い方法が無効です'], 400);
 
         } catch (\Exception $e) {
-            return response()->json(['error' => '決済セッションの作成に失敗しました。'], 500);
+            Log::error('決済エラー: ' . $e->getMessage());
+            return response()->json(['error' => '決済処理中にエラーが発生しました。'], 500);
         }
     }
 
