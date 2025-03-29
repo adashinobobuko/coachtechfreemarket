@@ -83,7 +83,7 @@ docker-compose exec app vendor/bin/phpunit --filter  test_it_displays_sell_form_
 --filter の後には、テストクラス内のメソッド名を指定します。  
 
 ## ER図  
-![ER図](free-market.drawio.png)  
+![ER図](/public/images/free-market.drawio.png)  
 ## URL  
 ### 開発環境  
 - **開発環境URL:** [http://localhost/](http://localhost/)  
