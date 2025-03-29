@@ -68,11 +68,14 @@ Stripe
 # MailHog へのアクセス  
 http://localhost:8025/  
 
-# PHPUnit 実行  
-
+# PHPUnit 実行およびテスト用の環境ファイルの作成 
+まずはデータベースを用意します。  
+$ mysql -u root -p  
+> CREATE DATABASE demo_test;  
+> SHOW DATABASES;  
+config/database.phpにテストサーバーのコードは記載済みです。  
 docker-compose exec app vendor/bin/phpunit  
-テスト用に.env.testingがございますのでテスト実行時はそちらをお使いください。
-# テスト用の環境ファイルの作成  
+テスト用に.env.testingがございますのでテスト実行時はそちらをお使いください。 
 cp .env.testing.example .env.testing  
 特定のメソッドのみ実行  
 特定のテストメソッドだけ実行したい場合は、--filter オプションを使用します。  
