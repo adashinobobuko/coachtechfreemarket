@@ -17,7 +17,7 @@ cd coachtechfreemarket
 # Dockerのビルドと起動  
 docker-compose build  
 docker-compose up -d  
-
+### 2. .envファイル作成とmigrate方法  
 # .env の作成と編集
 cp .env.example .env
 # APP_KEYの生成
@@ -37,7 +37,7 @@ docker-compose exec app php artisan migrate:fresh --seed
 
 .envは.env.exampleを参照にしてください。  
 
-使用技術 & 実行環境  
+###　使用技術 & 実行環境  
 フレームワーク & 言語  
 Laravel 8.83.8  
 
@@ -83,7 +83,7 @@ docker-compose exec app vendor/bin/phpunit --filter  test_it_displays_sell_form_
 --filter の後には、テストクラス内のメソッド名を指定します。  
 
 ## ER図  
-![ER図](/public/images/free-market.drawio.png)  
+![ER図](https://adashinobobuko.github.io/coachtechfreemarket/src/public/images/free-market.drawio.png)  
 ## URL  
 ### 開発環境  
 - **開発環境URL:** [http://localhost/](http://localhost/)  
