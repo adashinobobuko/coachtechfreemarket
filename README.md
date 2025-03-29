@@ -9,7 +9,6 @@
 # 環境構築  
 
 # 1. クローン & Docker起動  
-```bash  
 ## リポジトリをクローン  
 git clone https://github.com/coachtech-material/laravel-docker-template.git coachtechfreemarket
 cd coachtechfreemarket  
@@ -18,8 +17,7 @@ cd coachtechfreemarket
 docker-compose build  
 docker-compose up -d  
 
-# 2. .envファイル作成とmigrate方法 
-```bash  
+# 2. .envファイル作成とmigrate方法  
 # .env の作成と編集
 cp .env.example .env
 # APP_KEYの生成
