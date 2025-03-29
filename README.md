@@ -6,19 +6,19 @@
 
 ---
 
-## 環境構築  
+# 環境構築  
 
-### 1. クローン & Docker起動  
+# 1. クローン & Docker起動  
 ```bash  
-# リポジトリをクローン  
+## リポジトリをクローン  
 git clone https://github.com/coachtech-material/laravel-docker-template.git coachtechfreemarket
 cd coachtechfreemarket  
 
-# Dockerのビルドと起動  
+## Dockerのビルドと起動  
 docker-compose build  
 docker-compose up -d  
 
-### 2. .envファイル作成とmigrate方法 
+# 2. .envファイル作成とmigrate方法 
 ```bash  
 # .env の作成と編集
 cp .env.example .env
@@ -39,7 +39,7 @@ docker-compose exec app php artisan migrate:fresh --seed
 
 .envは.env.exampleを参照にしてください。  
 
-###　使用技術 & 実行環境  
+#　使用技術 & 実行環境  
 フレームワーク & 言語  
 Laravel 8.83.8  
 
@@ -54,7 +54,7 @@ Laravel App (app コンテナ)
 MySQL (mysql コンテナ)  
   
 MailHog (mailhog コンテナ)  
-# .env での MailHog 設定  
+## .env での MailHog 設定  
 MAIL_MAILER=smtp  
 MAIL_HOST=mailhog  
 MAIL_PORT=1025  
