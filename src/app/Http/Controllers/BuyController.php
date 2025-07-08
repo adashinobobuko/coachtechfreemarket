@@ -54,8 +54,13 @@ class BuyController extends Controller
                         'quantity' => 1,
                     ]],
                     'mode' => 'payment',
-                    'success_url' => url('/success'),
-                    'cancel_url' => url('/cancel'),
+                    'success_url' => url('/purchase/complete') . '/{CHECKOUT_SESSION_ID}',
+                    'cancel_url' => route('buy.show', ['id' => $goodsid]),
+                    'metadata' => [
+                        'good_id' => $good->id,
+                        'user_id' => Auth::id(),
+                        'payment_method' => 'カード払い',
+                    ],
                 ]);
 
                 return response()->json(['sessionId' => $session->id]);
@@ -71,22 +76,28 @@ class BuyController extends Controller
                             'name' => Auth::user()->name ?? 'ゲストユーザー',
                             'email' => Auth::user()->email ?? 'test@example.com',
                         ],
-                        'konbini' => [
-                        ],
+                        'konbini' => [],
+                    ],
+                    'metadata' => [ 
+                        'good_id' => $good->id,
+                        'user_id' => Auth::id(),
+                        'payment_method' => 'コンビニ払い',
                     ],
                     'confirm' => true,
                     'confirmation_method' => 'automatic',
                     'capture_method' => 'automatic',
                 ]);
-
+                
                 return response()->json(['client_secret' => $paymentIntent->client_secret]);
             }
 
             return response()->json(['error' => '支払い方法が無効です'], 400);
 
         } catch (\Exception $e) {
-            Log::error('決済エラー: ' . $e->getMessage());
-            return response()->json(['error' => '決済処理中にエラーが発生しました。'], 500);
+            Log::error('Stripe セッション作成エラー: ' . $e->getMessage());
+            return response()->json([
+                'error' => '決済処理中にエラーが発生しました：' . $e->getMessage()
+            ], 500);
         }
     }
 

@@ -18,11 +18,23 @@
         </div>
     </div>
 
+    @if(isset($averageRating))
+    <div class="mt-3 text-center">
+        <strong>評価平均：</strong> {{ number_format($averageRating, 1) }} / 5
+    </div>
+    @endif
+
     <div class="container mt-4">
             <!-- タブメニュー -->
         <div class="tab-menu">
             <a href="{{ route('mypage.sell') }}" class="tab-link {{ $activeTab === 'sell' ? 'active' : '' }}">出品した商品</a>
             <a href="{{ route('mypage.buy') }}" class="tab-link {{ $activeTab === 'buy' ? 'active' : '' }}">購入した商品</a>
+            <a href="{{ route('mypage.transactions') }}" class="{{ $activeTab === 'transactions' ? 'active' : '' }}">
+                取引中の商品
+                @if (!empty($unreadCount) && $unreadCount > 0)
+                    <span class="badge">{{ $unreadCount }}</span>
+                @endif
+            </a>
         </div>
     </div>
 
@@ -69,4 +81,35 @@
             @endif
         </div>
     </div>
+
+    @foreach ($transactions as $transaction)
+        @php
+            $isBuyer = $transaction->buyer_id === Auth::id();
+        @endphp
+
+        <div class="p-3 position-relative">
+
+            <a href="{{ $isBuyer 
+                ? route('chat.buyer', $transaction->purchase->id) 
+                : route('chat.seller', $transaction->purchase->id) }}">
+                
+                <div class="position-relative">
+                    <img src="{{ asset('storage/' . $transaction->good->image) }}" alt="商品画像" class="product-image">
+
+                    @if($transaction->unread_count > 0)
+                        <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">
+                            {{ $transaction->unread_count }}
+                        </span>
+                    @endif
+
+                    @if($transaction->status === 'completed' && !$transaction->evaluation)
+                        <div class="overlay">評価を投稿してください</div>
+                    @endif
+                </div>
+                <p class="product-name">{{ $transaction->good->name }}</p>
+            </a>
+        </div>
+    @endforeach
+
+</div>
 @endsection

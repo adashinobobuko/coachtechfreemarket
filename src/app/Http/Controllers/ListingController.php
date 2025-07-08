@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\Good;
 use App\Models\User;
+use App\Models\Category;
 use App\Http\Requests\ExhibitionRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,30 +12,32 @@ class ListingController extends Controller
 {
     public function showSellForm()
     {
-        return view('listing');
+        $categories = Category::all();
+        return view('listing', compact('categories'));
     }
-
+    
     public function store(ExhibitionRequest $request)
     {
-        // 画像アップロード処理
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('goods', 'public'); // storage/app/public/goods に保存
+            $imagePath = $request->file('image')->store('goods', 'public');
         } else {
             return back()->with('error', '画像がアップロードされていません');
         }
-
-        // 商品データを保存
+    
         $goods = Good::create([
             'user_id' => Auth::id(),
-            'image' => $request->file('image')->store('goods', 'public'),
-            'category' => implode(',', $request->category),
+            'image' => $imagePath,
             'condition' => $request->condition,
             'name' => $request->name,
             'brand' => $request->brand,
             'description' => $request->description,
             'price' => $request->price,
         ]);
-
+    
+        // 中間テーブルへカテゴリを保存
+        $goods->categories()->sync($request->input('category_ids', []));
+    
         return redirect()->route('index')->with('success', '商品が出品されました');
     }
+    
 }

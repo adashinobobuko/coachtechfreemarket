@@ -39,24 +39,25 @@
         <div class="mb-4">
             <label class="block text-gray-700">カテゴリー</label>
             <div class="category-container flex-wrap">
-                @foreach(['ファッション', '家電', 'インテリア', 'レディース', 'メンズ', 'コスメ', '本', 'ゲーム', 'スポーツ', 'キッチン', 'ハンドメイド', 'アクセサリー', 'おもちゃ', 'ベビー・キッズ'] as $category)
-                    <label class="category-item">
-                        <input type="checkbox" name="category[]" value="{{ $category }}"> {{ $category }}
-                    </label>
-                @endforeach
+            @foreach($categories as $category)
+            <label class="category-item">
+                <input type="checkbox" name="category_ids[]" value="{{ $category->id }}"
+                    {{ in_array($category->id, old('category_ids', [])) ? 'checked' : '' }}>
+                {{ $category->name }}
+            </label>
+            @endforeach
             </div>
-            @error('category')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+            @error('category_ids')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
         </div>
-
         
         <!-- 商品の状態 -->
         <div class="mb-4">
             <label class="block text-gray-700">商品の状態</label>
             <select name="condition" class="selecter">
-                <option value="良好">良好</option>
-                <option value="目立った傷や汚れ無し">目立った傷や汚れ無し</option>
-                <option value="やや傷や汚れあり">やや傷や汚れあり</option>
-                <option value="状態が悪い">状態が悪い</option>
+                <option value="良好" {{ old('condition') == '良好' ? 'selected' : '' }}>良好</option>
+                <option value="目立った傷や汚れ無し" {{ old('condition') == '目立った傷や汚れ無し' ? 'selected' : '' }}>目立った傷や汚れ無し</option>
+                <option value="やや傷や汚れあり" {{ old('condition') == 'やや傷や汚れあり' ? 'selected' : '' }}>やや傷や汚れあり</option>
+                <option value="状態が悪い" {{ old('condition') == '状態が悪い' ? 'selected' : '' }}>状態が悪い</option>
             </select>
             @error('condition')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
         </div>
@@ -64,21 +65,21 @@
         <!-- 商品名 -->
         <div class="mb-4">
             <label class="block text-gray-700">商品名</label>
-            <input type="text" name="name" class="w-full border p-2 rounded mt-1" required>
+            <input type="text" name="name" class="w-full border p-2 rounded mt-1" required value="{{ old('name') }}">
             @error('name')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
         </div>
 
         <!-- ブランド名 -->
         <div class="mb-4">
             <label class="block text-gray-700">ブランド名</label>
-            <input type="text" name="brand" class="w-full border p-2 rounded mt-1">
+            <input type="text" name="brand" class="w-full border p-2 rounded mt-1" value="{{ old('brand') }}">
             @error('brand')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
         </div>
         
         <!-- 商品の説明 -->
         <div class="mb-4">
             <label class="block text-gray-700">商品の説明</label>
-            <textarea name="description" class="description__form" rows="4" required></textarea>
+            <textarea name="description" class="description__form" rows="4" required>{{ old('description') }}</textarea>
             @error('description')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
         </div>
         
@@ -86,7 +87,8 @@
         <div class="mb-4">
             <label class="block text-gray-700">販売価格</label>
             <div class="input-wrapper">
-                <input type="number" name="price" class="price-field" required min="0">
+            <input type="number" name="price" class="price-field" required min="0" value="{{ old('price') }}">
+
             </div>
             @error('price')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
         </div>

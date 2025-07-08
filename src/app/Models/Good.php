@@ -13,7 +13,6 @@ class Good extends Model
 
     protected $fillable = [
         'image',
-        'category',
         'brand',
         'condition',
         'name',
@@ -78,5 +77,27 @@ class Good extends Model
     public function purchasesAddresses()
     {
         return $this->hasMany(PurchasesAddress::class, 'good_id', 'id');
+    }
+
+    // 追加
+    // カテゴリーとのリレーション
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_good');
+    }
+
+    // 取引メッセージの未読チェック
+    public function hasUnreadMessagesFor($userId)
+    {
+        return $this->transactionMessages()
+            ->where('user_id', '!=', $userId)
+            ->whereNull('read_at')
+            ->exists();
+    }
+
+    // 取引メッセージのリレーション
+    public function transactionMessages()
+    {
+        return $this->hasMany(TransactionMessage::class);
     }
 }

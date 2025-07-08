@@ -13,7 +13,6 @@ class GoodFactory extends Factory
         return [
             'user_id' => \App\Models\User::factory(), // ランダムなユーザーを生成
             'image' => $this->faker->imageUrl(), // ダミー画像URL
-            'category' => $this->faker->word(),
             'brand' => $this->faker->company(),
             'condition' => $this->faker->randomElement(['new', 'used', 'refurbished']),
             'name' => $this->faker->word(),

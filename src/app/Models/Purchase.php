@@ -21,14 +21,28 @@ class Purchase extends Model
         return $this->belongsTo(Good::class);
     }
 
-    public function favorite()
-    {
-        return $this->belongsTo(Favorite::class);
-    }
-
     public function isSold()
     {
         return $this->good->is_sold ?? false;
     }
-      
+
+    public function transaction()
+    {
+        return $this->hasOne(Transaction::class);
+    }
+
+    // public function messages()
+    // {
+    //     return $this->hasMany(TransactionMessage::class);
+    // }
+
+    public function evaluationBy($userId)
+    {
+        return $this->hasOne(Evaluation::class)->where('from_user_id', $userId);
+    }
+
+    public function buyer()
+    {
+        return $this->belongsTo(User::class, 'buyer_id');
+    }
 }

@@ -7,6 +7,8 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\BuyController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\EvaluationController;
 use Illuminate\Support\Facades\Response;
 
 /*
@@ -34,6 +36,8 @@ Route::get('/item/{id}', [ItemController::class, 'show'])->name('goods.show');//
 Route::middleware(['auth'])->group(function () {
     Route::get('/mypage/buy',[ProfileController::class,'buy'])->name('mypage.buy');
     Route::get('/mypage/sell',[ProfileController::class,'sell'])->name('mypage.sell');
+    // 追加：取引中の商品を表示
+    Route::get('/mypage/transactions', [ProfileController::class, 'transactions'])->name('mypage.transactions');
 });
 
 //購入のルート
@@ -41,6 +45,8 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/purchase/{id}', [BuyController::class, 'showBuyform'])->name('buy.show');
     Route::post('/purchase/store', [PurchaseController::class, 'store'])->name('purchase.store');
     Route::post('/checkout/{goodsid}', [BuyController::class, 'processCheckout'])->name('checkout.process');
+    // 購入完了のルート
+    Route::get('/purchase/complete/{session_id}', [PurchaseController::class, 'complete'])->name('purchase.complete');
 });
 
 //住所変更ルート
@@ -107,4 +113,28 @@ Route::post('/stripe/webhook', function (Request $request) {
     }
 
     return response()->json(['status' => 'success'], 200);
+});
+
+// 以下追加内容
+// 購入者と販売者のチャット関連のルート
+Route::middleware(['auth'])->group(function () {
+    Route::get('/chat/buyer/{purchaseId}', [ChatController::class, 'showBuyerChat'])->name('chat.buyer');
+    Route::get('/chat/seller/{purchaseId}', [ChatController::class, 'showSellerChat'])->name('chat.seller');
+    Route::post('/chat/send/{purchaseId}', [ChatController::class, 'store'])->name('chat.send');
+    Route::get('/chat/messages/{purchaseId}', [ChatController::class, 'fetchMessages'])->name('chat.messages');
+    // チャットメッセージの編集
+    Route::get('/chat/messages/{messageId}/edit', [ChatController::class, 'edit'])->name('chat.edit');
+    Route::put('/chat/messages/{messageId}', [ChatController::class, 'update'])->name('chat.update');
+    // チャットメッセージの削除
+    Route::delete('/chat/messages/{messageId}', [ChatController::class, 'destroy'])->name('chat.delete');
+    // 取引完了のルート
+    Route::post('/transactions/{purchase}/complete', [ChatController::class, 'complete'])
+    ->name('transactions.complete')
+    ->middleware('auth');
+});
+
+// 購入者と販売者、おたがいの評価ルート
+Route::middleware('auth')->group(function () {
+    Route::post('/mypage/transactions/{purchase}/evaluate', [EvaluationController::class, 'store'])
+        ->name('evaluations.store');
 });

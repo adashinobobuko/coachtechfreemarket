@@ -64,15 +64,13 @@
                 <!-- 商品の情報 -->
                 <div class="mt-3">
                     <h4>商品の情報</h4>
-                        @php
-                            $categories = is_array($good->category) ? $good->category : explode(',', $good->category);
-                        @endphp
-
                         <div class="category">
                             <strong>カテゴリー</strong>
-                            @foreach($categories as $category)
-                                <span class="badge">{{ trim($category) }}</span>
-                            @endforeach
+                            @forelse($good->categories as $category)
+                                <span class="badge">{{ $category->name }}</span>
+                            @empty
+                                <span class="text-muted">未分類</span>
+                            @endforelse
                         </div>
                     <p><strong>商品の状態</strong>&nbsp;&nbsp;&nbsp;{{ $good->condition ?? '不明' }}</p>
                 </div>

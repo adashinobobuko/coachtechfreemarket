@@ -25,7 +25,7 @@ class ExhibitionRequest extends FormRequest
     {
         return [
             'image' => 'required|image|mimes:jpeg,png,jpg|max:1024',
-            'category' => 'required|array', // 配列として受け取る
+            'category_ids' => 'required|array', // 配列として受け取る
             'condition' => 'required|string',
             'brand' => 'nullable|string',
             'name' => 'required|string',
@@ -46,8 +46,7 @@ class ExhibitionRequest extends FormRequest
             'image.image' => '画像ファイルをアップロードしてください。',
             'image.mimes' => '画像は jpeg, png, jpg のいずれかの形式でアップロードしてください。',
             'image.max' => '画像のサイズは1MB以下にしてください。',
-            'category.required' => 'カテゴリを入力してください。',
-            'category.string' => 'カテゴリは文字列で入力してください。',
+            'category_ids.required' => 'カテゴリを入力してください。',
             'condition.required' => '商品の状態を入力してください。',
             'condition.string' => '商品の状態は文字列で入力してください。',
             'brand.string' => 'ブランド名は文字列で入力してください。',
