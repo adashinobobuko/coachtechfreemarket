@@ -13,6 +13,7 @@ class TransactionMessage extends Model
         'recipient_id',
         'is_read',
         'purchase_id', 
+        'image_path',
     ];
 
     public function transaction()

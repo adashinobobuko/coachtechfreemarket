@@ -31,11 +31,6 @@ class Purchase extends Model
         return $this->hasOne(Transaction::class);
     }
 
-    // public function messages()
-    // {
-    //     return $this->hasMany(TransactionMessage::class);
-    // }
-
     public function evaluationBy($userId)
     {
         return $this->hasOne(Evaluation::class)->where('from_user_id', $userId);
@@ -44,5 +39,10 @@ class Purchase extends Model
     public function buyer()
     {
         return $this->belongsTo(User::class, 'buyer_id');
+    }
+
+    public function evaluations()
+    {
+        return $this->hasMany(Evaluation::class);
     }
 }

@@ -41,6 +41,8 @@ class TransactionSeeder extends Seeder
                 'address' => '東京都架空市1-1-1',
             ]);
 
+            $good->update(['is_sold' => true]);
+
             // 取引データ作成
             $transaction = Transaction::create([
                 'purchase_id' => $purchase->id,

@@ -35,6 +35,6 @@ class EvaluationController extends Controller
             'comment' => $request->comment,
         ]);
     
-        return redirect()->route('mypage.buy', $purchaseId)->with('success', '評価を投稿しました。');
+        return redirect()->route('index', $purchaseId)->with('success', '評価を投稿しました。');
     }
 }

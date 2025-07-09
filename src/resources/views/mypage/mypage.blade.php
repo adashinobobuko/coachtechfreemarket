@@ -18,18 +18,23 @@
         </div>
     </div>
 
-    @if(isset($averageRating))
-    <div class="mt-3 text-center">
-        <strong>評価平均：</strong> {{ number_format($averageRating, 1) }} / 5
+    <div class="mt-3 text-center rating-info">
+    <strong>評価平均：</strong>
+        @if ($averageRating)
+            {{ number_format($averageRating, 1) }}
+            {!! str_repeat('★', floor($averageRating)) !!}
+            {!! $averageRating - floor($averageRating) >= 0.5 ? '☆' : '' !!}
+        @else
+            <span class="no-rating">評価はまだありません</span>
+        @endif
     </div>
-    @endif
 
     <div class="container mt-4">
             <!-- タブメニュー -->
         <div class="tab-menu">
             <a href="{{ route('mypage.sell') }}" class="tab-link {{ $activeTab === 'sell' ? 'active' : '' }}">出品した商品</a>
             <a href="{{ route('mypage.buy') }}" class="tab-link {{ $activeTab === 'buy' ? 'active' : '' }}">購入した商品</a>
-            <a href="{{ route('mypage.transactions') }}" class="{{ $activeTab === 'transactions' ? 'active' : '' }}">
+            <a href="{{ route('mypage.transactions') }}" class="tab-link {{ $activeTab === 'transactions' ? 'active' : '' }}">
                 取引中の商品
                 @if (!empty($unreadCount) && $unreadCount > 0)
                     <span class="badge">{{ $unreadCount }}</span>
@@ -45,7 +50,7 @@
                     <div class="p-3 position-relative">
                         <a href="{{ route('goods.show', $good['id']) }}">
                             <div class="position-relative">
-                                <img src="{{ asset('storage/' . $good['image']) }}" alt="商品画像" class="product-image">
+                                <img src="{{ asset( $good['image']) }}" alt="商品画像" class="product-image">
                                 @if(isset($good['is_sold']) && $good['is_sold'] == true)
                                     <div class="sold-out-overlay">sold</div>
                                 @endif
@@ -67,7 +72,7 @@
                     <div class="p-3 border text-center position-relative">
                         <a href="{{ route('goods.show', $purchase->good->id) }}">
                             <div class="position-relative">
-                                <img src="{{ asset('storage/' . $purchase->good->image) }}" alt="商品画像" class="product-image">
+                                <img src="{{ asset($purchase->good->image) }}" alt="商品画像" class="product-image">
                                 @if($purchase->isSold())
                                     <div class="sold-out-overlay">sold</div>
                                 @endif
@@ -94,7 +99,7 @@
                 : route('chat.seller', $transaction->purchase->id) }}">
                 
                 <div class="position-relative">
-                    <img src="{{ asset('storage/' . $transaction->good->image) }}" alt="商品画像" class="product-image">
+                    <img src="{{ asset($transaction->good->image) }}" alt="商品画像" class="product-image">
 
                     @if($transaction->unread_count > 0)
                         <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">

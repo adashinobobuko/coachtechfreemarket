@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Evaluation extends Model
 {
@@ -11,6 +12,7 @@ class Evaluation extends Model
 
     protected $fillable = [
         'purchase_id',
+        'transaction_id',
         'from_user_id',
         'to_user_id',
         'rating',
@@ -32,7 +34,7 @@ class Evaluation extends Model
         return $this->belongsTo(User::class, 'to_user_id');
     }
 
-    public function transaction()
+    public function transaction(): BelongsTo
     {
         return $this->belongsTo(Transaction::class);
     }

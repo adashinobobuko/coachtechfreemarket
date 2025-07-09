@@ -1,137 +1,181 @@
-# コーチテックフリーマーケット (coachtechfreemarket)  
+# コーチテックフリーマーケット（Pro試験、拡張機能実装版）
 
-## プロジェクト概要  
-コーチテックフリーマーケットは、ユーザーが商品を出品・購入できるオンラインマーケットプレイスです。  
-登録したユーザーは商品をお気に入り登録（マイリスト）したり、Stripeを利用して商品購入も可能です。  
+## 概要
+
+本アプリは、Laravelを用いて構築されたフリーマーケットアプリです。  
+ユーザーは商品を出品・購入できるほか、以下の拡張機能を実装済みです。
 
 ---
 
-# 環境構築  
+## 実装済み機能（拡張部分）
 
-# 1. クローン & Docker起動  
-## リポジトリをクローン  
+### 取引チャット機能  
+- ユーザー同士が商品の購入後にチャット形式でやり取り可能  
+- チャットの投稿、編集、削除に対応  
+- 画像添付対応  
+
+### 取引画面の遷移  
+- `/mypage?tab=buy` から購入済み商品にアクセスし、各商品ごとのチャット画面へ遷移可能  
+
+### 取引相手の評価機能  
+- 購入完了後、取引相手を5段階で評価可能  
+- 購入者／出品者の平均評価をマイページで確認可能  
+
+### 通知・UI改善（未読バッジ等）  
+- 新着メッセージがある取引にバッジ表示（未読メッセージ件数）  
+
+### メール通知（MailHog対応）  
+- 出品者は購入者が取引完了をした際に、メールで通知を受け取る  
+
+---
+
+## セットアップ手順
+
+### 1. リポジトリクローン & コンテナ起動
+
+```bash
 git clone https://github.com/coachtech-material/laravel-docker-template.git coachtechfreemarket
-cd coachtechfreemarket  
+cd coachtechfreemarket
 
-## Dockerのビルドと起動  
-docker-compose build  
-docker-compose up -d  
+docker-compose build
+docker-compose up -d
+```
 
-# 2. .envファイル作成とmigrate方法  
-# .env の作成と編集
+### 2. .env 作成 & マイグレーション
+
+```bash
 cp .env.example .env
-# APP_KEYの生成
-docker-compose exec app php artisan key:generate  
-APP_URL=http://localhost  
-DB_CONNECTION=mysql  
-DB_HOST=mysql  
-DB_PORT=3306  
-DB_DATABASE=laravel_db  
-DB_USERNAME=laravel_user  
-DB_PASSWORD=laravel_pass  
+docker-compose exec app php artisan key:generate
+```
 
-# マイグレーションの実行  
-docker-compose exec app php artisan migrate --seed  
-# データをリセットする場合  
-docker-compose exec app php artisan migrate:fresh --seed  
+`.env` の主な設定値：
 
-.envは.env.exampleを参照にしてください。  
+```
+APP_URL=http://localhost
+DB_DATABASE=laravel_db
+DB_USERNAME=laravel_user
+DB_PASSWORD=laravel_pass
 
-#　使用技術 & 実行環境  
-フレームワーク & 言語  
-Laravel 8.83.8  
+MAIL_MAILER=smtp
+MAIL_HOST=mailhog
+MAIL_PORT=1025
+```
 
-PHP 7.4.9   
+## シーディングについて
 
-データベース  
-MySQL 15.  
+本プロジェクトでは、取引チャット機能・評価機能の検証を行いやすくするため、以下の Seeder を実装・改訂しています。
 
-Docker環境  
-Laravel App (app コンテナ)  
+- `CategorySeeder`  
+  新たに `categories` テーブルを作成し、カテゴリの初期データを投入できるようにしました。
 
-MySQL (mysql コンテナ)  
-  
-MailHog (mailhog コンテナ)  
-## .env での MailHog 設定  
-MAIL_MAILER=smtp  
-MAIL_HOST=mailhog  
-MAIL_PORT=1025  
-MAIL_USERNAME=null  
-MAIL_PASSWORD=null  
-MAIL_ENCRYPTION=null  
-MAIL_FROM_ADDRESS="noreply@example.com"  
-MAIL_FROM_NAME="Coachtech Freemarket"  
-  
-決済サービス  
-Stripe  
+- `ItemSeeder`  
+  既存の `ItemSeeder` を見直し、ユーザー・カテゴリとの関連を明確にしました。
 
-# MailHog へのアクセス  
-http://localhost:8025/  
+- `TransactionSeeder`  
+  試験用として独自に用意し、チャットや評価のテストが可能になる取引データを登録しています。
 
-# PHPUnit 実行およびテスト用の環境ファイルの作成 
-まずはデータベースを用意します。  
-$ mysql -u root -p  
-> CREATE DATABASE demo_test;  
-> SHOW DATABASES;  
-config/database.phpにテストサーバーのコードは記載済みです。  
-docker-compose exec app vendor/bin/phpunit  
-テスト用に.env.testingがございますのでテスト実行時はそちらをお使いください。 
-cp .env.testing.example .env.testing  
-特定のメソッドのみ実行  
-特定のテストメソッドだけ実行したい場合は、--filter オプションを使用します。  
-docker-compose exec app vendor/bin/phpunit --filter  test_it_displays_sell_form_and_stores_good_successfully  
---filter の後には、テストクラス内のメソッド名を指定します。  
+- `EvaluationSeeder`  
+  試験用として独自に用意し、評価閲覧のテストが可能になりました。
 
-## ER図  
+
+### 初期データの内容（例）
+
+- ユーザーは3名登録されています：
+  - `User One`, `User Two`: 出品者
+  - `User Three`: 購入者  
+
+- `User Three` は複数の商品を購入済みであり、該当するチャットメッセージも含まれています。  
+
+### シーディングの実行方法
+
+```bash
+docker-compose exec app php artisan migrate --seed
+```
+
+- データ初期化:  
+  `docker-compose exec app php artisan migrate:fresh --seed`
+
+---
+
+## 使用技術
+
+| 項目         | 内容               |
+|--------------|--------------------|
+| フレームワーク | Laravel 8.83.8      |
+| 言語         | PHP 7.4.9           |
+| データベース | MySQL               |
+| 決済         | Stripe              |
+| メール      | MailHog（ポート:8025） |
+| 実行環境    | Docker              |
+
+---
+
+## 主な画面URL
+
+### 一般ユーザー用
+
+- `/` : トップ（おすすめ商品）
+- `/item/{id}` : 商品詳細
+- `/purchase/{id}` : 購入画面
+- `/mypage` : プロフィールページ
+- `/mypage?tab=buy` : 購入履歴
+- `mypage.transactions` : 取引中の商品一覧（購入者、販売者共通）  
+
+### 出品者用
+
+- `/sell` : 出品ページ
+- `/mypage?tab=sell` : 出品履歴 （マイページ）
+
+---
+
+## チャット機能関連のルート例  
+
+- `/chat/buyer/{purchase_id}` : チャット詳細（購入者用ビュー）  
+- `/chat/seller/{purchase_id}` : チャット詳細（出品者用ビュー）  
+
+
+---
+
+## テスト関連
+
+```bash
+cp .env.testing.example .env.testing
+docker-compose exec app vendor/bin/phpunit
+```
+
+特定のテストだけを実行するには：
+
+```bash
+docker-compose exec app vendor/bin/phpunit --filter test_method_name
+```
+>> 注：この度の試験では単体テストの実装はしておりません  
+---
+
+## ストレージ設定
+
+- 商品画像：`public/goods`
+- プロフィール画像：`public/profile_images`
+
+シンボリックリンク作成：
+
+```bash
+docker-compose exec app php artisan storage:link
+```
+
+---
+
+## ER図
+
 ![ER図](free-market.png)
-## URL  
-### 開発環境  
-- **開発環境URL:** [http://localhost/](http://localhost/)  
 
-### ユーザー向けページ  
-- `/` 　　　　　トップページ（おすすめ商品） ※検索時は `search` パラメータ付き  
-- `/?tab=mylist`　マイリストページ（お気に入り一覧） ※検索時は `search` パラメータ付き  
-- `/register`　　会員登録画面  
-- `/login`　　　会員ログイン画面  
-- `/item/{id}`　 商品詳細画面  
+---
 
-### 購入・配送関連  
-- `/purchase/{id}`　　　　　商品購入画面  
-- `/purchase/address/{id}`　お届け先住所変更ページ  
+## 備考
 
-### 出品関連  
-- `/sell`　商品出品画面  
+- 本プロジェクトは COACHTECH の Pro 入会テスト用の拡張機能実装課題として取り組んでいます。
+- 限られた期間内で設計・開発・検証まで対応しました。
+- 拡張機能の実装は要件通りで、特にチャット・評価・通知まわりに注力しています。
 
-### マイページ関連  
-- `/mypage`　　　　　　プロフィール画面  
-- `/mypage?tab=buy`　　マイページ：購入した商品一覧  
-- `/mypage?tab=sell`　 マイページ：出品した商品一覧  
-  
-## 機能一覧  
-#ユーザー向け機能  
-商品の検索、購入、マイリスト登録  
+```
 
-会員登録・ログイン  
-
-商品出品・購入履歴の確認  
-
-配送先住所の登録・変更  
-
-#出品者向け機能  
-商品の出品、編集、削除  
-
-出品履歴の管理  
-
----  
-
-## 画像アップロードと表示  
-# 画像保存のパス  
-- 画像は `public/goods` に保存されます。  
-- URL 形式：`http://localhost/storage/app/public`  
-# 画像アップロードのパス  
-- 商品画像: `public/goods`  
-- プロフィール画像: `public/profile_images`  
-- シンボリックリンク: `public/storage`  
-
-# シンボリックリンクの作成  
-docker-compose exec app php artisan storage:link  
+---

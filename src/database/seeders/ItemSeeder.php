@@ -48,7 +48,7 @@ class ItemSeeder extends Seeder
                 'price'      => 12000,
                 'category'   => 'ファッション,メンズ,アクセサリー',
                 'description'=> 'スタイリッシュなアナログ腕時計',
-                'image'      => 'testitem/Watch+analog.jpg',
+                'image'      => 'images/testitem/Armani+Mens+Clock.jpg',
                 'condition'  => '良好',
             ],
             [
@@ -57,7 +57,7 @@ class ItemSeeder extends Seeder
                 'price'      => 5000,
                 'category'   => '家電',
                 'description'=> '高速で信頼性の高いハードディスク',
-                'image'      => 'testitem/HDD+Hard+Disk.jpg',
+                'image'      => 'images/testitem/HDD+Hard+Disk.jpg',
                 'condition'  => '目立った傷や汚れなし',
             ],
             [
@@ -66,7 +66,7 @@ class ItemSeeder extends Seeder
                 'price'      => 300,
                 'category'   => 'キッチン',
                 'description'=> '新鮮な玉ねぎ3束のセット',
-                'image'      => 'testitem/iLoveIMG+d.jpg',
+                'image'      => 'images/testitem/iLoveIMG+d.jpg',
                 'condition'  => 'やや傷や汚れあり',
             ],
             [
@@ -75,7 +75,7 @@ class ItemSeeder extends Seeder
                 'price'      => 4000,
                 'category'   => 'ファッション,メンズ',
                 'description'=> 'クラシックなデザインの革靴',
-                'image'      => 'testitem/Leather+Shoes+Product+Photo.jpg',
+                'image'      => 'images/testitem/Leather+Shoes+Product+Photo.jpg',
                 'condition'  => '状態が悪い',
             ],
             [
@@ -84,7 +84,7 @@ class ItemSeeder extends Seeder
                 'price'      => 45000,
                 'category'   => '家電',
                 'description'=> '高性能なノートパソコン',
-                'image'      => 'testitem/Living+Room+Laptop.jpg',
+                'image'      => 'images/testitem/Living+Room+Laptop.jpg',
                 'condition'  => '良好',
             ],
             [
@@ -93,7 +93,7 @@ class ItemSeeder extends Seeder
                 'price'      => 8000,
                 'category'   => '家電,アクセサリー',
                 'description'=> '高音質のレコーディング用マイク',
-                'image'      => 'testitem/Music+Mic+4632231.jpg',
+                'image'      => 'images/testitem/Music+Mic+4632231.jpg',
                 'condition'  => '目立った傷や汚れなし',
             ],
             [
@@ -102,7 +102,7 @@ class ItemSeeder extends Seeder
                 'price'      => 3500,
                 'category'   => 'ファッション,レディース,アクセサリー',
                 'description'=> 'おしゃれなショルダーバッグ',
-                'image'      => 'testitem/Purse+fashion+pocket.jpg',
+                'image'      => 'images/testitem/Purse+fashion+pocket.jpg',
                 'condition'  => 'やや傷や汚れあり',
             ],
             [
@@ -111,7 +111,7 @@ class ItemSeeder extends Seeder
                 'price'      => 500,
                 'category'   => 'キッチン',
                 'description'=> '使いやすいタンブラー',
-                'image'      => 'testitem/Tumbler+souvenir.jpg',
+                'image'      => 'images/testitem/Tumbler+souvenir.jpg',
                 'condition'  => '状態が悪い',
             ],
             [
@@ -120,7 +120,7 @@ class ItemSeeder extends Seeder
                 'price'      => 4000,
                 'category'   => 'キッチン',
                 'description'=> '手動のコーヒーミル',
-                'image'      => 'testitem/Waitress+with+Coffee+Grinder.jpg',
+                'image'      => 'images/testitem/Waitress+with+Coffee+Grinder.jpg',
                 'condition'  => '良好',
             ],
             [
@@ -129,11 +129,11 @@ class ItemSeeder extends Seeder
                 'price'      => 2500,
                 'category'   => 'ファッション,レディース',
                 'description'=> '便利なメイクアップセット',
-                'image'      => 'testitem/外出メイクアップセット.jpg',
+                'image'      => 'images/testitem/外出メイクアップセット.jpg',
                 'condition'  => '目立った傷や汚れなし',
             ],
         ];
-
+        
         // 商品と中間テーブルを登録
         foreach ($goodsData as $data) {
             $categoryNames = explode(',', $data['category']);

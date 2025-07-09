@@ -34,7 +34,7 @@
                             <div class="p-3">
                                 <a href="{{ route('goods.show', $good->id) }}">
                                     <div class="image-wrapper">
-                                        <img src="{{ asset('storage/' . $good->image) }}" alt="商品画像" class="product-image">
+                                        <img src="{{ asset($good->image) }}" alt="商品画像" class="product-image">
                                         @if($good->isSold())
                                             <div class="sold-out-overlay">sold</div>
                                         @endif
