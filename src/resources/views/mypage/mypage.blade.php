@@ -114,7 +114,13 @@
                         </span>
                     @endif
 
-                    @if($transaction->status === 'completed' && !$transaction->evaluation)
+                    @php
+                        $alreadyEvaluated = $transaction->evaluation
+                            ? $transaction->evaluation->where('from_user_id', Auth::id())->isNotEmpty()
+                            : false;
+                    @endphp
+
+                    @if($transaction->status === 'completed' && !$alreadyEvaluated)
                         <div class="overlay">評価を投稿してください</div>
                     @endif
                 </div>
