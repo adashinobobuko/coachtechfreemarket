@@ -20,13 +20,19 @@
 
     <div class="mt-3 text-center rating-info">
     <strong>評価平均：</strong>
-        @if ($averageRating)
-            {{ number_format($averageRating, 1) }}
-            {!! str_repeat('★', floor($averageRating)) !!}
-            {!! $averageRating - floor($averageRating) >= 0.5 ? '☆' : '' !!}
-        @else
-            <span class="no-rating">評価はまだありません</span>
-        @endif
+        {{ number_format($averageRating, 1) }}
+
+        <div class="star-display">
+            @for ($i = 1; $i <= 5; $i++)
+                @if ($i <= floor($averageRating))
+                    <span class="star full">★</span>
+                @elseif ($i - $averageRating < 1)
+                    <span class="star half">★</span>
+                @else
+                    <span class="star empty">★</span>
+                @endif
+            @endfor
+        </div>
     </div>
 
     <div class="container mt-4">
@@ -45,7 +51,7 @@
 
     <div class="tab-content {{ $activeTab === 'sell' ? 'active' : '' }}">
         @if(isset($goods) && count($goods) > 0)
-            <div class="d-flex gap-3 product-grid">
+            <div class="gap-3 product-grid">
                 @foreach($goods as $good)
                     <div class="p-3 position-relative">
                         <a href="{{ route('goods.show', $good['id']) }}">
@@ -66,7 +72,7 @@
     </div>
 
     <div class="tab-content {{ $activeTab === 'buy' ? 'active' : '' }}">
-        <div class="d-flex gap-3">
+        <div class="gap-3 product-grid">
             @if(isset($purchases) && $purchases->isNotEmpty())
                 @foreach($purchases as $purchase)
                     <div class="p-3 border text-center position-relative">
@@ -87,6 +93,7 @@
         </div>
     </div>
 
+    <div class="product-grid">
     @foreach ($transactions as $transaction)
         @php
             $isBuyer = $transaction->buyer_id === Auth::id();
@@ -102,7 +109,7 @@
                     <img src="{{ asset($transaction->good->image) }}" alt="商品画像" class="product-image">
 
                     @if($transaction->unread_count > 0)
-                        <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">
+                        <span class="badge badge-top-left">
                             {{ $transaction->unread_count }}
                         </span>
                     @endif
@@ -115,6 +122,7 @@
             </a>
         </div>
     @endforeach
+    </div>
 
 </div>
 @endsection

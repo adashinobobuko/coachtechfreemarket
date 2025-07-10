@@ -344,6 +344,66 @@ a {
     font-size: 14px;
 }
 
+/* 星評価（クリックで黄色に） */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.star-rating input[type="radio"] {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 2rem;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.star-rating input:checked~label {
+    color: #ccc;
+}
+
+.star-rating label:hover,
+.star-rating label:hover~label {
+    color: gold;
+}
+
+.star-rating input:checked+label,
+.star-rating input:checked+label~label {
+    color: gold;
+}
+
+.star-display {
+    display: inline-block;
+}
+
+.star {
+    font-size: 1.5rem;
+    color: #ccc;
+    margin: 0 1px;
+}
+
+.star-display {
+    display: inline-block;
+}
+
+.star {
+    font-size: 1.5rem;
+    color: #ccc;
+    margin: 0 1px;
+}
+
+.star.full {
+    color: gold;
+}
+
+.star.empty {
+    color: #ccc;
+}
 /* === レスポンシブ対応 === */
 @media screen and (min-width: 768px) and (max-width: 1024px) {
     .chat-wrapper {

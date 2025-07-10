@@ -86,19 +86,6 @@
     display: block;
 }
 
-/* 追加：バッジ */
-.badge {
-    display: inline-block;
-    background-color: red;
-    color: white;
-    border-radius: 9999px;
-    padding: 0 0.5em;
-    font-size: 0.75rem;
-    font-weight: bold;
-    margin-left: 0.4em;
-    line-height: 1.5;
-}
-
 /* 商品グリッド */
 .product-grid {
     display: grid;
@@ -127,6 +114,7 @@
 .product-image {
     width: 290px;
     height: 281px;
+    border-radius: 5px;
 }
 
 /* 売り切れオーバーレイ */
@@ -181,6 +169,61 @@ a {
     color: #333;
     margin-top: 20px;
     margin-left: 18rem;
+}
+
+/* 追加：バッジ */
+.badge {
+    display: inline-block;
+    background-color: red;
+    color: white;
+    border-radius: 9999px;
+    padding: 0 0.5em;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-left: 0.4em;
+    line-height: 1.5;
+}
+
+.badge-top-left {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 0.4em 0.8em;
+    font-size: 0.75rem;
+    font-weight: bold;
+    z-index: 10;
+}
+
+/* 評価セクション */
+.star {
+    font-size: 24px;
+    margin: 0 2px;
+}
+
+.star.full {
+    color: gold;
+}
+
+.star.half {
+    position: relative;
+    display: inline-block;
+    color: #ccc;
+}
+
+.star.half::before {
+    content: '★';
+    color: gold;
+    position: absolute;
+    left: 0;
+    width: 50%;
+    overflow: hidden;
+}
+
+.star.empty {
+    color: #ccc;
 }
 
 /* タブレット (768px - 1024px) */
