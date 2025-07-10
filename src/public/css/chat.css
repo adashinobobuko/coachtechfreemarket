@@ -319,6 +319,15 @@ a {
 }
 
 /* === サイドバー項目 === */
+.sidebar {
+    width: 250px;
+    max-height: 600px;
+    overflow-y: auto;
+    border-right: 1px solid #ccc;
+    padding: 10px;
+    background-color: #868686;
+}
+
 .sidebar-item {
     display: flex;
     align-items: center;

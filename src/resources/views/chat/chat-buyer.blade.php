@@ -10,6 +10,7 @@
 
             {{-- サイドバー --}}
             <div class="sidebar">
+                <h2 class="sidebar-title">その他の取引</h2>
                 @foreach ($otherTransactions as $t)
                     <a href="{{ route('chat.buyer', $t->id) }}"
                        class="sidebar-item {{ $t->id === $purchase->id ? 'active' : '' }}">
