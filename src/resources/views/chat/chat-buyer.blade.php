@@ -188,10 +188,12 @@
         const saved = localStorage.getItem(key);
         if (saved && textarea) textarea.value = saved;
 
-        const form = document.querySelector('form');
-        form?.addEventListener('submit', () => {
-            localStorage.removeItem(key);
+        document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', () => {
+                localStorage.removeItem(key);
+            });
         });
+
 
         window.addEventListener('pageshow', function(event) {
             if (event.persisted) {

@@ -61,7 +61,9 @@ class ChatController extends Controller
     
         $good = $purchase->good;
         $otherUser = $transaction->buyer_id === $user->id ? $transaction->seller : $transaction->buyer;
-        $alreadyEvaluated = $transaction->evaluation()->exists();
+        $alreadyEvaluated = $transaction->evaluation()
+            ->where('from_user_id', $user->id)
+            ->exists();
     
         // 未読メッセージを既読に更新
         TransactionMessage::where('transaction_id', $transaction->id)
@@ -181,5 +183,6 @@ class ChatController extends Controller
     
         return redirect()->route('chat.buyer', ['purchaseId' => $purchase->id, 'completed' => 1])
         ->with('success', '取引を完了しました。');
+
     }
 }

@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CategorySeeder::class);
         $this->call(ItemSeeder::class);
         $this->call(TransactionSeeder::class);
-        $this->call(EvaluationSeeder::class);
+        //$this->call(EvaluationSeeder::class);
+        //評価のシーダーは必要な時に使用してください
     }
 }

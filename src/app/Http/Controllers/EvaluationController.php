@@ -29,12 +29,13 @@ class EvaluationController extends Controller
     
         Evaluation::create([
             'purchase_id' => $purchase->id,
+            'transaction_id' => $purchase->transaction->id,
             'from_user_id' => $fromUserId,
             'to_user_id' => $toUserId,
             'rating' => $request->rating,
             'comment' => $request->comment,
         ]);
     
-        return redirect()->route('index', $purchaseId)->with('success', '評価を投稿しました。');
+        return redirect()->route('index')->with('success', '評価を投稿しました。');
     }
 }
