@@ -305,6 +305,7 @@ a {
     width: 203px;
     height: 206px;
     object-fit: cover;
+    margin-left: 10px;
 }
 
 .product-name {

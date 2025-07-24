@@ -94,39 +94,40 @@
     </div>
 
     <div class="product-grid">
-    @foreach ($transactions as $transaction)
-        @php
-            $isBuyer = $transaction->buyer_id === Auth::id();
-        @endphp
+        @forelse ($transactions as $transaction)
+            @php
+                $isBuyer = $transaction->buyer_id === Auth::id();
+            @endphp
 
-        <div class="p-3 position-relative">
+            <div class="p-3 position-relative">
+                <a href="{{ $isBuyer 
+                    ? route('chat.buyer', $transaction->purchase->id) 
+                    : route('chat.seller', $transaction->purchase->id) }}">
 
-            <a href="{{ $isBuyer 
-                ? route('chat.buyer', $transaction->purchase->id) 
-                : route('chat.seller', $transaction->purchase->id) }}">
-                
-                <div class="position-relative">
-                    <img src="{{ asset($transaction->good->image) }}" alt="商品画像" class="product-image">
+                    <div class="position-relative">
+                        <img src="{{ asset($transaction->good->image) }}" alt="商品画像" class="product-image">
 
-                    @if($transaction->unread_count > 0)
-                        <span class="badge badge-top-left">
-                            {{ $transaction->unread_count }}
-                        </span>
-                    @endif
+                        @if($transaction->unread_count > 0)
+                            <span class="badge badge-top-left">
+                                {{ $transaction->unread_count }}
+                            </span>
+                        @endif
 
-                    @php
-                        $alreadyEvaluated = $transaction->evaluation &&
-                        $transaction->evaluation->from_user_id === Auth::id();
-                    @endphp
+                        @php
+                            $alreadyEvaluated = $transaction->evaluation &&
+                            $transaction->evaluation->from_user_id === Auth::id();
+                        @endphp
 
-                    @if($transaction->status === 'completed' && !$alreadyEvaluated)
-                        <div class="overlay">評価を投稿してください</div>
-                    @endif
-                </div>
-                <p class="product-name">{{ $transaction->good->name }}</p>
-            </a>
-        </div>
-    @endforeach
+                        @if($transaction->status === 'completed' && !$alreadyEvaluated)
+                            <div class="overlay">評価を投稿してください</div>
+                        @endif
+                    </div>
+                    <p class="product-name">{{ $transaction->good->name }}</p>
+                </a>
+            </div>
+        @empty
+            <p>取引中の商品はありません。</p>
+        @endforelse
     </div>
 
 </div>

@@ -184,8 +184,10 @@ class ChatController extends Controller
             return redirect()->back()->with('error', '取引データが見つかりません。');
         }
     
-        // 出品者に通知（例: Mailhog）
-        Mail::to($purchase->good->user->email)->send(new TransactionCompletedMail($transaction));
+        $transaction->load('purchase.good', 'purchase.user');
+
+        $seller = $purchase->good->user;
+        Mail::to($seller->email)->send(new TransactionCompletedMail($seller, $transaction));
     
         return redirect()->route('chat.buyer', ['purchaseId' => $purchase->id, 'completed' => 1])
         ->with('success', '取引を完了しました。');
