@@ -16,7 +16,6 @@ class Evaluation extends Model
         'from_user_id',
         'to_user_id',
         'rating',
-        'comment',
     ];
 
     public function purchase(): BelongsTo

@@ -33,7 +33,6 @@ class EvaluationController extends Controller
             'from_user_id' => $fromUserId,
             'to_user_id' => $toUserId,
             'rating' => $request->rating,
-            'comment' => $request->comment,
         ]);
     
         return redirect()->route('index')->with('success', '評価を投稿しました。');
