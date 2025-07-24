@@ -115,9 +115,8 @@
                     @endif
 
                     @php
-                        $alreadyEvaluated = $transaction->evaluation
-                            ? $transaction->evaluation->where('from_user_id', Auth::id())->isNotEmpty()
-                            : false;
+                        $alreadyEvaluated = $transaction->evaluation &&
+                        $transaction->evaluation->from_user_id === Auth::id();
                     @endphp
 
                     @if($transaction->status === 'completed' && !$alreadyEvaluated)

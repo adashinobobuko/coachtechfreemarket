@@ -14,14 +14,19 @@
                 @foreach ($otherTransactions as $t)
                     <a href="{{ route('chat.seller', $t->id) }}"
                        class="sidebar-item {{ $t->id === $purchase->id ? 'active' : '' }}">
-                        <div class="sidebar-title">{{ $t->good->name }}</div>
+                        <div class="sidebar-subtitle">{{ $t->good->name }}</div>
                     </a>
                 @endforeach
             </div>
 
             {{-- メインチャットエリア --}}
             <div class="chat-main">
-                <h2 class="chat-title">{{ $otherUser->name }} さんとの取引画面</h2>
+                <div class="chat-header">
+                    <div class="header-left">
+                        <img src="{{ asset($otherUser->profile_image) }}" alt="プロフィール画像" class="profile-icon">
+                        <h2 class="chat-title">{{ $otherUser->name }} さんとの取引画面</h2>
+                    </div>
+                </div>
 
                 {{-- 取引完了モーダル自動表示 --}}
                 @if($transaction->status === 'completed' && !$alreadyEvaluated)
@@ -41,26 +46,34 @@
                     $transaction = $purchase->transaction;
                 @endphp
 
-                {{-- 評価モーダル --}}
+                {{-- 評価モーダル（取引完了後に表示） --}}
                 @if ($transaction && $transaction->status === 'completed' && !$alreadyEvaluated)
-                    <div id="complete-modal" class="hidden">
+                <div id="complete-modal" class="hidden">
+                    <div class="modal-content">
+                        <h2 class="modal-title">取引が完了しました。</h2>
+
+                        <hr class="modal-divider">
+
+                        <p class="modal-subtitle">今回の取引相手はどうでしたか？</p>
+
                         <form action="{{ route('evaluations.store', $purchase->id) }}" method="POST">
                             @csrf
-                            <label for="rating">評価（1〜5）</label>
-                            <select name="rating" required>
-                                <option value="5">★5</option>
-                                <option value="4">★4</option>
-                                <option value="3">★3</option>
-                                <option value="2">★2</option>
-                                <option value="1">★1</option>
-                            </select>
+                            <div class="form-rating">
+                                @for ($i = 5; $i >= 1; $i--)
+                                    <input class="form-rating__input" id="star{{ $i }}" name="rating" type="radio" value="{{ $i }}">
+                                    <label class="form-rating__label" for="star{{ $i }}"><i class="fa-solid fa-star"></i></label>
+                                @endfor
+                            </div>
 
-                            <label for="comment">コメント</label>
-                            <textarea name="comment" rows="3"></textarea>
+                            <hr class="modal-divider">
 
-                            <button type="submit">評価を送信</button>
+                            <div class="submit-wrapper">
+                                <button type="submit" class="submit-button">送信する</button>
+                            </div>
+                            
                         </form>
                     </div>
+                </div>
                 @endif
 
                 {{-- 商品情報 --}}
@@ -77,38 +90,51 @@
                 {{-- チャットメッセージ一覧 --}}
                 <div class="message-list">
                     @foreach($messages as $message)
-                        <div class="message-item {{ $message->user_id === Auth::id() ? 'my-message' : 'other-message' }}" data-id="{{ $message->id }}">
-                            <p class="message-user">
-                                <img src="{{ asset('storage/' . $message->user->profile_image) }}" alt="プロフィール画像" class="profile-icon">  
-                                {{ $message->user->name }}
-                            </p>
+                        @php
+                            $isMine = $message->user_id === Auth::id();
+                        @endphp
 
-                            @if($message->user_id === Auth::id())
-                                <div class="message-content js-click-to-edit" data-id="{{ $message->id }}">
+                        <div class="message-wrapper {{ $isMine ? 'my-wrapper' : 'other-wrapper' }}">
+                            
+                            {{-- ユーザー名とアイコン --}}
+                            <div class="message-header">
+                                <img src="{{ asset('storage/' . $message->user->profile_image) }}" alt="プロフィール画像" class="profile-icon">
+                                <span class="message-user">{{ $message->user->name }}</span>
+                            </div>
+
+                            {{-- メッセージ本体 --}}
+                            <div class="message-bubble {{ $isMine ? 'my-message' : 'other-message' }}" data-id="{{ $message->id }}">
+                                <div class="message-content {{ $isMine ? 'js-click-to-edit' : '' }}" data-id="{{ $message->id }}">
                                     {{ $message->message }}
                                 </div>
 
+                                {{-- 画像があれば表示 --}}
                                 @if ($message->image_path)
-                                    <img src="{{ asset('storage/' . $message->image_path) }}" alt="添付画像">
+                                    <img src="{{ asset('storage/' . $message->image_path) }}"
+                                        alt="添付画像"
+                                        class="chat-image"
+                                        onclick="openImageModal(this.src)">
                                 @endif
 
-                                <form action="{{ route('chat.update', $message->id) }}" method="POST" class="js-edit-form" data-id="{{ $message->id }}" style="display: none;">
-                                    @csrf
-                                    @method('PUT')
-                                    <textarea name="message" class="edit-textarea" rows="2">{{ $message->message }}</textarea>
-                                </form>
-
-                                <div class="message-actions">
-                                    <button type="button" class="js-edit-submit" data-id="{{ $message->id }}">編集</button>
-                                    <form action="{{ route('chat.delete', $message->id) }}" method="POST" style="display:inline;">
+                                {{-- 編集削除は自分のみ --}}
+                                @if ($isMine)
+                                    <form action="{{ route('chat.update', $message->id) }}" method="POST" class="js-edit-form" data-id="{{ $message->id }}" style="display: none;">
                                         @csrf
-                                        @method('DELETE')
-                                        <button type="submit">削除</button>
+                                        @method('PUT')
+                                        <textarea name="message" class="edit-textarea" rows="2">{{ $message->message }}</textarea>
                                     </form>
-                                </div>
-                            @else
-                                <div class="message-content">{{ $message->message }}</div>
-                            @endif
+
+                                    <div class="message-actions">
+                                        <button type="button" class="js-edit-submit" data-id="{{ $message->id }}">編集</button>
+
+                                        <form action="{{ route('chat.delete', $message->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit">削除</button>
+                                        </form>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -145,7 +171,11 @@
                     </div>
                 </form>
 
-                <a href="{{ route('mypage.sell') }}" class="btn btn-sm btn-secondary mb-3">← マイページに戻る</a>
+                {{-- 画像モーダル --}}
+                <div id="image-modal" class="hidden" onclick="closeImageModal()">
+                    <img id="modal-image" src="" alt="拡大画像">
+                </div>
+
             </div>
         </div>
     </div>
@@ -194,5 +224,17 @@
             const fileName = e.target.files[0]?.name || '';
             document.getElementById('file-name').textContent = fileName;
         });
+
+        function openImageModal(src) {
+            const modal = document.getElementById('image-modal');
+            const modalImg = document.getElementById('modal-image');
+            modalImg.src = src;
+            modal.classList.add('show');
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('image-modal');
+            modal.classList.remove('show');
+        }
     </script>
 @endsection

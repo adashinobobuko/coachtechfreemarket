@@ -14,7 +14,6 @@
 
 #complete-modal .modal-content {
     background-color: #fff;
-    padding: 20px;
     border-radius: 6px;
     min-width: 300px;
 }
@@ -40,7 +39,6 @@
 /* モーダル内容 */
 .modal-content {
     background: #fdfae9;
-    padding: 30px;
     border-radius: 10px;
     width: 320px;
     text-align: center;
@@ -49,15 +47,17 @@
 
 /* タイトルと説明 */
 .modal-title {
-    font-size: 18px;
+    font-size: 35px;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin: 10px;
+    text-align: left;
 }
 
 .modal-subtitle {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 20px;
+    font-size: 20px;
+    color: #868686;
+    margin: 10px;
+    text-align: left;
 }
 
 /* セレクトボックス */
@@ -83,6 +83,7 @@
     padding: 8px 16px;
     border-radius: 5px;
     cursor: pointer;
+    margin: 10px;
 }
 
 .close-button {
@@ -121,9 +122,49 @@ a {
 
 .chat-main {
     flex-grow: 1;
-    padding: 1rem;
-    max-width: 800px;
     margin: 0 auto;
+}
+
+.chat-image {
+    max-width: 200px;
+    max-height: 200px;
+    object-fit: contain;
+    border-radius: 6px;
+    margin-top: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.chat-image:hover {
+    transform: scale(1.02);
+}
+
+#image-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+#image-modal img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 10px;
+    pointer-events: none;
+}
+
+#image-modal.show {
+    display: flex;
+}
+
+.hidden {
+    display: none;
 }
 
 /* === 全体コンテナ === */
@@ -132,11 +173,43 @@ a {
 }
 
 /* === チャットヘッダー === */
-.chat-title {
-    font-size: 1.5rem;
-    font-weight: bold;
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 1rem;
-    text-align: center;
+    border-bottom: 2px solid #5F5F5F;
+}
+
+.chat-title {
+    font-size: 36px;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.profile-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+#complete-button {
+    background-color: #ff8282;
+    color: #fff;
+    padding: 10px 40px;
+    border: none;
+    border-radius: 30px;
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 20px;
 }
 
 /* === ボタン系 === */
@@ -144,10 +217,11 @@ a {
 .message-submit {
     background-color: #f88;
     color: white;
-    padding: 0.5rem 1rem;
+    padding: 10px 40px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
+    border-radius: 30px;
 }
 
 .message-submit {
@@ -196,21 +270,26 @@ a {
 }
 
 .message-form-row {
+    position: sticky;
+    bottom: 0;
+    background-color: #fff;
+    padding: 1rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-top: 1rem;
+    z-index: 100;
+    border-top: 1px solid #ccc;
 }
 
 .message-input {
     width: 100%;
     flex-grow: 1;
     padding: 0.5rem;
-    border: 1px solid #ccc;
+    border: 1px solid #5F5F5F;
     border-radius: 4px;
     font-size: 1rem;
     resize: none;
-    margin-top: 1rem;
+    margin: 1rem;
 }
 
 /* === 商品情報 === */
@@ -219,28 +298,27 @@ a {
     align-items: center;
     gap: 1rem;
     margin: 1rem 0;
-    padding: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    border-bottom: 2px solid #5F5F5F;
 }
 
 .product-image img {
-    width: 100px;
+    width: 203px;
+    height: 206px;
     object-fit: cover;
 }
 
 .product-name {
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 48px;
 }
 
 .product-price {
-    color: #666;
+    font-size: 36px;
 }
 
 /* === メッセージ === */
 .message-list {
-    margin: 1rem 0;
+    margin: 1rem 2rem;
 }
 
 .message-item {
@@ -250,14 +328,14 @@ a {
 
 .my-message {
     margin-left: auto;
-    background-color: #e0f7fa;
+    background-color: #D9D9D9;
     padding: 0.5rem;
     border-radius: 8px;
 }
 
 .other-message {
     margin-right: auto;
-    background-color: #eee;
+    background-color: #D9D9D9;
     padding: 0.5rem;
     border-radius: 8px;
 }
@@ -269,9 +347,9 @@ a {
 }
 
 .message-content {
-    background-color: white;
+    font-weight: bold;
     padding: 0.5rem;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
 }
 
@@ -293,12 +371,79 @@ a {
 }
 
 .profile-icon {
-    width: 24px;
-    height: 24px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     object-fit: cover;
     margin-right: 0.5em;
     vertical-align: middle;
+}
+
+.message-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.message-wrapper {
+    display: flex;
+    flex-direction: column;
+    max-width: 75%;
+    margin-bottom: 0.5rem;
+}
+
+/* 自分のメッセージは右寄せ */
+.my-wrapper {
+    align-items: flex-end;
+    margin-left: auto;
+    text-align: right;
+}
+
+/* 相手のメッセージは左寄せ */
+.other-wrapper {
+    align-items: flex-start;
+    margin-right: auto;
+    text-align: left;
+}
+
+/* 名前とアイコンの並び */
+.message-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+/* 右側のときは並びを逆にする */
+.my-wrapper .message-header {
+    flex-direction: row-reverse;
+}
+
+/* プロフィール画像 */
+.profile-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* ユーザー名 */
+.message-user {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* メッセージ本体（吹き出し） */
+.message-item {
+    background-color: #D9D9D9;
+    padding: 12px;
+    border-radius: 10px;
+}
+
+.my-message {
+    background-color: #D9D9D9;
 }
 
 /* === メッセージ・エラーメッセージ === */
@@ -335,84 +480,106 @@ a {
     margin-bottom: 8px;
     text-decoration: none;
     color: #333;
-    background-color: #fff;
+    background-color: #EEEFEB;
     border-radius: 6px;
     transition: background-color 0.2s;
 }
 
 .sidebar-item:hover {
-    background-color: #eef;
-}
-
-.sidebar-item.active {
-    background-color: #d0ebff;
-    font-weight: bold;
+    background-color: rgb(94, 94, 94);
 }
 
 .sidebar-title {
-    font-size: 14px;
+    font-size: 30px;
+    color: #fff;
+    text-align: center;
+}
+
+.sidebar-subtitle {
+    font-size: 24px;
+    color: #000000;
+    margin-bottom: 10px;
 }
 
 /* 星評価（クリックで黄色に） */
-.star-rating {
+.form-rating {
+    align-items: center;
     display: flex;
     flex-direction: row-reverse;
     justify-content: center;
-    margin: 10px 0;
+    margin-bottom: 20px;
+    margin-right: 10px;
 }
 
-.star-rating input[type="radio"] {
+.form-rating__input {
     display: none;
 }
 
-.star-rating label {
-    font-size: 2rem;
+.form-rating__label {
     color: #ccc;
     cursor: pointer;
-    transition: color 0.2s;
+    font-size: 24px;
+    padding: 0 10px;
+    position: relative;
+    transition: color 0.3s;
 }
 
-.star-rating input:checked~label {
-    color: #ccc;
+.form-rating__label:hover,
+.form-rating__label:hover~.form-rating__label,
+.form-rating__input:checked~.form-rating__label {
+    /* 「~」でホバー時を動的に、チェック時にそれ以下の数字をもつスターの色も変化 */
+    color: #FFF048;
 }
 
-.star-rating label:hover,
-.star-rating label:hover~label {
-    color: gold;
+.error {
+    color: #ff6200;
+    ;
 }
 
-.star-rating input:checked+label,
-.star-rating input:checked+label~label {
-    color: gold;
+.form-rating__label i {
+    font-size: 100px;
+    /* ←OK。明示的に幅をとる */
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
 }
 
-.star-display {
-    display: inline-block;
+#complete-modal .modal-content {
+    background-color: #FDFCE6;;
+    border-radius: 15px;
+    border: 1px solid #000000;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    width: 598px;
+    height: 367px;
 }
 
-.star {
-    font-size: 1.5rem;
-    color: #ccc;
-    margin: 0 1px;
+.submit-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    /* ← 右寄せ */
+    margin-top: 20px;
 }
 
-.star-display {
-    display: inline-block;
+.submit-button {
+    background: #FF8282;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: right;
 }
 
-.star {
-    font-size: 1.5rem;
-    color: #ccc;
-    margin: 0 1px;
+.modal-divider {
+    border: none;
+    height: 1px;
+    background-color: #000;
+    margin: 16px 0;
+    width: 100%;
 }
 
-.star.full {
-    color: gold;
-}
-
-.star.empty {
-    color: #ccc;
-}
 /* === レスポンシブ対応 === */
 @media screen and (min-width: 768px) and (max-width: 1024px) {
     .chat-wrapper {
@@ -420,7 +587,6 @@ a {
     }
 
     .chat-main {
-        padding: 1rem;
         max-width: 100%;
         margin: 0;
     }

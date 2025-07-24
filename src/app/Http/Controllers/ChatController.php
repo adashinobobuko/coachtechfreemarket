@@ -16,41 +16,47 @@ class ChatController extends Controller
     public function showBuyerChat($purchaseId)
     {
         $user = Auth::user();
-    
-        // 購入情報を取得し、関連する取引と商品をロード
+
         $purchase = Purchase::with('transaction.good.user')->findOrFail($purchaseId);
-    
+
         if (!$purchase->transaction || !$purchase->transaction->good) {
             abort(404, '取引情報が不完全です');
         }
-    
+
         $transaction = $purchase->transaction;
         $good = $transaction->good;
         $otherUser = $good->user;
-    
-        // 未読メッセージを既読に更新
+
         TransactionMessage::where('purchase_id', $purchaseId)
             ->where('recipient_id', $user->id)
             ->where('is_read', false)
             ->update(['is_read' => true]);
 
-        // ほかの取引を取得
-        $otherTransactions = Purchase::with('good', 'transaction') // ← 追記
-        ->where('user_id', $user->id)
-        ->where('id', '!=', $purchaseId)
-        ->orderByDesc('updated_at')
-        ->get();
-        
-        // メッセージ取得
+        $otherTransactions = Purchase::with('good', 'transaction')
+            ->where('user_id', $user->id)
+            ->where('id', '!=', $purchaseId)
+            ->orderByDesc('updated_at')
+            ->get();
+
         $messages = TransactionMessage::where('purchase_id', $purchaseId)
             ->with('user')
             ->orderBy('created_at', 'asc')
             ->get();
 
+        $alreadyEvaluated = \App\Models\Evaluation::where('purchase_id', $purchase->id)
+            ->where('from_user_id', $user->id)
+            ->exists();
+
         return view('chat.chat-buyer', compact(
-                'purchase', 'transaction', 'good', 'otherUser', 'messages', 'otherTransactions'
-            ));
-    }    
+            'purchase',
+            'transaction',
+            'good',
+            'otherUser',
+            'messages',
+            'otherTransactions',
+            'alreadyEvaluated'
+        ));
+    }
     
     public function showSellerChat($purchaseId)
     {
